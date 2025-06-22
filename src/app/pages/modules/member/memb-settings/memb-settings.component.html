@@ -1,0 +1,42 @@
+<div class="p-4 max-w-screen-sm mx-auto">
+  <p-card header="Configuración de usuario">
+    <form class="grid formgrid p-fluid" (ngSubmit)="save()">
+
+      <div class="field col-12">
+        <label for="language">Idioma</label>
+        <p-dropdown
+          inputId="language"
+          [(ngModel)]="settings.language"
+          name="language"
+          [options]="[
+            { label: 'Español', value: 'es' },
+            { label: 'Inglés', value: 'en' }
+          ]"
+          placeholder="Selecciona un idioma"
+        ></p-dropdown>
+      </div>
+
+      <div class="field-checkbox col-12">
+        <p-checkbox
+          name="dark_mode"
+          [(ngModel)]="settings.dark_mode"
+          binary="true"
+        ></p-checkbox>
+        <label for="dark_mode">Modo oscuro</label>
+      </div>
+
+      <div class="field-checkbox col-12">
+        <p-checkbox
+          name="notifications_enabled"
+          [(ngModel)]="settings.notifications_enabled"
+          binary="true"
+        ></p-checkbox>
+        <label for="notifications_enabled">Recibir notificaciones</label>
+      </div>
+
+      <div class="col-12 mt-3">
+        <button pButton type="submit" label="Guardar" class="p-button-primary w-full"></button>
+      </div>
+    </form>
+  </p-card>
+</div>

@@ -1,0 +1,36 @@
+<div class="p-4 max-w-screen-lg mx-auto">
+  <p-card header="Estado de mis contribuciones">
+    <p-table [value]="statusList" [paginator]="true" [rows]="5" [responsiveLayout]="'scroll'">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Factura</th>
+          <th>Descripción</th>
+          <th>Estrategia</th>
+          <th>Monto</th>
+          <th>Fecha límite</th>
+          <th>Estado</th>
+          <th>Pagado en</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-s>
+        <tr>
+          <td>{{ s.descripcionFactura }}</td>
+          <td>{{ s.descripcionContrib }}</td>
+          <td>{{ s.strategy }}</td>
+          <td>{{ s.monto | currency }}</td>
+          <td>{{ s.fechaLimite | date: 'longDate' }}</td>
+          <td>
+            <span class="badge"
+              [ngClass]="{
+                'bg-success': s.status === 'PAGADO',
+                'bg-warning': s.status === 'PENDIENTE'
+              }">
+              {{ s.status }}
+            </span>
+          </td>
+          <td>{{ s.pagadoEn ? (s.pagadoEn | date: 'short') : '-' }}</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </p-card>
+</div>

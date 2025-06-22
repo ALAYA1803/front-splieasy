@@ -1,0 +1,9 @@
+:host ::ng-deep .p-card {
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.p-field {
+  display: flex;
+  flex-direction: column;
+}

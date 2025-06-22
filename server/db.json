@@ -1,0 +1,143 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "name": "Juan Pérez",
+      "email": "rep@example.com",
+      "password": "rep123",
+      "role": "REPRESENTANTE",
+      "income": 1200
+    },
+    {
+      "id": 2,
+      "name": "Ana Gómez",
+      "email": "mem@example.com",
+      "password": "mem123",
+      "role": "MIEMBRO",
+      "income": 2000
+    },
+    {
+      "id": 3,
+      "name": "Carlos Ruiz",
+      "email": "carlos@correo.com",
+      "password": "123456",
+      "role": "MIEMBRO",
+      "income": 1500
+    }
+  ],
+  "households": [
+    {
+      "id": 1,
+      "name": "Casa Familiar",
+      "description": "Hogar de Juan",
+      "currency": "PEN",
+      "representante_id": 1
+    }
+  ],
+  "household_members": [
+    {
+      "id": 1,
+      "user_id": 2,
+      "household_id": 1
+    },
+    {
+      "id": 2,
+      "user_id": 3,
+      "household_id": 1
+    }
+  ],
+  "bills": [
+    {
+      "id": 1,
+      "household_id": 1,
+      "descripcion": "Luz Abril",
+      "monto": 180,
+      "created_by": 1,
+      "fecha": "2025-06-01"
+    },
+    {
+      "id": 2,
+      "household_id": 1,
+      "descripcion": "Agua Mayo",
+      "monto": 120,
+      "created_by": 1,
+      "fecha": "2025-06-05"
+    }
+  ],
+  "contributions": [
+    {
+      "id": 1,
+      "bill_id": 1,
+      "household_id": 1,
+      "descripcion": "División luz abril",
+      "fecha_limite": "2025-06-30",
+      "strategy": "INCOME_BASED"
+    },
+    {
+      "id": 2,
+      "bill_id": 2,
+      "household_id": 1,
+      "descripcion": "División agua mayo",
+      "fecha_limite": "2025-07-10",
+      "strategy": "EQUAL"
+    }
+  ],
+  "member_contributions": [
+    {
+      "id": 1,
+      "contribution_id": 1,
+      "member_id": 2,
+      "monto": 100,
+      "status": "PENDIENTE",
+      "pagado_en": "2025-06-22T08:18:58.255Z"
+    },
+    {
+      "id": 2,
+      "contribution_id": 1,
+      "member_id": 3,
+      "monto": 80,
+      "status": "PAGADO",
+      "pagado_en": "2025-06-20T10:00:00"
+    },
+    {
+      "id": 3,
+      "contribution_id": 2,
+      "member_id": 2,
+      "monto": 40,
+      "status": "PENDIENTE",
+      "pagado_en": "2025-06-22T08:19:00.612Z"
+    },
+    {
+      "id": 4,
+      "contribution_id": 2,
+      "member_id": 3,
+      "monto": 40,
+      "status": "PENDIENTE",
+      "pagado_en": null
+    },
+    {
+      "id": 5,
+      "contribution_id": 2,
+      "member_id": 1,
+      "monto": 40,
+      "status": "PENDIENTE",
+      "pagado_en": null
+    }
+  ],
+  "settings": [
+    {
+      "id": 1,
+      "user_id": 1,
+      "language": "es",
+      "dark_mode": true,
+      "notifications_enabled": true
+    },
+    {
+      "id": 2,
+      "user_id": 2,
+      "language": "en",
+      "dark_mode": false,
+      "notifications_enabled": true
+    }
+  ]
+}

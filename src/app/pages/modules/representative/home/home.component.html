@@ -1,0 +1,24 @@
+<div class="p-4 max-w-screen-lg mx-auto">
+  <p-card header="Resumen del hogar" class="mb-4">
+    <div class="text-xl mb-2">{{ household?.name }}</div>
+    <div class="text-muted mb-3">{{ household?.description }}</div>
+
+    <div class="grid">
+      <div class="col-12 md:col-4">
+        <p-panel header="Miembros">
+          <div class="text-center text-2xl">{{ members.length }}</div>
+        </p-panel>
+      </div>
+      <div class="col-12 md:col-4">
+        <p-panel header="Cuentas">
+          <div class="text-center text-2xl">{{ bills.length }}</div>
+        </p-panel>
+      </div>
+      <div class="col-12 md:col-4">
+        <p-panel header="Contribuciones">
+          <div class="text-center text-2xl">{{ contributions.length }}</div>
+        </p-panel>
+      </div>
+    </div>
+  </p-card>
+</div>

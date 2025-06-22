@@ -1,0 +1,45 @@
+<div class="p-4 max-w-screen-lg mx-auto">
+  <p-card header="Cuentas del hogar" class="mt-4">
+    <p-button label="Registrar nueva cuenta" icon="pi pi-plus" (click)="showForm()" class="mb-3" />
+
+    <p-table [value]="bills" [loading]="loading" responsiveLayout="scroll">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Descripción</th>
+          <th>Monto (S/)</th>
+          <th>Fecha</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-bill>
+        <tr>
+          <td>{{ bill.descripcion }}</td>
+          <td>{{ bill.monto }}</td>
+          <td>{{ bill.fecha }}</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </p-card>
+
+  <!-- Formulario modal -->
+  <p-dialog header="Nueva cuenta" [(visible)]="formVisible" [modal]="true" [style]="{ width: '400px' }">
+    <form [formGroup]="billForm" (ngSubmit)="submit()">
+      <div class="p-fluid">
+        <div class="field">
+          <label for="descripcion">Descripción</label>
+          <input id="descripcion" type="text" pInputText formControlName="descripcion" />
+        </div>
+        <div class="field">
+          <label for="monto">Monto</label>
+          <input id="monto" type="number" pInputText formControlName="monto" />
+        </div>
+        <div class="field">
+          <label for="fecha">Fecha</label>
+          <input id="fecha" type="date" pInputText formControlName="fecha" />
+        </div>
+      </div>
+      <p-footer>
+        <p-button pButton type="submit" label="Guardar" [disabled]="billForm.invalid" />
+      </p-footer>
+    </form>
+  </p-dialog>
+</div>

@@ -1,0 +1,41 @@
+.main-layout {
+  background-color: #f2f4f8;
+  background-color: transparent;
+}
+
+.sidebar {
+  width: 250px;
+  background-color: transparent;
+  transition: width 0.5s ease, opacity 0.5s ease;
+  overflow: hidden;
+  /* border-right: 0.5px solid #f0f9f2; */
+}
+
+.sidebar-hidden {
+  width: 0;
+  opacity: 0;
+  border-right: none;
+}
+
+.main-content {
+  overflow: auto;
+  background-color: transparent;
+}
+
+.separator {
+  display: block;
+  width: 1px;
+  border: 1px solid #e3e8f0;
+  align-self: stretch;
+  margin: 0 0.5rem;
+  visibility: hidden;
+}
+
+.boton-toggle-sidebar {
+  padding-left: 0.5rem;
+}
+
+.boton-toggle-sidebar ::ng-deep .p-button-icon {
+  background-color: white !important;
+}
+

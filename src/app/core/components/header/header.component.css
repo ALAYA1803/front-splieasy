@@ -1,0 +1,48 @@
+.header-container {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.header-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #1565c0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: calc(100% - 80px); /* deja espacio para el avatar */
+  flex: 1;
+}
+
+.perfil {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  min-width: 60px;
+}
+
+.imagen {
+  cursor: pointer;
+}
+
+@media (max-width: 576px) {
+  .header-title {
+    font-size: 0.95rem;
+    max-width: 100%;
+    text-align: start;
+  }
+}
+
+@media (min-width: 576px) {
+  .header-title span {
+    display: inline-block;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}

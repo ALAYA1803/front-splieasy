@@ -1,0 +1,37 @@
+<div class="p-4 max-w-screen-lg mx-auto" *ngIf="household">
+  <div class="grid mt-3">
+
+    <!-- Información del hogar -->
+    <div class="col-12 md:col-6 p-1">
+      <p-card header="Mi hogar">
+        <p><strong>Nombre:</strong> {{ household.name }}</p>
+        <p><strong>Moneda:</strong> {{ household.currency }}</p>
+        <p><strong>Descripción:</strong> {{ household.description }}</p>
+      </p-card>
+    </div>
+
+    <!-- Información financiera -->
+    <div class="col-12 md:col-6 p-1">
+      <p-card header="Mi situación financiera">
+        <p><strong>Total pendiente:</strong> {{ totalPendiente | currency:household.currency }}</p>
+        <p><strong>Total pagado:</strong> {{ totalPagado | currency:household.currency }}</p>
+        <p><strong>Contribuciones activas:</strong> {{ contributions.length }}</p>
+      </p-card>
+    </div>
+
+    <!-- Miembros del hogar -->
+    <div class="col-12 p-1">
+      <p-card header="Miembros del hogar">
+        <ul class="list-disc pl-4">
+          <li *ngFor="let m of members">
+            {{ m.name }} ({{ m.email }}) -
+            <span [ngClass]="{ 'font-bold text-primary': m.role === 'REPRESENTANTE' }">
+              {{ m.role }}
+            </span>
+          </li>
+        </ul>
+      </p-card>
+    </div>
+
+  </div>
+</div>

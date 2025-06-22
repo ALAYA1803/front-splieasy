@@ -1,0 +1,12 @@
+<!-- Hero Section -->
+<section class="hero-section">
+  <div class="container d-flex align-items-center justify-content-center fs-1 text-white flex-column">
+    <h3 class="text-center">
+      {{ 'HERO.DESCRIPTION' | translate }}
+    </h3>
+    <p>{{ 'HERO.SUBTEXT' | translate }}</p>
+    <a [routerLink]="['/register']" class="signin-button">
+      {{ 'HERO.REGISTER_BUTTON' | translate }}
+    </a>
+  </div>
+</section>

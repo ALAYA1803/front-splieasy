@@ -1,0 +1,55 @@
+<div class="d-flex vh-100 main-layout">
+  <div
+    class="sidebar d-flex flex-shrink-0 min-vh-100"
+    [ngClass]="{
+      'sidebar-hidden': !isSidebarOpen
+    }"
+  >
+    <app-sidebar class="flex-grow-1"></app-sidebar>
+  </div>
+
+  <div class="d-flex flex-column flex-grow-1 barra-superior">
+    <div class="d-flex align-items-center barra-superior">
+      <p-button
+        [rounded]="true"
+        [severity]="'contrast'"
+        [icon]="
+          isMobile
+            ? 'pi pi-bars'
+            : isSidebarOpen
+            ? 'pi pi-angle-left'
+            : 'pi pi-angle-right'
+        "
+        (onClick)="toggleSidebar()"
+        [raised]="true"
+        variant="text"
+        class="boton-toggle-sidebar"
+      ></p-button>
+      <span class="separator"></span>
+      <app-header class="flex-grow-1"></app-header>
+    </div>
+
+    <div class="main-content flex-grow-1">
+      <router-outlet></router-outlet>
+    </div>
+
+    <app-footer-sidebar class="w-100"></app-footer-sidebar>
+  </div>
+
+  <!-- Drawer (Mobil) -->
+  <p-drawer
+    [(visible)]="isSidebarOpenMobile"
+    position="left"
+    [modal]="true"
+    [dismissible]="true"
+    [showCloseIcon]="true"
+    [style]="{ width: '250px' }"
+    class="d-md-none"
+  >
+    <ng-template #headless>
+      <div class="d-flex w-100 h-100">
+        <app-sidebar class="w-100 h-100"></app-sidebar>
+      </div>
+    </ng-template>
+  </p-drawer>
+</div>

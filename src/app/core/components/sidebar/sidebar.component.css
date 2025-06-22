@@ -1,0 +1,43 @@
+.sidebar {
+  width: 250px;
+  min-height: 100vh;
+  background-color: #1565c0;
+  border-right: 1px solid #1565c0;
+}
+
+.sidebar-item {
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  transition: background-color 0.2s ease;
+  cursor: pointer;
+  user-select: none; /* evita que se seleccione el texto al hacer clic */
+  display: flex;
+  align-items: center;
+}
+
+.sidebar-item:hover {
+  background-color: #42a5f5;
+}
+
+.sidebar-item:active {
+  background-color: #42a5f5;
+}
+
+.logout {
+  background-color: #dc3545 !important; /* rojo estilo Bootstrap danger */
+  color: white !important;              /* 👈 texto blanco */
+}
+
+.logout:hover {
+  background-color: #c82333 !important; /* un rojo más oscuro al pasar el mouse */
+  color: white !important;              /* 👈 mantiene el texto blanco al hacer hover */
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    width: 100%;
+    min-height: auto;
+    position: fixed;
+    z-index: 100;
+  }
+}
