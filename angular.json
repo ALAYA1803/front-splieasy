@@ -23,7 +23,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/spliteasy-frontend",
+            "outputPath": "dist/web-app",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": [
