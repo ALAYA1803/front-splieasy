@@ -1,4 +1,4 @@
 export const environment = {
   production: false,
-  serverBaseUrl: 'http://localhost:3000/',
+  urlBackend: 'http://localhost:3000', // tu backend local
 };

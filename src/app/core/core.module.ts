@@ -7,7 +7,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
-import { PrimeNgModule } from '../../prime-ng/prime-ng.module';
+import { PrimeNgModule } from '../prime-ng/prime-ng.module';
 import { LayoutComponent } from './components/layout/layout.component';
 import { HeaderComponent } from './components/header/header.component';
 import { FooterSidebarComponent } from './components/footer-sidebar/footer-sidebar.component';

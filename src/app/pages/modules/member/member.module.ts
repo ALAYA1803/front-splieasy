@@ -6,7 +6,7 @@ import { MembContributionsComponent } from './memb-contributions/memb-contributi
 import { MembStatusComponent } from './memb-status/memb-status.component';
 import { MembSettingsComponent } from './memb-settings/memb-settings.component';
 import { MembHomeComponent } from './memb-home/memb-home.component';
-import { PrimeNgModule } from '../../../../prime-ng/prime-ng.module';
+import { PrimeNgModule } from '../../../prime-ng/prime-ng.module';
 import { DropdownModule } from 'primeng/dropdown';
 
 

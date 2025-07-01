@@ -5,19 +5,18 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeng/themes/aura';
-import { PrimeNgModule } from '../prime-ng/prime-ng.module';
+import { PrimeNgModule } from './prime-ng/prime-ng.module';
 
 import { HttpClient } from '@angular/common/http';
 import { provideHttpClient } from '@angular/common/http';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { CoreModule } from './core/core.module';
 import { FormsModule } from '@angular/forms';
-import { MembContributionsComponent } from './pages/modules/member/memb-contributions/memb-contributions.component';
-import { MembHomeComponent } from './pages/modules/member/memb-home/memb-home.component';
+import { providePrimeNG } from 'primeng/config';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -48,7 +47,12 @@ export function HttpLoaderFactory(http: HttpClient) {
         preset: Aura
       }
     }),
-    provideHttpClient()
+    provideHttpClient(),
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    }
   ],
   bootstrap: [AppComponent]
 })

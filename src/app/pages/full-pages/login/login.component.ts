@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { SidebarService } from '../../../core/services/sidebar.service';
+import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -16,31 +17,24 @@ export class LoginComponent {
   error = '';
 
   constructor(
-    private http: HttpClient,
-    private router: Router,
-    private sidebarService: SidebarService
-  ) {}
+    private authService: AuthService,
+    private sidebarService: SidebarService, // 👈 inyecta el servicio
+    private router: Router
+  ) { }
 
-  login() {
-    this.http.get<any[]>('http://localhost:3000/users').subscribe(users => {
-      const user = users.find(u => u.email === this.email && u.password === this.password);
+  onLogin() {
+    this.authService.login(this.email, this.password).subscribe({
+      next: user => {
+        this.sidebarService.generateMenu(); // 👈 genera el menú dinámico
 
-      if (user) {
-        // Guardar usuario en localStorage
-        localStorage.setItem('currentUser', JSON.stringify(user));
-
-        // ⚠️ Actualizar el sidebar con los ítems correctos
-        this.sidebarService.generateMenu();
-
-        // Redirigir según el rol
         if (user.role === 'REPRESENTANTE') {
           this.router.navigate(['/representante']);
-        } else {
+        } else if (user.role === 'MIEMBRO') {
           this.router.navigate(['/miembro']);
         }
-      } else {
-        this.error = 'Email o contraseña incorrectos';
-        this.password = ''; // limpiar campo contraseña
+      },
+      error: err => {
+        this.error = 'Usuario o contraseña incorrectos';
       }
     });
   }
