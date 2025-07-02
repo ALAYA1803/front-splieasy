@@ -1,18 +1,18 @@
 <div class="p-4 max-w-screen-sm mx-auto">
-  <p-card header="Configuración de usuario">
+  <p-card [header]="'SETTINGS.TITLE' | translate">
     <form class="grid formgrid p-fluid" (ngSubmit)="save()">
 
       <div class="field col-12">
-        <label for="language">Idioma</label>
+        <label for="language">{{ 'SETTINGS.LANGUAGE.LABEL' | translate }}</label>
         <p-dropdown
           inputId="language"
           [(ngModel)]="settings.language"
           name="language"
           [options]="[
-            { label: 'Español', value: 'es' },
-            { label: 'Inglés', value: 'en' }
+            { label: ('SETTINGS.LANGUAGE.ES' | translate), value: 'es' },
+            { label: ('SETTINGS.LANGUAGE.EN' | translate), value: 'en' }
           ]"
-          placeholder="Selecciona un idioma"
+          [placeholder]="'SETTINGS.LANGUAGE.PLACEHOLDER' | translate"
         ></p-dropdown>
       </div>
 
@@ -22,7 +22,7 @@
           [(ngModel)]="settings.dark_mode"
           binary="true"
         ></p-checkbox>
-        <label for="dark_mode">Modo oscuro</label>
+        <label for="dark_mode">{{ 'SETTINGS.DARK_MODE' | translate }}</label>
       </div>
 
       <div class="field-checkbox col-12">
@@ -31,11 +31,16 @@
           [(ngModel)]="settings.notifications_enabled"
           binary="true"
         ></p-checkbox>
-        <label for="notifications_enabled">Recibir notificaciones</label>
+        <label for="notifications_enabled">{{ 'SETTINGS.NOTIFICATIONS' | translate }}</label>
       </div>
 
       <div class="col-12 mt-3">
-        <button pButton type="submit" label="Guardar" class="p-button-primary w-full"></button>
+        <button
+          pButton
+          type="submit"
+          [label]="'SETTINGS.SAVE_BUTTON' | translate"
+          class="p-button-primary w-full"
+        ></button>
       </div>
     </form>
   </p-card>

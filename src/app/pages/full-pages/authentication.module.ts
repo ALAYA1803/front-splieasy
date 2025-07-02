@@ -11,6 +11,7 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
 import { CoreModule } from '../../core/core.module';
 import { AppRoutingModule } from '../../app-routing.module';
 import { FormsModule } from '@angular/forms';
+import {TranslatePipe} from '@ngx-translate/core';
 
 
 @NgModule({
@@ -24,7 +25,8 @@ import { FormsModule } from '@angular/forms';
     CommonModule,
     CoreModule,
     AuthenticationRoutingModule,
-    FormsModule
+    FormsModule,
+    TranslatePipe
   ]
 })
 export class AuthenticationModule { }

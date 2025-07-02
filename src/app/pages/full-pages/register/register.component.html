@@ -2,21 +2,21 @@
 
 <section class="login-section d-flex align-items-center justify-content-center">
   <div class="login-box shadow p-4 rounded">
-    <h2 class="text-center mb-4">Register</h2>
+    <h2 class="text-center mb-4">{{ 'REGISTER.TITLE' | translate }}</h2>
     <form>
       <div class="mb-3 d-flex gap-3">
         <div>
-          <label for="firstName" class="form-label">First Name</label>
+          <label for="firstName" class="form-label">{{ 'REGISTER.FIRST_NAME_LABEL' | translate }}</label>
           <input type="text" class="form-control" />
         </div>
         <div class="ml-2">
-          <label for="lastName" class="form-label">Last Name</label>
+          <label for="lastName" class="form-label">{{ 'REGISTER.LAST_NAME_LABEL' | translate }}</label>
           <input type="text" class="form-control" />
         </div>
       </div>
 
       <div class="mb-3">
-        <label for="email" class="form-label">Email</label>
+        <label for="email" class="form-label">{{ 'REGISTER.EMAIL_LABEL' | translate }}</label>
         <input
           type="email"
           class="form-control"
@@ -25,7 +25,7 @@
       </div>
 
       <div class="mb-3">
-        <label for="password" class="form-label">Password</label>
+        <label for="password" class="form-label">{{ 'REGISTER.PASSWORD_LABEL' | translate }}</label>
         <input
           type="password"
           class="form-control"
@@ -34,7 +34,7 @@
       </div>
 
       <div class="mb-3">
-        <label for="repeat-password" class="form-label">Repeat Password</label>
+        <label for="repeat-password" class="form-label">{{ 'REGISTER.REPEAT_PASSWORD_LABEL' | translate }}</label>
         <input
           type="password"
           class="form-control"
@@ -43,21 +43,21 @@
       </div>
 
       <div class="mb-3">
-        <label for="role" class="form-label">Role</label>
+        <label for="role" class="form-label">{{ 'REGISTER.ROLE_LABEL' | translate }}</label>
         <select class="form-control">
-          <option>--selection role---</option>
-          <option value="member">Member</option>
-          <option value="representative">Representative</option>
+          <option disabled selected>{{ 'REGISTER.ROLE_PLACEHOLDER' | translate }}</option>
+          <option value="member">{{ 'REGISTER.ROLE_MEMBER' | translate }}</option>
+          <option value="representative">{{ 'REGISTER.ROLE_REPRESENTATIVE' | translate }}</option>
         </select>
       </div>
 
       <button type="button" class="btn w-100 signin-button" [routerLink]="['/inicio']">
-        Register
+        {{ 'REGISTER.BUTTON' | translate }}
       </button>
 
       <div class="text-center mt-3">
         <a [routerLink]="['/autenticacion/login']" class="text-decoration-none text-secondary">
-          I have an account
+          {{ 'REGISTER.HAVE_ACCOUNT' | translate }}
         </a>
       </div>
     </form>

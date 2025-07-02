@@ -1,107 +1,50 @@
-<div class="p-4 max-w-screen-lg mx-auto">
-  <p-card header="Contribuciones del hogar" class="mt-4">
-    <p-button label="Nueva contribución" icon="pi pi-plus" (click)="openForm()" class="mb-3" />
+<p-card [header]="'CONTRIB.TITLE' | translate" class="mt-4">
+  <p-button [label]="'CONTRIB.NEW_BUTTON' | translate" icon="pi pi-plus" (click)="openForm()" class="mb-3" />
 
-    <p-table [value]="contributions" [loading]="loading" responsiveLayout="scroll">
-      <ng-template pTemplate="header">
-        <tr>
-          <th>Descripción</th>
-          <th>Cuenta</th>
-          <th>Estrategia</th>
-          <th>Fecha Límite</th>
-        </tr>
-      </ng-template>
-
-      <ng-template pTemplate="body" let-contribution>
-        <tr>
-          <td>{{ contribution.descripcion }}</td>
-          <td>{{ getBillDescription(contribution.bill_id) }}</td>
-          <td>{{ contribution.strategy === 'EQUAL' ? 'Igualitaria' : 'Según Ingresos' }}</td>
-          <td>{{ contribution.fecha_limite | date: 'dd/MM/yyyy' }}</td>
-        </tr>
-
-        <tr>
-          <td colspan="4">
-            <p-table [value]="contribution.details" [responsiveLayout]="'scroll'" [paginator]="false" styleClass="p-datatable-sm">
-              <ng-template pTemplate="header">
-                <tr>
-                  <th>Miembro</th>
-                  <th>Rol</th>
-                  <th>Monto (S/)</th>
-                  <th>Estado</th>
-                </tr>
-              </ng-template>
-
-              <ng-template pTemplate="body" let-detail>
-                <tr>
-                  <td>{{ detail.user?.name }}</td>
-                  <td>{{ detail.user?.role === 'REPRESENTANTE' ? 'Representante' : 'Miembro' }}</td>
-                  <td>{{ detail.monto | number: '1.2-2' }}</td>
-                  <td>{{ detail.status }}</td>
-                </tr>
-              </ng-template>
-
-              <ng-template pTemplate="emptymessage">
-                <tr>
-                  <td colspan="4" class="text-center">Sin registros de pagos</td>
-                </tr>
-              </ng-template>
-            </p-table>
-          </td>
-        </tr>
-      </ng-template>
-
-      <ng-template pTemplate="emptymessage">
-        <tr>
-          <td colspan="4" class="text-center">No hay contribuciones registradas.</td>
-        </tr>
-      </ng-template>
-    </p-table>
-  </p-card>
-
-  <p-dialog header="Nueva contribución" [(visible)]="showForm" [modal]="true" style="width: 400px">
-    <form [formGroup]="contributionForm" (ngSubmit)="submit()">
-      <div class="p-fluid">
-        <div class="field">
-          <label for="descripcion">Descripción</label>
-          <input id="descripcion" type="text" pInputText formControlName="descripcion" />
-          <small *ngIf="contributionForm.get('descripcion')?.invalid && contributionForm.get('descripcion')?.touched" class="p-error">
-            La descripción es obligatoria.
-          </small>
-        </div>
-
-        <div class="field">
-          <label for="bill_id">Cuenta</label>
-          <p-dropdown inputId="bill_id" [options]="bills" optionLabel="descripcion" optionValue="id"
-            formControlName="bill_id" placeholder="Seleccione una cuenta"></p-dropdown>
-          <small *ngIf="contributionForm.get('bill_id')?.invalid && contributionForm.get('bill_id')?.touched" class="p-error">
-            Seleccione una cuenta.
-          </small>
-        </div>
-
-        <div class="field">
-          <label for="fecha_limite">Fecha Límite</label>
-          <input id="fecha_limite" type="date" pInputText formControlName="fecha_limite" />
-          <small *ngIf="contributionForm.get('fecha_limite')?.invalid && contributionForm.get('fecha_limite')?.touched" class="p-error">
-            La fecha límite es obligatoria.
-          </small>
-        </div>
-
-        <div class="field">
-          <label for="strategy">Estrategia</label>
-          <p-dropdown inputId="strategy" [options]="[
-              { label: 'Igualitaria', value: 'EQUAL' },
-              { label: 'Según Ingresos', value: 'INCOME_BASED' }
-            ]" formControlName="strategy" placeholder="Seleccione una estrategia"></p-dropdown>
-          <small *ngIf="contributionForm.get('strategy')?.invalid && contributionForm.get('strategy')?.touched" class="p-error">
-            Seleccione una estrategia.
-          </small>
-        </div>
-      </div>
-
-      <ng-template pTemplate="footer">
-        <p-button type="submit" label="Guardar" [disabled]="contributionForm.invalid" />
-      </ng-template>
-    </form>
-  </p-dialog>
-</div>
+  <p-table ...>
+    <ng-template pTemplate="header">
+      <tr>
+        <th>{{ 'CONTRIB.DESCRIPTION' | translate }}</th>
+        <th>{{ 'CONTRIB.BILL' | translate }}</th>
+        <th>{{ 'CONTRIB.STRATEGY' | translate }}</th>
+        <th>{{ 'CONTRIB.DEADLINE' | translate }}</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-contribution>
+      <tr>
+        <td>{{ contribution.descripcion }}</td>
+        <td>{{ getBillDescription(contribution.bill_id) }}</td>
+        <td>{{ contribution.strategy === 'EQUAL' ? ('CONTRIB.STRATEGY_EQUAL' | translate) : ('CONTRIB.STRATEGY_INCOME' | translate) }}</td>
+        <td>{{ contribution.fecha_limite | date: 'dd/MM/yyyy' }}</td>
+      </tr>
+      <tr>
+        <td colspan="4">
+          <p-table [value]="contribution.details" ...>
+            <ng-template pTemplate="header">
+              <tr>
+                <th>{{ 'CONTRIB.MEMBER' | translate }}</th>
+                <th>{{ 'CONTRIB.ROLE' | translate }}</th>
+                <th>{{ 'CONTRIB.AMOUNT' | translate }}</th>
+                <th>{{ 'CONTRIB.STATUS' | translate }}</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-detail>
+              <tr>
+                <td>{{ detail.user?.name }}</td>
+                <td>{{ detail.user?.role === 'REPRESENTANTE' ? 'Representante' : 'Miembro' }}</td>
+                <td>{{ detail.monto | number: '1.2-2' }}</td>
+                <td>{{ detail.status }}</td>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+              <tr><td colspan="4" class="text-center">{{ 'CONTRIB.NO_PAYMENT_RECORDS' | translate }}</td></tr>
+            </ng-template>
+          </p-table>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr><td colspan="4" class="text-center">{{ 'CONTRIB.NO_CONTRIBUTIONS' | translate }}</td></tr>
+    </ng-template>
+  </p-table>
+</p-card>

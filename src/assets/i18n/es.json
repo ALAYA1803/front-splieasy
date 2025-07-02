@@ -125,5 +125,139 @@
       "HELP": "Centro de ayuda"
     },
     "RIGHTS": "Todos los derechos reservados."
+  },
+  "FORGOT": {
+    "TITLE": "¿Olvidaste tu contraseña?",
+    "EMAIL_LABEL": "Correo electrónico",
+    "CHANGE_PASSWORD_BUTTON": "Cambiar contraseña",
+    "BACK_TO_LOGIN": "Volver al inicio de sesión"
+  },
+  "LOGIN": {
+    "TITLE": "Iniciar sesión",
+    "EMAIL_LABEL": "Correo electrónico",
+    "EMAIL_PLACEHOLDER": "mem@ejemplo.com o rep@ejemplo.com",
+    "PASSWORD_LABEL": "Contraseña",
+    "PASSWORD_PLACEHOLDER": "mem123 o rep123",
+    "BUTTON": "Iniciar sesión",
+    "FORGOT_PASSWORD": "¿Olvidaste tu contraseña?",
+    "CREATE_ACCOUNT": "¿Nuevo aquí? Crea una cuenta"
+  },
+  "REGISTER": {
+    "TITLE": "Registrarse",
+    "FIRST_NAME_LABEL": "Nombre",
+    "LAST_NAME_LABEL": "Apellido",
+    "EMAIL_LABEL": "Correo electrónico",
+    "PASSWORD_LABEL": "Contraseña",
+    "REPEAT_PASSWORD_LABEL": "Repetir contraseña",
+    "ROLE_LABEL": "Rol",
+    "ROLE_PLACEHOLDER": "--selecciona un rol--",
+    "ROLE_MEMBER": "Miembro",
+    "ROLE_REPRESENTATIVE": "Representante",
+    "BUTTON": "Registrarse",
+    "HAVE_ACCOUNT": "Ya tengo una cuenta"
+  },
+  "RESET": {
+    "TITLE": "Restablecer contraseña",
+    "NEW_PASSWORD_LABEL": "Nueva contraseña",
+    "CONFIRM_PASSWORD_LABEL": "Confirmar contraseña",
+    "BUTTON": "Restablecer contraseña"
+  },
+  "DASHBOARD": {
+    "HOME_CARD": {
+      "TITLE": "Mi hogar",
+      "NAME": "Nombre:",
+      "CURRENCY": "Moneda:",
+      "DESCRIPTION": "Descripción:"
+    },
+    "FINANCE_CARD": {
+      "TITLE": "Mi situación financiera",
+      "TOTAL_PENDING": "Total pendiente:",
+      "TOTAL_PAID": "Total pagado:",
+      "ACTIVE_CONTRIBUTIONS": "Contribuciones activas:"
+    },
+    "MEMBERS_CARD": {
+      "TITLE": "Miembros del hogar"
+    }
+  },
+  "SETTINGS": {
+    "TITLE": "Configuración de usuario",
+    "LANGUAGE": {
+      "LABEL": "Idioma",
+      "PLACEHOLDER": "Selecciona un idioma",
+      "ES": "Español",
+      "EN": "Inglés"
+    },
+    "DARK_MODE": "Modo oscuro",
+    "NOTIFICATIONS": "Recibir notificaciones",
+    "SAVE_BUTTON": "Guardar"
+  },
+  "CONTRIBUTIONS_STATUS": {
+    "TITLE": "Estado de mis contribuciones",
+    "INVOICE": "Factura",
+    "DESCRIPTION": "Descripción",
+    "STRATEGY": "Estrategia",
+    "AMOUNT": "Monto",
+    "DUE_DATE": "Fecha límite",
+    "STATUS": "Estado",
+    "PAID_AT": "Pagado en"
+  },
+  "BILLS": {
+    "TITLE": "Cuentas del hogar",
+    "REGISTER_BUTTON": "Registrar nueva cuenta",
+    "DESCRIPTION": "Descripción",
+    "AMOUNT": "Monto (S/)",
+    "DATE": "Fecha",
+    "NEW_BILL_DIALOG": "Nueva cuenta",
+    "SAVE_BUTTON": "Guardar"
+  },
+  "CONTRIB": {
+    "TITLE": "Contribuciones del hogar",
+    "NEW_BUTTON": "Nueva contribución",
+    "DESCRIPTION": "Descripción",
+    "BILL": "Cuenta",
+    "STRATEGY": "Estrategia",
+    "STRATEGY_EQUAL": "Igualitaria",
+    "STRATEGY_INCOME": "Según Ingresos",
+    "DEADLINE": "Fecha Límite",
+    "MEMBER": "Miembro",
+    "ROLE": "Rol",
+    "AMOUNT": "Monto (S/)",
+    "STATUS": "Estado",
+    "PAID": "Pagado",
+    "PENDING": "Pendiente",
+    "NO_PAYMENT_RECORDS": "Sin registros de pagos",
+    "NO_CONTRIBUTIONS": "No hay contribuciones registradas.",
+    "SAVE_BUTTON": "Guardar",
+    "VALIDATION": {
+      "DESCRIPTION": "La descripción es obligatoria.",
+      "BILL": "Seleccione una cuenta.",
+      "DEADLINE": "La fecha límite es obligatoria.",
+      "STRATEGY": "Seleccione una estrategia."
+    }
+  },
+  "SUMMARY": {
+    "TITLE": "Resumen del hogar",
+    "MEMBERS": "Miembros",
+    "BILLS": "Cuentas",
+    "CONTRIBUTIONS": "Contribuciones"
+  },
+  "HOUSEHOLD": {
+    "MEMBERS": {
+      "TITLE": "Miembros del hogar",
+      "NAME": "Nombre",
+      "EMAIL": "Email",
+      "INCOME": "Ingreso mensual"
+    }
+  },
+  "contributions": {
+    "bill": "Factura",
+    "description": "Descripción",
+    "amount": "Monto",
+    "strategy": "Estrategia",
+    "dueDate": "Fecha límite",
+    "status": "Estado",
+    "actions": "Acciones",
+    "pay": "Pagar",
+    "pageReport": "Mostrando {first} a {last} de {totalRecords} contribuciones"
   }
 }

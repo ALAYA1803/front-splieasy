@@ -1,11 +1,11 @@
 <div class="p-4 max-w-screen-lg mx-auto">
-  <p-card header="Miembros del hogar" class="mt-4">
+  <p-card [header]="'HOUSEHOLD.MEMBERS.TITLE' | translate" class="mt-4">
     <p-table [value]="members" [loading]="loading" responsiveLayout="scroll">
       <ng-template pTemplate="header">
         <tr>
-          <th>Nombre</th>
-          <th>Email</th>
-          <th>Ingreso mensual</th>
+          <th>{{ 'HOUSEHOLD.MEMBERS.NAME' | translate }}</th>
+          <th>{{ 'HOUSEHOLD.MEMBERS.EMAIL' | translate }}</th>
+          <th>{{ 'HOUSEHOLD.MEMBERS.INCOME' | translate }}</th>
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-member>

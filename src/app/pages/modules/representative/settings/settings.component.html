@@ -1,33 +1,33 @@
-<p-card header="Ajustes de usuario" class="mt-4">
+<p-card [header]="'SETTINGS.TITLE' | translate" class="mt-4">
   <form [formGroup]="form" (ngSubmit)="save()" *ngIf="form">
     <div class="p-fluid">
 
       <div class="field">
-        <label for="language">Idioma</label>
+        <label for="language">{{ 'SETTINGS.LANGUAGE.LABEL' | translate }}</label>
         <p-dropdown
           [options]="[
-            { label: 'Español', value: 'es' },
-            { label: 'Inglés', value: 'en' }
+            { label: ('SETTINGS.LANGUAGE.OPTIONS.ES' | translate), value: 'es' },
+            { label: ('SETTINGS.LANGUAGE.OPTIONS.EN' | translate), value: 'en' }
           ]"
           formControlName="language"
-          placeholder="Seleccione un idioma">
+          [placeholder]="'SETTINGS.LANGUAGE.PLACEHOLDER' | translate">
         </p-dropdown>
       </div>
 
       <div class="field">
-        <label for="dark_mode">Modo oscuro</label>
+        <label for="dark_mode">{{ 'SETTINGS.DARK_MODE' | translate }}</label>
         <p-inputSwitch formControlName="dark_mode"></p-inputSwitch>
       </div>
 
       <div class="field">
-        <label for="notifications_enabled">Notificaciones</label>
+        <label for="notifications_enabled">{{ 'SETTINGS.NOTIFICATIONS' | translate }}</label>
         <p-inputSwitch formControlName="notifications_enabled"></p-inputSwitch>
       </div>
 
     </div>
 
     <div class="mt-3">
-      <p-button type="submit" label="Guardar cambios" icon="pi pi-save"></p-button>
+      <p-button type="submit" [label]="'SETTINGS.SAVE_BUTTON' | translate" icon="pi pi-save"></p-button>
     </div>
   </form>
 </p-card>

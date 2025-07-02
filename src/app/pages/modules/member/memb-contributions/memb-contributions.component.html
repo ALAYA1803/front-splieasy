@@ -1,41 +1,40 @@
-<div class="p-4 max-w-screen-lg mx-auto">
-  <p-table [value]="contributions" *ngIf="!isLoading" [paginator]="true" [rows]="5" [responsiveLayout]="'scroll'"
-    [showCurrentPageReport]="true"
-    currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} contribuciones">
-    <ng-template pTemplate="header">
-      <tr>
-        <th>Factura</th>
-        <th>Descripción</th>
-        <th>Monto</th>
-        <th>Estrategia</th>
-        <th>Fecha límite</th>
-        <th>Estado</th>
-        <th>Acciones</th>
-      </tr>
-    </ng-template>
+<p-table [value]="contributions" *ngIf="!isLoading"
+         [paginator]="true" [rows]="5" [responsiveLayout]="'scroll'"
+         [showCurrentPageReport]="true"
+         [currentPageReportTemplate]="'contributions.pageReport' | translate">
+  <ng-template pTemplate="header">
+    <tr>
+      <th>{{ 'contributions.bill' | translate }}</th>
+      <th>{{ 'contributions.description' | translate }}</th>
+      <th>{{ 'contributions.amount' | translate }}</th>
+      <th>{{ 'contributions.strategy' | translate }}</th>
+      <th>{{ 'contributions.dueDate' | translate }}</th>
+      <th>{{ 'contributions.status' | translate }}</th>
+      <th>{{ 'contributions.actions' | translate }}</th>
+    </tr>
+  </ng-template>
 
-    <ng-template pTemplate="body" let-c>
-      <tr>
-        <td>{{ c.billDescripcion }}</td>
-        <td>{{ c.descripcion }}</td>
-        <td>{{ c.monto | currency }}</td>
-        <td>{{ c.strategy }}</td>
-        <td>{{ c.fechaLimite | date: 'longDate' }}</td>
-        <td>
-          <span class="badge" [ngClass]="{
-            'bg-success': c.status === 'PAGADO',
-            'bg-warning': c.status === 'PENDIENTE'
-          }">
-            {{ c.status }}
-          </span>
-        </td>
-        <td>
-          <button *ngIf="c.status === 'PENDIENTE'" class="btn btn-sm btn-primary" (click)="pagar(c)">
-            Pagar
-          </button>
-          <i *ngIf="c.status === 'PAGADO'" class="pi pi-check-circle text-success"></i>
-        </td>
-      </tr>
-    </ng-template>
-  </p-table>
-</div>
+  <ng-template pTemplate="body" let-c>
+    <tr>
+      <td>{{ c.billDescripcion }}</td>
+      <td>{{ c.descripcion }}</td>
+      <td>{{ c.monto | currency }}</td>
+      <td>{{ c.strategy }}</td>
+      <td>{{ c.fechaLimite | date: 'longDate' }}</td>
+      <td>
+        <span class="badge" [ngClass]="{
+          'bg-success': c.status === 'PAGADO',
+          'bg-warning': c.status === 'PENDIENTE'
+        }">
+          {{ c.status }}
+        </span>
+      </td>
+      <td>
+        <button *ngIf="c.status === 'PENDIENTE'" class="btn btn-sm btn-primary" (click)="pagar(c)">
+          {{ 'contributions.pay' | translate }}
+        </button>
+        <i *ngIf="c.status === 'PAGADO'" class="pi pi-check-circle text-success"></i>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>

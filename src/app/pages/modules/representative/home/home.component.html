@@ -1,21 +1,21 @@
 <div class="p-4 max-w-screen-lg mx-auto">
-  <p-card header="Resumen del hogar" class="mb-4">
+  <p-card [header]="'SUMMARY.TITLE' | translate" class="mb-4">
     <div class="text-xl mb-2">{{ household?.name }}</div>
     <div class="text-muted mb-3">{{ household?.description }}</div>
 
     <div class="grid">
       <div class="col-12 md:col-4">
-        <p-panel header="Miembros">
+        <p-panel [header]="'SUMMARY.MEMBERS' | translate">
           <div class="text-center text-2xl">{{ members.length }}</div>
         </p-panel>
       </div>
       <div class="col-12 md:col-4">
-        <p-panel header="Cuentas">
+        <p-panel [header]="'SUMMARY.BILLS' | translate">
           <div class="text-center text-2xl">{{ bills.length }}</div>
         </p-panel>
       </div>
       <div class="col-12 md:col-4">
-        <p-panel header="Contribuciones">
+        <p-panel [header]="'SUMMARY.CONTRIBUTIONS' | translate">
           <div class="text-center text-2xl">{{ contributions.length }}</div>
         </p-panel>
       </div>

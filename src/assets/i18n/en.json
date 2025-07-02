@@ -125,5 +125,139 @@
       "HELP": "Help Center"
     },
     "RIGHTS": "All rights reserved."
+  },
+  "FORGOT": {
+    "TITLE": "Forgot Password",
+    "EMAIL_LABEL": "Email",
+    "CHANGE_PASSWORD_BUTTON": "Change Password",
+    "BACK_TO_LOGIN": "Back to login"
+  },
+  "LOGIN": {
+    "TITLE": "Login",
+    "EMAIL_LABEL": "Email",
+    "EMAIL_PLACEHOLDER": "mem@example.com or rep@example.com",
+    "PASSWORD_LABEL": "Password",
+    "PASSWORD_PLACEHOLDER": "mem123 or rep123",
+    "BUTTON": "Login",
+    "FORGOT_PASSWORD": "Forgot your password?",
+    "CREATE_ACCOUNT": "New here? Create an account"
+  },
+  "REGISTER": {
+    "TITLE": "Register",
+    "FIRST_NAME_LABEL": "First Name",
+    "LAST_NAME_LABEL": "Last Name",
+    "EMAIL_LABEL": "Email",
+    "PASSWORD_LABEL": "Password",
+    "REPEAT_PASSWORD_LABEL": "Repeat Password",
+    "ROLE_LABEL": "Role",
+    "ROLE_PLACEHOLDER": "--select a role--",
+    "ROLE_MEMBER": "Member",
+    "ROLE_REPRESENTATIVE": "Representative",
+    "BUTTON": "Register",
+    "HAVE_ACCOUNT": "I have an account"
+  },
+  "RESET": {
+    "TITLE": "Reset Password",
+    "NEW_PASSWORD_LABEL": "New Password",
+    "CONFIRM_PASSWORD_LABEL": "Confirm Password",
+    "BUTTON": "Reset Password"
+  },
+  "DASHBOARD": {
+    "HOME_CARD": {
+      "TITLE": "My Home",
+      "NAME": "Name:",
+      "CURRENCY": "Currency:",
+      "DESCRIPTION": "Description:"
+    },
+    "FINANCE_CARD": {
+      "TITLE": "My Financial Situation",
+      "TOTAL_PENDING": "Total pending:",
+      "TOTAL_PAID": "Total paid:",
+      "ACTIVE_CONTRIBUTIONS": "Active contributions:"
+    },
+    "MEMBERS_CARD": {
+      "TITLE": "Household Members"
+    }
+  },
+  "SETTINGS": {
+    "TITLE": "User Settings",
+    "LANGUAGE": {
+      "LABEL": "Language",
+      "PLACEHOLDER": "Select a language",
+      "ES": "Spanish",
+      "EN": "English"
+    },
+    "DARK_MODE": "Dark mode",
+    "NOTIFICATIONS": "Receive notifications",
+    "SAVE_BUTTON": "Save"
+  },
+  "CONTRIBUTIONS_STATUS": {
+    "TITLE": "My Contributions Status",
+    "INVOICE": "Invoice",
+    "DESCRIPTION": "Description",
+    "STRATEGY": "Strategy",
+    "AMOUNT": "Amount",
+    "DUE_DATE": "Due Date",
+    "STATUS": "Status",
+    "PAID_AT": "Paid At"
+  },
+  "BILLS": {
+    "TITLE": "Household Bills",
+    "REGISTER_BUTTON": "Register new bill",
+    "DESCRIPTION": "Description",
+    "AMOUNT": "Amount (S/)",
+    "DATE": "Date",
+    "NEW_BILL_DIALOG": "New bill",
+    "SAVE_BUTTON": "Save"
+  },
+  "CONTRIB": {
+    "TITLE": "Household Contributions",
+    "NEW_BUTTON": "New Contribution",
+    "DESCRIPTION": "Description",
+    "BILL": "Bill",
+    "STRATEGY": "Strategy",
+    "STRATEGY_EQUAL": "Equal",
+    "STRATEGY_INCOME": "Income-based",
+    "DEADLINE": "Deadline",
+    "MEMBER": "Member",
+    "ROLE": "Role",
+    "AMOUNT": "Amount (S/)",
+    "STATUS": "Status",
+    "PAID": "Paid",
+    "PENDING": "Pending",
+    "NO_PAYMENT_RECORDS": "No payment records",
+    "NO_CONTRIBUTIONS": "No contributions registered.",
+    "SAVE_BUTTON": "Save",
+    "VALIDATION": {
+      "DESCRIPTION": "Description is required.",
+      "BILL": "Select a bill.",
+      "DEADLINE": "Deadline is required.",
+      "STRATEGY": "Select a strategy."
+    }
+  },
+  "SUMMARY": {
+    "TITLE": "Household Summary",
+    "MEMBERS": "Members",
+    "BILLS": "Bills",
+    "CONTRIBUTIONS": "Contributions"
+  },
+  "HOUSEHOLD": {
+    "MEMBERS": {
+      "TITLE": "Household Members",
+      "NAME": "Name",
+      "EMAIL": "Email",
+      "INCOME": "Monthly Income"
+    }
+  },
+  "contributions": {
+    "bill": "Bill",
+    "description": "Description",
+    "amount": "Amount",
+    "strategy": "Strategy",
+    "dueDate": "Due date",
+    "status": "Status",
+    "actions": "Actions",
+    "pay": "Pay",
+    "pageReport": "Showing {first} to {last} of {totalRecords} contributions"
   }
 }

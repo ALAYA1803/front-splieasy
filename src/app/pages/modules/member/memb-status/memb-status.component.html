@@ -1,15 +1,15 @@
 <div class="p-4 max-w-screen-lg mx-auto">
-  <p-card header="Estado de mis contribuciones">
+  <p-card [header]="'CONTRIBUTIONS_STATUS.TITLE' | translate">
     <p-table [value]="statusList" [paginator]="true" [rows]="5" [responsiveLayout]="'scroll'">
       <ng-template pTemplate="header">
         <tr>
-          <th>Factura</th>
-          <th>Descripción</th>
-          <th>Estrategia</th>
-          <th>Monto</th>
-          <th>Fecha límite</th>
-          <th>Estado</th>
-          <th>Pagado en</th>
+          <th>{{ 'CONTRIBUTIONS_STATUS.INVOICE' | translate }}</th>
+          <th>{{ 'CONTRIBUTIONS_STATUS.DESCRIPTION' | translate }}</th>
+          <th>{{ 'CONTRIBUTIONS_STATUS.STRATEGY' | translate }}</th>
+          <th>{{ 'CONTRIBUTIONS_STATUS.AMOUNT' | translate }}</th>
+          <th>{{ 'CONTRIBUTIONS_STATUS.DUE_DATE' | translate }}</th>
+          <th>{{ 'CONTRIBUTIONS_STATUS.STATUS' | translate }}</th>
+          <th>{{ 'CONTRIBUTIONS_STATUS.PAID_AT' | translate }}</th>
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-s>
@@ -21,7 +21,7 @@
           <td>{{ s.fechaLimite | date: 'longDate' }}</td>
           <td>
             <span class="badge"
-              [ngClass]="{
+                  [ngClass]="{
                 'bg-success': s.status === 'PAGADO',
                 'bg-warning': s.status === 'PENDIENTE'
               }">

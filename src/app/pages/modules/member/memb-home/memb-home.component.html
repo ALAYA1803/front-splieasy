@@ -3,25 +3,25 @@
 
     <!-- Información del hogar -->
     <div class="col-12 md:col-6 p-1">
-      <p-card header="Mi hogar">
-        <p><strong>Nombre:</strong> {{ household.name }}</p>
-        <p><strong>Moneda:</strong> {{ household.currency }}</p>
-        <p><strong>Descripción:</strong> {{ household.description }}</p>
+      <p-card [header]="'DASHBOARD.HOME_CARD.TITLE' | translate">
+        <p><strong>{{ 'DASHBOARD.HOME_CARD.NAME' | translate }}</strong> {{ household.name }}</p>
+        <p><strong>{{ 'DASHBOARD.HOME_CARD.CURRENCY' | translate }}</strong> {{ household.currency }}</p>
+        <p><strong>{{ 'DASHBOARD.HOME_CARD.DESCRIPTION' | translate }}</strong> {{ household.description }}</p>
       </p-card>
     </div>
 
     <!-- Información financiera -->
     <div class="col-12 md:col-6 p-1">
-      <p-card header="Mi situación financiera">
-        <p><strong>Total pendiente:</strong> {{ totalPendiente | currency:household.currency }}</p>
-        <p><strong>Total pagado:</strong> {{ totalPagado | currency:household.currency }}</p>
-        <p><strong>Contribuciones activas:</strong> {{ contributions.length }}</p>
+      <p-card [header]="'DASHBOARD.FINANCE_CARD.TITLE' | translate">
+        <p><strong>{{ 'DASHBOARD.FINANCE_CARD.TOTAL_PENDING' | translate }}</strong> {{ totalPendiente | currency:household.currency }}</p>
+        <p><strong>{{ 'DASHBOARD.FINANCE_CARD.TOTAL_PAID' | translate }}</strong> {{ totalPagado | currency:household.currency }}</p>
+        <p><strong>{{ 'DASHBOARD.FINANCE_CARD.ACTIVE_CONTRIBUTIONS' | translate }}</strong> {{ contributions.length }}</p>
       </p-card>
     </div>
 
     <!-- Miembros del hogar -->
     <div class="col-12 p-1">
-      <p-card header="Miembros del hogar">
+      <p-card [header]="'DASHBOARD.MEMBERS_CARD.TITLE' | translate">
         <ul class="list-disc pl-4">
           <li *ngFor="let m of members">
             {{ m.name }} ({{ m.email }}) -

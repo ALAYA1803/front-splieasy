@@ -10,6 +10,7 @@ import { MembersComponent } from './members/members.component';
 import { BillsComponent } from './bills/bills.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DropdownModule } from 'primeng/dropdown';
+import {TranslatePipe} from '@ngx-translate/core';
 
 
 @NgModule({
@@ -25,7 +26,8 @@ import { DropdownModule } from 'primeng/dropdown';
     RepresentativeRoutingModule,
     PrimeNgModule,
     ReactiveFormsModule,
-    DropdownModule
+    DropdownModule,
+    TranslatePipe
   ]
 })
 export class RepresentativeModule { }

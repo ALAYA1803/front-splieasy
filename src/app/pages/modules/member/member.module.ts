@@ -8,6 +8,7 @@ import { MembSettingsComponent } from './memb-settings/memb-settings.component';
 import { MembHomeComponent } from './memb-home/memb-home.component';
 import { PrimeNgModule } from '../../../prime-ng/prime-ng.module';
 import { DropdownModule } from 'primeng/dropdown';
+import {TranslatePipe} from '@ngx-translate/core';
 
 
 @NgModule({
@@ -22,7 +23,8 @@ import { DropdownModule } from 'primeng/dropdown';
     CommonModule,
     MemberRoutingModule,
     PrimeNgModule,
-    DropdownModule
+    DropdownModule,
+    TranslatePipe
   ]
 })
 export class MemberModule { }
