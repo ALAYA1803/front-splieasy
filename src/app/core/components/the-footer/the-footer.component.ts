@@ -8,5 +8,7 @@ import { TranslateModule } from '@ngx-translate/core';
   styleUrl: './the-footer.component.css'
 })
 export class TheFooterComponent {
+  public currentYear: number = new Date().getFullYear();
 
+  constructor() { }
 }

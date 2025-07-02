@@ -1,43 +1,79 @@
-.sidebar {
-  width: 250px;
-  min-height: 100vh;
-  background-color: #1565c0;
-  border-right: 1px solid #1565c0;
+:host {
+  display: block;
+  height: 100%;
 }
 
-.sidebar-item {
-  padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
-  transition: background-color 0.2s ease;
-  cursor: pointer;
-  user-select: none; /* evita que se seleccione el texto al hacer clic */
+.sidebar-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100vh;
+  background-color: #2c3e50;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  color: #ecf0f1;
+}
+
+.sidebar-header {
   display: flex;
   align-items: center;
+  border-bottom: 1px solid #34495e;
 }
 
-.sidebar-item:hover {
-  background-color: #42a5f5;
+.logo-img {
+  height: 40px;
+  width: 40px;
 }
 
-.sidebar-item:active {
-  background-color: #42a5f5;
+.app-name {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-left: 0.75rem;
+  color: #ecf0f1;
 }
 
-.logout {
-  background-color: #dc3545 !important; /* rojo estilo Bootstrap danger */
-  color: white !important;              /* 👈 texto blanco */
+.nav-link {
+  color: #bdc3c7;
+  border-radius: 8px;
+  margin: 0.2rem 0.5rem;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  cursor: pointer;
+  text-decoration: none;
+  font-weight: 500;
+  border-left: 4px solid transparent;
 }
 
-.logout:hover {
-  background-color: #c82333 !important; /* un rojo más oscuro al pasar el mouse */
-  color: white !important;              /* 👈 mantiene el texto blanco al hacer hover */
+.nav-link:hover {
+  background-color: #34495e;
+  color: #ffffff;
 }
 
-@media (max-width: 768px) {
-  .sidebar {
-    width: 100%;
-    min-height: auto;
-    position: fixed;
-    z-index: 100;
-  }
+.nav-link.active-route {
+  background-color: rgba(52, 152, 219, 0.15);
+  color: #3498db;
+  font-weight: 700;
+  border-left: 4px solid #3498db;
+}
+
+.sidebar-footer {
+  border-top: 1px solid #34495e;
+}
+
+.user-profile {
+  background-color: #34495e;
+  border-radius: 8px;
+}
+
+.logout-button {
+  background: transparent;
+  border: none;
+  color: #e74c3c;
+  width: 100%;
+  border-radius: 8px;
+  font-weight: 700;
+  transition: background-color 0.2s ease;
+  cursor: pointer;
+}
+
+.logout-button:hover {
+  background-color: rgba(231, 76, 60, 0.1);
 }

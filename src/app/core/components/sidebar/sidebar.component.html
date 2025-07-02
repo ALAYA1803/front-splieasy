@@ -1,20 +1,32 @@
-<div class="sidebar p-3">
-  <div class="logo text-center text-xl font-bold mb-4">
-    SplitEasy
+<div class="sidebar-container">
+  <div>
+    <div class="sidebar-header p-3">
+      <img src="assets/images/logo.png" alt="SplitEasy Logo" class="logo-img">
+      <span class="app-name">SplitEasy</span>
+    </div>
+
+    <ul class="sidebar-nav list-none p-0 m-0">
+      <li *ngFor="let item of items" class="nav-item">
+        <a [routerLink]="item.route" routerLinkActive="active-route" class="nav-link p-3 flex align-items-center">
+          <i class="{{ item.icon }} text-xl"></i>
+          <span class="ml-3">{{ item.label }}</span>
+        </a>
+      </li>
+    </ul>
   </div>
 
-  <ul class="list-none p-0">
-    <li
-      *ngFor="let item of items"
-      class="sidebar-item mb-3"
-      (click)="navigate(item.route)"
-    >
-      <i class="{{ item.icon }} mr-2"></i> {{ item.label }}
-    </li>
+  <div class="sidebar-footer p-3">
+    <div class="user-profile flex align-items-center p-2 mb-3">
+      <p-avatar [label]="user?.name?.charAt(0) || 'U'" shape="circle" styleClass="bg-primary-500 text-white"></p-avatar>
+      <div class="ml-3">
+        <div class="font-bold text-sm">{{ user?.name }}</div>
+        <div class="text-xs text-color-secondary">{{ user?.email }}</div>
+      </div>
+    </div>
 
-    <!-- Botón de logout -->
-    <li class="sidebar-item logout mt-5 text-danger" (click)="logout()">
-      <i class="pi pi-sign-out mr-2"></i> Cerrar sesión
-    </li>
-  </ul>
+    <button (click)="logout()" class="logout-button p-3 flex align-items-center w-full">
+      <i class="pi pi-sign-out text-xl"></i>
+      <span class="ml-3">Cerrar Sesión</span>
+    </button>
+  </div>
 </div>

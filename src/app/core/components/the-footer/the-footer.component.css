@@ -1,0 +1,147 @@
+/* --- Variables de Color --- */
+:host {
+  --footer-bg: #1a1d24;          /* Un gris carbón muy oscuro */
+  --footer-text: #adb5bd;        /* Gris claro para el texto */
+  --footer-heading: #ffffff;    /* Blanco para los títulos */
+  --brand-primary: #1565c0;      /* Color primario de tu marca */
+  --brand-secondary: #ff6f00;     /* Color secundario de tu marca */
+}
+
+/* --- Contenedor Principal del Footer --- */
+.site-footer {
+  background-color: var(--footer-bg);
+  color: var(--footer-text);
+  padding: 4rem 0 2rem 0;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+/* --- Sección Superior (Logo y Enlaces) --- */
+.footer-top {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 2rem;
+  padding-bottom: 2rem;
+}
+
+/* --- Logo y Lema --- */
+.footer-brand {
+  flex-basis: 100%;
+  max-width: 100%;
+  margin-bottom: 2rem;
+}
+
+.footer-brand .brand-text {
+  font-weight: bold;
+  font-size: 1.8rem;
+  text-decoration: none;
+}
+
+.brand-text .text-split {
+  color: var(--brand-primary);
+}
+
+.brand-text .text-easy {
+  color: var(--brand-secondary);
+}
+
+.footer-brand .tagline {
+  margin-top: 0.5rem;
+  max-width: 350px;
+  color: var(--footer-text);
+}
+
+/* --- Contenedor de las Columnas de Enlaces --- */
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  flex-grow: 1;
+  justify-content: space-between;
+}
+
+.footer-column {
+  flex: 1;
+  min-width: 180px;
+}
+
+/* --- Títulos de las Columnas --- */
+.footer-column h6 {
+  color: var(--footer-heading);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: 0.8rem;
+  margin-bottom: 1.2rem;
+}
+
+/* --- Enlaces del Footer --- */
+.footer-column ul {
+  padding-left: 0;
+}
+
+.footer-column a {
+  color: var(--footer-text);
+  text-decoration: none;
+  transition: color 0.2s ease-in-out, padding-left 0.2s ease-in-out;
+  display: inline-block;
+  padding-bottom: 0.5rem;
+}
+
+.footer-column a:hover {
+  color: var(--footer-heading);
+  padding-left: 5px; /* Sutil efecto de desplazamiento al pasar el mouse */
+}
+
+/* --- Iconos de Redes Sociales --- */
+.social-icons {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.social-icons a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 50%;
+  color: var(--footer-text);
+  font-size: 1.1rem;
+  transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.social-icons a:hover {
+  background-color: var(--brand-primary);
+  color: #fff;
+  transform: translateY(-3px); /* Efecto de elevación */
+}
+
+/* --- Línea Divisoria --- */
+.footer-divider {
+  border-color: rgba(255, 255, 255, 0.1);
+  margin-top: 1rem;
+}
+
+/* --- Copyright en la Parte Inferior --- */
+.footer-bottom {
+  padding-top: 2rem;
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--footer-text);
+}
+
+.footer-bottom p {
+  margin: 0;
+}
+
+/* --- Adaptación para Móviles --- */
+@media (min-width: 768px) {
+  .footer-brand {
+    flex-basis: 30%; /* El logo toma menos espacio en pantallas grandes */
+    max-width: 30%;
+    margin-bottom: 0;
+  }
+}

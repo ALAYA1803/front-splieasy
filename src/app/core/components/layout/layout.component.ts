@@ -7,8 +7,8 @@ import { Component, HostListener } from '@angular/core';
   styleUrl: './layout.component.css'
 })
 export class LayoutComponent {
-  isSidebarOpen = true; // Inicialmente abierto
-  isSidebarOpenMobile = false; // Inicialmente cerrado
+  isSidebarOpen = true;
+  isSidebarOpenMobile = false;
   isMobile = false;
 
   ngOnInit(): void {

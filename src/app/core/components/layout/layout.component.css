@@ -1,41 +1,106 @@
-.main-layout {
-  background-color: #f2f4f8;
-  background-color: transparent;
+/* --- Variables de Diseño Global --- */
+:host {
+  --sidebar-width: 280px;
+  --header-height: 70px;
+  --background-main: #3a3a3a; /* Un gris muy claro y suave */
+  --border-color: #1c1c1c;     /* Color para bordes sutiles */
+  --transition-speed: 0.3s;
+  --transition-timing: ease-in-out;
 }
 
-.sidebar {
-  width: 250px;
-  background-color: transparent;
-  transition: width 0.5s ease, opacity 0.5s ease;
-  overflow: hidden;
-  /* border-right: 0.5px solid #f0f9f2; */
+/* --- 1. Layout Principal con CSS Grid --- */
+.app-layout {
+  display: grid;
+  /* Define dos columnas: una para el sidebar y otra para el contenido */
+  grid-template-columns: var(--sidebar-width) 1fr;
+  height: 100vh;
+  transition: grid-template-columns var(--transition-speed) var(--transition-timing);
 }
 
-.sidebar-hidden {
+/* Estado colapsado: la columna del sidebar se hace de 0px */
+.app-layout.sidebar-collapsed {
+  grid-template-columns: 0px 1fr;
+}
+
+/* --- 2. Estilos del Sidebar (<aside>) --- */
+.app-sidebar {
+  background-color: #ffffff;
+  border-right: 1px solid var(--border-color);
+  overflow: hidden; /* Oculta el contenido cuando se colapsa */
+  transition: width var(--transition-speed) var(--transition-timing);
+}
+
+/* Cuando se colapsa, su ancho se va a cero */
+.sidebar-collapsed .app-sidebar {
   width: 0;
-  opacity: 0;
-  border-right: none;
 }
 
+/* --- 3. Contenedor Principal (Header + Main) --- */
+.main-container {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* Evita dobles barras de scroll */
+}
+
+/* --- 4. Estilos del Header (<header>) --- */
+.app-header {
+  display: flex;
+  align-items: center;
+  height: var(--header-height);
+  min-height: var(--header-height); /* Evita que se encoja */
+  padding: 0 1.5rem; /* 24px de espaciado lateral */
+  background-color: #101010;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.toggle-button {
+  border-radius: 50% !important;
+}
+
+.header-content {
+  flex-grow: 1;
+  margin-left: 1rem;
+}
+
+/* --- 5. Estilos del Contenido Principal (<main>) --- */
 .main-content {
-  overflow: auto;
-  background-color: transparent;
+  flex-grow: 1;
+  overflow-y: auto; /* El scroll solo ocurre aquí */
+  background-color: var(--background-main);
+  padding: 2rem; /* 32px de espaciado interno */
 }
 
-.separator {
-  display: block;
-  width: 1px;
-  border: 1px solid #e3e8f0;
-  align-self: stretch;
-  margin: 0 0.5rem;
-  visibility: hidden;
+/* --- 6. Lógica para Móviles --- */
+.mobile-menu-button {
+  display: none; /* Oculto por defecto */
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  z-index: 1001; /* Por encima del contenido */
+  background: #ffffff !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-.boton-toggle-sidebar {
-  padding-left: 0.5rem;
-}
+/* A partir de 992px (tablets/desktops), se usa el sidebar fijo */
+/* Por debajo de 992px, se usa el drawer y el botón de hamburguesa */
+@media (max-width: 991.98px) {
+  .app-sidebar {
+    display: none; /* Oculta el sidebar de escritorio */
+  }
 
-.boton-toggle-sidebar ::ng-deep .p-button-icon {
-  background-color: white !important;
-}
+  .app-layout {
+    grid-template-columns: 0 1fr; /* El contenido ocupa todo */
+  }
 
+  .toggle-button {
+    display: none !important; /* Oculta el botón de toggle de escritorio */
+  }
+
+  .mobile-menu-button {
+    display: block; /* Muestra el botón de hamburguesa */
+  }
+
+  .app-header {
+    padding: 0 1rem 0 4rem; /* Hacemos espacio para el botón de menú */
+  }
+}

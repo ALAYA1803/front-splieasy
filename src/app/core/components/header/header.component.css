@@ -14,7 +14,7 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: calc(100% - 80px); /* deja espacio para el avatar */
+  max-width: calc(100% - 80px);
   flex: 1;
 }
 

@@ -7,5 +7,7 @@ import { Component } from '@angular/core';
   styleUrl: './footer-sidebar.component.css'
 })
 export class FooterSidebarComponent {
+  public currentYear: number = new Date().getFullYear();
 
+  constructor() { }
 }

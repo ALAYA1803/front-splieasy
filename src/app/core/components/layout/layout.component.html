@@ -1,55 +1,48 @@
-<div class="d-flex vh-100 main-layout">
-  <div
-    class="sidebar d-flex flex-shrink-0 min-vh-100"
-    [ngClass]="{
-      'sidebar-hidden': !isSidebarOpen
-    }"
-  >
-    <app-sidebar class="flex-grow-1"></app-sidebar>
-  </div>
+<div class="app-layout" [class.sidebar-collapsed]="!isSidebarOpen">
 
-  <div class="d-flex flex-column flex-grow-1 barra-superior">
-    <div class="d-flex align-items-center barra-superior">
+  <aside class="app-sidebar">
+    <app-sidebar></app-sidebar>
+  </aside>
+
+  <div class="main-container">
+
+    <header class="app-header">
       <p-button
+        styleClass="toggle-button"
         [rounded]="true"
-        [severity]="'contrast'"
-        [icon]="
-          isMobile
-            ? 'pi pi-bars'
-            : isSidebarOpen
-            ? 'pi pi-angle-left'
-            : 'pi pi-angle-right'
-        "
-        (onClick)="toggleSidebar()"
-        [raised]="true"
-        variant="text"
-        class="boton-toggle-sidebar"
+        [text]="true"
+        [icon]="isSidebarOpen ? 'pi pi-angle-left' : 'pi pi-angle-right'"
+        (click)="toggleSidebar()"
       ></p-button>
-      <span class="separator"></span>
-      <app-header class="flex-grow-1"></app-header>
-    </div>
 
-    <div class="main-content flex-grow-1">
+      <div class="header-content">
+        <app-header></app-header>
+      </div>
+    </header>
+
+    <main class="main-content">
       <router-outlet></router-outlet>
-    </div>
-
+    </main>
     <app-footer-sidebar class="w-100"></app-footer-sidebar>
   </div>
 
-  <!-- Drawer (Mobil) -->
   <p-drawer
     [(visible)]="isSidebarOpenMobile"
     position="left"
     [modal]="true"
-    [dismissible]="true"
-    [showCloseIcon]="true"
-    [style]="{ width: '250px' }"
-    class="d-md-none"
+    [style]="{ width: '280px' }"
   >
-    <ng-template #headless>
-      <div class="d-flex w-100 h-100">
-        <app-sidebar class="w-100 h-100"></app-sidebar>
-      </div>
+    <ng-template pTemplate="content">
+      <app-sidebar (onNavigate)="isSidebarOpenMobile = false"></app-sidebar>
     </ng-template>
   </p-drawer>
+
+  <p-button
+    *ngIf="isMobile"
+    icon="pi pi-bars"
+    styleClass="mobile-menu-button"
+    [rounded]="true"
+    [text]="true"
+    (click)="isSidebarOpenMobile = true"
+  ></p-button>
 </div>
