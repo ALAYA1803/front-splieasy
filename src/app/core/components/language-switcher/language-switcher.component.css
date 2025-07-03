@@ -9,7 +9,8 @@
   gap: 0.5rem;
   padding: 0.5rem 0.75rem;
   background-color: #3e3e3e;
-  border: 1px solid #e0e0e0;
+  border: 1.5px solid #808080;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
   border-radius: 50px;
   cursor: pointer;
   transition: background-color 0.2s ease;
@@ -41,7 +42,7 @@
   z-index: 100;
   background-color: #ffffff;
   border-radius: 8px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
   border: 1px solid #e9ecef;
   min-width: 150px;
   padding: 0.5rem;

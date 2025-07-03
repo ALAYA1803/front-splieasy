@@ -9,7 +9,7 @@
 
 .reviews-section {
   padding: 6rem 1rem;
-  background-color: var(--background-light);
+  background-color: #202020;
 }
 
 .section-header {
@@ -19,7 +19,7 @@
   font-size: 2.5rem; font-weight: 700;
 }
 .section-lead {
-  font-size: 1.1rem; color: var(--text-muted); max-width: 600px; margin: 0.5rem auto 0 auto;
+  font-size: 1.1rem; color: #ffffff; max-width: 600px; margin: 0.5rem auto 0 auto;
 }
 
 .testimonial-card {

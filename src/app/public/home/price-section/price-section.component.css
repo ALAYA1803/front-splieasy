@@ -9,7 +9,7 @@
 
 .price-section {
   padding: 6rem 1rem;
-  background-color: var(--background-light);
+  background-color: #2d2d2d;
 }
 
 .section-header {
@@ -19,10 +19,9 @@
   font-size: 2.5rem; font-weight: 700;
 }
 .section-lead {
-  font-size: 1.1rem; color: var(--text-muted); max-width: 600px; margin: 0.5rem auto 0 auto;
+  font-size: 1.1rem; color: #ffffff; max-width: 600px; margin: 0.5rem auto 0 auto;
 }
 
-/* --- Interruptor Mensual/Anual --- */
 .billing-toggle {
   display: flex;
   justify-content: center;
@@ -153,7 +152,6 @@
   font-weight: 700;
 }
 
-/* El botón de la tarjeta recomendada es más llamativo */
 .price-card.recommended .btn-price {
   background-color: var(--brand-primary);
   color: #fff;

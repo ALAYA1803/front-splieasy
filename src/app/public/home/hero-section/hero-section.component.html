@@ -10,8 +10,13 @@
       <a [routerLink]="['/autenticacion/register']" class="btn btn-hero-primary">
         {{ 'HERO.REGISTER_BUTTON' | translate }}
       </a>
-      <a href="#howdoesitwork" class="btn btn-hero-secondary">
-        {{ 'HERO.HOW_IT_WORKS' | translate }} <i class="bi bi-arrow-down-circle ms-2"></i>
+      <a
+        [routerLink]="['/inicio']"
+        fragment="howdoesitwork"
+        class="btn btn-hero-secondary"
+      >
+        {{ 'HERO.HOW_IT_WORKS' | translate }}
+        <i class="bi bi-arrow-down-circle ms-2"></i>
       </a>
     </div>
 

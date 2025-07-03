@@ -1,15 +1,17 @@
 :host {
   --brand-primary: #1565c0;
+  --brand-secondary: #ff6f00;
   --text-dark: #212529;
   --text-muted: #6c757d;
   --background-light: #f8f9fa;
+  --neutral-medium: #e9ecef;
   --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.04);
   --card-shadow-hover: 0 10px 25px rgba(0, 0, 0, 0.08);
 }
 
 .features-section {
   padding: 6rem 1rem;
-  background-color: var(--background-light);
+  background-color: #2d2d2d;
 }
 
 .section-header {
@@ -19,13 +21,13 @@
 .section-title {
   font-size: 2.5rem;
   font-weight: 700;
-  color: var(--text-dark);
+  color: #41a4f3;
   margin-bottom: 0.5rem;
 }
 
 .section-lead {
   font-size: 1.1rem;
-  color: var(--text-muted);
+  color: #ffffff;
   max-width: 700px;
   margin: 0 auto;
 }
@@ -34,7 +36,7 @@
   background-color: #ffffff;
   padding: 2.5rem;
   border-radius: 1rem;
-  border: 1px solid #e9ecef;
+  border: 1px solid var(--neutral-medium);
   text-align: center;
   width: 100%;
   box-shadow: var(--card-shadow);
@@ -55,7 +57,7 @@
   margin-bottom: 1.5rem;
   font-size: 2rem;
   border-radius: 50%;
-  background-color: #e3f2fd;
+  background-color: rgba(21, 101, 192, 0.1);
   color: var(--brand-primary);
 }
 

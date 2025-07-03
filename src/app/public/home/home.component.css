@@ -1,0 +1,12 @@
+:host {
+  --brand-primary: #1565c0;
+  --brand-secondary: #ff6f00;
+  --neutral-light: #f5f7fa;
+  --neutral-medium: #e9ecef;
+  --text-dark: #212529;
+  --text-light: #f8f9fa;
+  --success: #2e7d32;
+  --error: #d32f2f;
+  --warning: #f9a825;
+  --info: #0288d1;
+}

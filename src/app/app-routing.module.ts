@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './public/home/home.component';
 import { LayoutComponent } from './core/components/layout/layout.component';
-import { AuthGuard } from './core/guards/auth.guard'; // Asegúrate de ajustar el path según tu estructura
+import { AuthGuard } from './core/guards/auth.guard';
 
 const routes: Routes = [
   { path: '', redirectTo: 'inicio', pathMatch: 'full' },
@@ -12,7 +12,7 @@ const routes: Routes = [
   {
     path: 'representante',
     component: LayoutComponent,
-    canActivate: [AuthGuard], // 🔒 Protegida por AuthGuard
+    canActivate: [AuthGuard],
     children: [
       {
         path: '',
@@ -23,7 +23,7 @@ const routes: Routes = [
   {
     path: 'miembro',
     component: LayoutComponent,
-    canActivate: [AuthGuard], // 🔒 Protegida por AuthGuard
+    canActivate: [AuthGuard],
     children: [
       {
         path: '',
@@ -34,7 +34,11 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [ RouterModule.forRoot(routes, {
+    anchorScrolling: 'enabled',
+    scrollOffset: [0, 80]
+  })
+  ],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

@@ -136,7 +136,7 @@
       "id": "2",
       "user_id": 2,
       "language": "en",
-      "dark_mode": false,
+      "dark_mode": true,
       "notifications_enabled": true
     }
   ]

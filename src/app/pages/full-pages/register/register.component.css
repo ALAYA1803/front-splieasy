@@ -2,7 +2,7 @@
   --brand-primary: #222222;
   --brand-secondary: #ff6f00;
   --background-light: #f0f0f0;
-  --text-dark: #212529;
+  --text-dark: #000000;
   --text-muted: #6c757d;
   --border-color: #dee2e6;
 }
@@ -22,7 +22,17 @@
   justify-content: center;
   padding: 3rem;
 }
-
+.language-switcher {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 9999;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.4rem 0.8rem;
+  cursor: pointer;
+}
 .brand-logo {
   display: flex;
   align-items: center;
@@ -56,10 +66,11 @@
 }
 
 .form-column {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #fff;
+  background-color: #2d2d2d;
   padding: 2rem;
 }
 
@@ -87,7 +98,7 @@
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  color: var(--text-muted);
+  color: #ffffff;
   text-decoration: none;
   font-size: 1.2rem;
   transition: background-color 0.2s ease, color 0.2s ease;
@@ -101,11 +112,11 @@
 .form-title {
   font-size: 2rem;
   font-weight: 700;
-  color: var(--text-dark);
+  color: #ffffff;
 }
 
 .form-subtitle {
-  color: var(--text-muted);
+  color: #b1b1b1;
   font-size: 0.9rem;
   margin-bottom: 2rem;
 }
@@ -137,7 +148,7 @@
 .form-control {
   height: 50px;
   border-radius: 8px;
-  border: 1px solid var(--border-color);
+  border: 1px solid #000000;
   padding-left: 45px;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }

@@ -9,10 +9,10 @@
 
 .site-navbar {
   padding: 0.75rem 0;
-  background-color: rgba(255, 255, 255, 0.85);
+  background-color: rgba(234, 234, 234, 0.87);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: 1px solid rgba(234, 234, 234, 0.87);
   transition: all 0.3s ease;
 }
 
