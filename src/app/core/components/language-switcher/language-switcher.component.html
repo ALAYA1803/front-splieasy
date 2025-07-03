@@ -1,4 +1,18 @@
-<select [(ngModel)]="selectedLang" (change)="changeLanguage(selectedLang)">
-  <option value="en">English</option>
-  <option value="es">Español</option>
-</select>
+<div class="language-switcher" [class.open]="isOpen">
+  <button class="switcher-button" (click)="toggleDropdown()">
+    <i class="bi bi-translate"></i>
+    <span class="current-lang-code">{{ currentLang.code }}</span>
+    <i class="bi bi-chevron-down dropdown-arrow"></i>
+  </button>
+
+  <div class="switcher-menu" *ngIf="isOpen">
+    <a
+      *ngFor="let lang of availableLangs"
+      class="menu-item"
+      [class.active]="lang.code === currentLang.code"
+      (click)="changeLanguage(lang)">
+      <span class="flag">{{ lang.flag }}</span>
+      <span>{{ lang.name }}</span>
+    </a>
+  </div>
+</div>

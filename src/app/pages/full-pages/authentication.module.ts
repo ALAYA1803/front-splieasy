@@ -12,7 +12,8 @@ import { CoreModule } from '../../core/core.module';
 import { AppRoutingModule } from '../../app-routing.module';
 import { FormsModule } from '@angular/forms';
 import {TranslatePipe} from '@ngx-translate/core';
-
+import { TranslateModule } from '@ngx-translate/core';
+import { LanguageSwitcherComponent } from '../../core/components/language-switcher/language-switcher.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import {TranslatePipe} from '@ngx-translate/core';
     CoreModule,
     AuthenticationRoutingModule,
     FormsModule,
-    TranslatePipe
+    TranslateModule,
+    LanguageSwitcherComponent
   ]
 })
 export class AuthenticationModule { }

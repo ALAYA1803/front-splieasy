@@ -20,7 +20,6 @@ import { AppRoutingModule } from '../../app-routing.module';
 @NgModule({
   declarations: [HomeComponent,
     AboutSectionComponent,
-    ContactusSectionComponent,
     HeroSectionComponent,
     HowdoesitworkSectionComponent,
     PriceSectionComponent,
@@ -32,6 +31,7 @@ import { AppRoutingModule } from '../../app-routing.module';
     CoreModule,
     TranslateModule,
     FormsModule,
+    ContactusSectionComponent,
     HomeRoutingModule
   ]
 })

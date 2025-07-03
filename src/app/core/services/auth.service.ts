@@ -9,7 +9,7 @@ import { map } from 'rxjs';
 })
 export class AuthService {
 
-  private apiUrl = `${environment.urlBackend}/users`; // si usas json-server
+  private apiUrl = `${environment.urlBackend}/users`;
 
   constructor(private http: HttpClient, private router: Router) {}
 
@@ -18,7 +18,7 @@ export class AuthService {
       map(users => {
         const user = users.find(u => u.email === email && u.password === password);
         if (user) {
-          const token = btoa(`${user.email}:${user.password}`); // falso token
+          const token = btoa(`${user.email}:${user.password}`);
           localStorage.setItem('accessToken', token);
           localStorage.setItem('userRole', user.role);
           localStorage.setItem('currentUser', JSON.stringify(user));

@@ -1,13 +1,11 @@
-/* --- Variables de Color --- */
 :host {
-  --footer-bg: #1a1d24;          /* Un gris carbón muy oscuro */
-  --footer-text: #adb5bd;        /* Gris claro para el texto */
-  --footer-heading: #ffffff;    /* Blanco para los títulos */
-  --brand-primary: #1565c0;      /* Color primario de tu marca */
-  --brand-secondary: #ff6f00;     /* Color secundario de tu marca */
+  --footer-bg: #1a1d24;
+  --footer-text: #adb5bd;
+  --footer-heading: #ffffff;
+  --brand-primary: #1565c0;
+  --brand-secondary: #ff6f00;
 }
 
-/* --- Contenedor Principal del Footer --- */
 .site-footer {
   background-color: var(--footer-bg);
   color: var(--footer-text);
@@ -16,7 +14,6 @@
   line-height: 1.6;
 }
 
-/* --- Sección Superior (Logo y Enlaces) --- */
 .footer-top {
   display: flex;
   flex-wrap: wrap;
@@ -25,7 +22,6 @@
   padding-bottom: 2rem;
 }
 
-/* --- Logo y Lema --- */
 .footer-brand {
   flex-basis: 100%;
   max-width: 100%;
@@ -52,7 +48,6 @@
   color: var(--footer-text);
 }
 
-/* --- Contenedor de las Columnas de Enlaces --- */
 .footer-links {
   display: flex;
   flex-wrap: wrap;
@@ -66,7 +61,6 @@
   min-width: 180px;
 }
 
-/* --- Títulos de las Columnas --- */
 .footer-column h6 {
   color: var(--footer-heading);
   font-weight: 600;
@@ -76,7 +70,6 @@
   margin-bottom: 1.2rem;
 }
 
-/* --- Enlaces del Footer --- */
 .footer-column ul {
   padding-left: 0;
 }
@@ -91,10 +84,9 @@
 
 .footer-column a:hover {
   color: var(--footer-heading);
-  padding-left: 5px; /* Sutil efecto de desplazamiento al pasar el mouse */
+  padding-left: 5px;
 }
 
-/* --- Iconos de Redes Sociales --- */
 .social-icons {
   display: flex;
   gap: 0.75rem;
@@ -116,16 +108,14 @@
 .social-icons a:hover {
   background-color: var(--brand-primary);
   color: #fff;
-  transform: translateY(-3px); /* Efecto de elevación */
+  transform: translateY(-3px);
 }
 
-/* --- Línea Divisoria --- */
 .footer-divider {
   border-color: rgba(255, 255, 255, 0.1);
   margin-top: 1rem;
 }
 
-/* --- Copyright en la Parte Inferior --- */
 .footer-bottom {
   padding-top: 2rem;
   text-align: center;
@@ -137,10 +127,9 @@
   margin: 0;
 }
 
-/* --- Adaptación para Móviles --- */
 @media (min-width: 768px) {
   .footer-brand {
-    flex-basis: 30%; /* El logo toma menos espacio en pantallas grandes */
+    flex-basis: 30%;
     max-width: 30%;
     margin-bottom: 0;
   }

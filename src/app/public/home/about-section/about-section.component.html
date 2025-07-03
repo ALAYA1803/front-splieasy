@@ -1,45 +1,67 @@
-<!-- About Section -->
-<section class="container mt-5" id="about">
-  <div class="row text-center">
-    <h1 class="center">{{ 'ABOUT.TITLE' | translate }}</h1>
-    <div class="col-md-6">
-      <h2>{{ 'ABOUT.MISSION_TITLE' | translate }}</h2>
-      <p>{{ 'ABOUT.MISSION_TEXT' | translate }}</p>
+<section class="about-section-wrapper" id="about">
+  <div class="container">
 
-      <h2>{{ 'ABOUT.VISION_TITLE' | translate }}</h2>
-      <p>{{ 'ABOUT.VISION_TEXT' | translate }}</p>
+    <div class="row align-items-center g-5">
 
-      <h2>{{ 'ABOUT.WHY_TITLE' | translate }}</h2>
-      <p>{{ 'ABOUT.WHY_TEXT_1' | translate }}</p>
-      <p>{{ 'ABOUT.WHY_TEXT_2' | translate }}</p>
-    </div>
-    <div class="col-md-6">
-      <h2>{{ 'ABOUT.WHO_TITLE' | translate }}</h2>
-      <p [innerHTML]="'ABOUT.WHO_TEXT_1' | translate"></p>
-      <p>{{ 'ABOUT.WHO_TEXT_2' | translate }}</p>
-      <p [innerHTML]="'ABOUT.WHO_TEXT_3' | translate"></p>
-    </div>
-  </div>
-  <!-- Sección de videos -->
-  <div class="container mb-5">
-    <div class="row">
-      <div class="col-md-6 mb-4">
-        <div class="video-wrapper">
-          <video controls class="video-fluid">
-            <source src="assets/videos/video_about_team.mp4" type="video/mp4" />
-            Tu navegador no soporta el video MP4.
-          </video>
+      <div class="col-lg-6">
+        <div class="about-content">
+          <span class="tagline">{{ 'ABOUT.TAGLINE' | translate }}</span>
+          <h2 class="section-title">{{ 'ABOUT.TITLE' | translate }}</h2>
+          <p class="section-description">{{ 'ABOUT.DESCRIPTION' | translate }}</p>
+
+          <ul class="benefits-list">
+            <li>
+              <div class="icon-box"><i class="bi bi-pie-chart-fill"></i></div>
+              <div class="text-box">
+                <strong>{{ 'ABOUT.BENEFIT_1_TITLE' | translate }}</strong>
+                <p>{{ 'ABOUT.BENEFIT_1_TEXT' | translate }}</p>
+              </div>
+            </li>
+            <li>
+              <div class="icon-box"><i class="bi bi-eye-fill"></i></div>
+              <div class="text-box">
+                <strong>{{ 'ABOUT.BENEFIT_2_TITLE' | translate }}</strong>
+                <p>{{ 'ABOUT.BENEFIT_2_TEXT' | translate }}</p>
+              </div>
+            </li>
+            <li>
+              <div class="icon-box"><i class="bi bi-emoji-smile-fill"></i></div>
+              <div class="text-box">
+                <strong>{{ 'ABOUT.BENEFIT_3_TITLE' | translate }}</strong>
+                <p>{{ 'ABOUT.BENEFIT_3_TEXT' | translate }}</p>
+              </div>
+            </li>
+          </ul>
         </div>
       </div>
-      <div class="col-md-6 mb-4">
-        <div class="video-wrapper">
-          <video controls class="video-fluid">
-            <source src="assets/videos/video_about_product.mkv" type="video/webm" />
-            Tu navegador no soporta el video MKV.
-          </video>
+
+      <div class="col-lg-6">
+        <div class="about-visual">
+          <img src="https://www.esan.edu.pe/images/blog/2016/09/19/finanzas-derecho-corporativo-principal.jpg" alt="Ilustración de personas gestionando finanzas con SplitEasy">
         </div>
       </div>
     </div>
-  </div>
 
+    <div class="video-showcase">
+      <div class="row g-4">
+        <div class="col-md-6">
+          <div class="video-wrapper">
+            <video controls poster="assets/images/PORTADA-ABOUT-THE-PRODUCT1.png">
+              <source src="assets/videos/video_about_product.mkv" type="video/mp4">
+              Tu navegador no soporta el video.
+            </video>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="video-wrapper">
+            <video controls poster="assets/images/PORTADA-ABOUT-THE-TEAM1.png">
+              <source src="assets/videos/video_about_team.mp4" type="video/mp4">
+              Tu navegador no soporta el video.
+            </video>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
 </section>

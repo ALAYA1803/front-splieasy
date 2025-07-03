@@ -1,0 +1,164 @@
+:host {
+  --brand-primary: #1565c0;
+  --brand-secondary: #ff6f00;
+  --text-dark: #212529;
+  --text-muted: #6c757d;
+  --background-light: #f8f9fa;
+  --border-color: #dee2e6;
+}
+
+.price-section {
+  padding: 6rem 1rem;
+  background-color: var(--background-light);
+}
+
+.section-header {
+  margin-bottom: 3rem;
+}
+.section-title {
+  font-size: 2.5rem; font-weight: 700;
+}
+.section-lead {
+  font-size: 1.1rem; color: var(--text-muted); max-width: 600px; margin: 0.5rem auto 0 auto;
+}
+
+/* --- Interruptor Mensual/Anual --- */
+.billing-toggle {
+  display: flex;
+  justify-content: center;
+  background-color: #e0e0e0;
+  border-radius: 50px;
+  padding: 0.4rem;
+  width: fit-content;
+  margin: 0 auto 4rem auto;
+}
+
+.toggle-btn {
+  border: none;
+  padding: 0.6rem 1.25rem;
+  border-radius: 50px;
+  font-weight: 600;
+  cursor: pointer;
+  background-color: transparent;
+  color: var(--text-muted);
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.toggle-btn.active {
+  background-color: #fff;
+  color: var(--brand-primary);
+  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+}
+
+.save-badge {
+  position: absolute;
+  top: -20px;
+  right: -20px;
+  background-color: var(--brand-secondary);
+  color: #fff;
+  font-size: 0.7rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 50px;
+  font-weight: 700;
+}
+
+.price-card {
+  background-color: #fff;
+  border: 1px solid var(--border-color);
+  border-radius: 1rem;
+  padding: 2.5rem;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.plan-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+.plan-price {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--brand-primary);
+  margin: 1rem 0;
+}
+.plan-price small {
+  font-size: 1rem;
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+.card-divider {
+  border-color: var(--border-color);
+  margin: 1.5rem 0;
+}
+
+.features-list {
+  list-style: none;
+  padding: 0;
+  text-align: left;
+  margin-bottom: 2rem;
+}
+.features-list li {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  color: var(--text-dark);
+}
+.features-list i {
+  color: #28a745;
+  font-size: 1.2rem;
+}
+
+.btn-price {
+  width: 100%;
+  padding: 0.8rem;
+  font-weight: 600;
+  border-radius: 8px;
+  text-decoration: none;
+  border: 2px solid var(--brand-primary);
+  background-color: #fff;
+  color: var(--brand-primary);
+  transition: all 0.2s ease;
+}
+.btn-price:hover {
+  background-color: var(--brand-primary);
+  color: #fff;
+}
+
+.price-card.recommended {
+  border-color: var(--brand-primary);
+  border-width: 2px;
+  transform: scale(1.05);
+  box-shadow: 0 10px 30px rgba(21, 101, 192, 0.2);
+}
+
+.recommended-badge {
+  position: absolute;
+  top: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--brand-primary);
+  color: #fff;
+  padding: 0.4rem 1rem;
+  border-radius: 50px;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+/* El botón de la tarjeta recomendada es más llamativo */
+.price-card.recommended .btn-price {
+  background-color: var(--brand-primary);
+  color: #fff;
+}
+.price-card.recommended .btn-price:hover {
+  background-color: #115293;
+  border-color: #115293;
+}

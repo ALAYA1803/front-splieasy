@@ -1,90 +1,40 @@
-<!-- Howdoesitwork Section -->
-<section class="container mt-5" id="howdoesitwork">
-  <h1 class="text-center mb-4">{{ 'HOW_IT_WORKS.TITLE' | translate }}</h1>
+<section class="how-it-works-section" id="howdoesitwork">
+  <div class="container">
+    <div class="section-header text-center">
+      <h2 class="section-title">{{ 'HOW_IT_WORKS.TITLE' | translate }}</h2>
+      <p class="section-lead">{{ 'HOW_IT_WORKS.LEAD_TEXT' | translate }}</p>
+    </div>
 
-  <!-- Para Representantes -->
-  <h2 class="text-start mb-3">
-    {{ 'HOW_IT_WORKS.REP.HEADER' | translate }}
-  </h2>
-  <div class="row row-cols-1 row-cols-md-4 g-4 mb-5">
-    <div class="col">
-      <div class="card card-dark h-100 text-center">
-        <div class="card-body">
-          <i class="bi bi-person-plus-fill display-4 mb-3"></i>
-          <h2 class="card-title">{{ 'HOW_IT_WORKS.REP.SIGNUP_TITLE' | translate }}</h2>
-          <p class="card-text">{{ 'HOW_IT_WORKS.REP.SIGNUP_TEXT' | translate }}</p>
-        </div>
-      </div>
+    <div class="tab-controls">
+      <button class="tab-btn" [class.active]="activeTab === 'rep'" (click)="selectTab('rep')">
+        {{ 'HOW_IT_WORKS.TABS.REP' | translate }}
+      </button>
+      <button class="tab-btn" [class.active]="activeTab === 'member'" (click)="selectTab('member')">
+        {{ 'HOW_IT_WORKS.TABS.MEMBER' | translate }}
+      </button>
     </div>
-    <div class="col">
-      <div class="card card-dark h-100 text-center">
-        <div class="card-body">
-          <i class="bi bi-house-fill display-4 mb-3"></i>
-          <h2 class="card-title">{{ 'HOW_IT_WORKS.REP.CREATE_TITLE' | translate }}</h2>
-          <p class="card-text">{{ 'HOW_IT_WORKS.REP.CREATE_TEXT' | translate }}</p>
-        </div>
-      </div>
-    </div>
-    <div class="col">
-      <div class="card card-dark h-100 text-center">
-        <div class="card-body">
-          <i class="bi bi-cash-coin display-4 mb-3"></i>
-          <h2 class="card-title">{{ 'HOW_IT_WORKS.REP.ASSIGN_TITLE' | translate }}</h2>
-          <p class="card-text">{{ 'HOW_IT_WORKS.REP.ASSIGN_TEXT' | translate }}</p>
-        </div>
-      </div>
-    </div>
-    <div class="col">
-      <div class="card card-dark h-100 text-center">
-        <div class="card-body">
-          <i class="bi bi-bar-chart-fill display-4 mb-3"></i>
-          <h2 class="card-title">{{ 'HOW_IT_WORKS.REP.CONTROL_TITLE' | translate }}</h2>
-          <p class="card-text">{{ 'HOW_IT_WORKS.REP.CONTROL_TEXT' | translate }}</p>
-        </div>
-      </div>
-    </div>
-  </div>
 
-  <!-- Para Miembros del hogar -->
-  <h2 class="text-start mb-3">
-    {{ 'HOW_IT_WORKS.MEMBER.HEADER' | translate }}
-  </h2>
-  <div class="row row-cols-1 row-cols-md-4 g-4 mb-5">
-    <div class="col">
-      <div class="card card-dark h-100 text-center">
-        <div class="card-body">
-          <i class="bi bi-person-plus-fill display-4 mb-3"></i>
-          <h2 class="card-title">{{ 'HOW_IT_WORKS.MEMBER.SIGNUP_TITLE' | translate }}</h2>
-          <p class="card-text">{{ 'HOW_IT_WORKS.MEMBER.SIGNUP_TEXT' | translate }}</p>
+    <div class="tab-content">
+      <div *ngIf="activeTab === 'rep'" class="row g-4 fade-in">
+        <div *ngFor="let step of repSteps" class="col-lg-3 col-md-6 d-flex">
+          <div class="feature-card">
+            <div class="feature-icon"><i [class]="step.iconClass"></i></div>
+            <h3 class="feature-title">{{ step.titleKey | translate }}</h3>
+            <p class="feature-description">{{ step.descriptionKey | translate }}</p>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="activeTab === 'member'" class="row g-4 fade-in">
+        <div *ngFor="let step of memberSteps" class="col-lg-3 col-md-6 d-flex">
+          <div class="feature-card">
+            <div class="feature-icon"><i [class]="step.iconClass"></i></div>
+            <h3 class="feature-title">{{ step.titleKey | translate }}</h3>
+            <p class="feature-description">{{ step.descriptionKey | translate }}</p>
+          </div>
         </div>
       </div>
     </div>
-    <div class="col">
-      <div class="card card-dark h-100 text-center">
-        <div class="card-body">
-          <i class="bi bi-key-fill display-4 mb-3"></i>
-          <h2 class="card-title">{{ 'HOW_IT_WORKS.MEMBER.JOIN_TITLE' | translate }}</h2>
-          <p class="card-text">{{ 'HOW_IT_WORKS.MEMBER.JOIN_TEXT' | translate }}</p>
-        </div>
-      </div>
-    </div>
-    <div class="col">
-      <div class="card card-dark h-100 text-center">
-        <div class="card-body">
-          <i class="bi bi-wallet-fill display-4 mb-3"></i>
-          <h2 class="card-title">{{ 'HOW_IT_WORKS.MEMBER.INCOME_TITLE' | translate }}</h2>
-          <p class="card-text">{{ 'HOW_IT_WORKS.MEMBER.INCOME_TEXT' | translate }}</p>
-        </div>
-      </div>
-    </div>
-    <div class="col">
-      <div class="card card-dark h-100 text-center">
-        <div class="card-body">
-          <i class="bi bi-wallet2 display-4 mb-3"></i>
-          <h2 class="card-title">{{ 'HOW_IT_WORKS.MEMBER.MONITOR_TITLE' | translate }}</h2>
-          <p class="card-text">{{ 'HOW_IT_WORKS.MEMBER.MONITOR_TEXT' | translate }}</p>
-        </div>
-      </div>
-    </div>
+
   </div>
 </section>

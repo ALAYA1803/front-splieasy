@@ -10,7 +10,7 @@ export class SidebarService {
   items$ = this.itemsSubject.asObservable();
 
   constructor() {
-    this.generateMenu(); // Genera el menú inicial si hay un usuario guardado
+    this.generateMenu();
   }
 
   /**
@@ -19,7 +19,6 @@ export class SidebarService {
   generateMenu() {
     const user = JSON.parse(localStorage.getItem('currentUser') || 'null');
 
-    // Si no hay usuario logueado, se limpia el menú
     if (!user || !user.role) {
       this.itemsSubject.next([]);
       return;

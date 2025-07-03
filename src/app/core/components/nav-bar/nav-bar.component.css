@@ -1,0 +1,118 @@
+
+:host {
+  --brand-primary: #1565c0;
+  --brand-secondary: #ff6f00;
+  --text-dark: #212529;
+  --text-light: #f8f9fa;
+  --border-color: #e9ecef;
+}
+
+.site-navbar {
+  padding: 0.75rem 0;
+  background-color: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border-color);
+  transition: all 0.3s ease;
+}
+
+/* --- Logo --- */
+.brand-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.logo-img {
+  width: 50px;
+  height: auto;
+}
+.brand-text {
+  font-weight: 700;
+  font-size: 1.5rem;
+}
+.brand-text .text-split {
+  color: var(--brand-primary);
+}
+.brand-text .text-easy {
+  color: var(--brand-secondary);
+}
+
+.nav-item {
+  margin: 0 0.5rem;
+}
+
+.nav-link {
+  color: var(--text-dark);
+  font-weight: 500;
+  padding: 0.5rem 0.75rem;
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+.nav-link:hover {
+  color: var(--brand-primary);
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 50%;
+  transform: translateX(-50%) scaleX(0);
+  width: 80%;
+  height: 2px;
+  background-color: var(--brand-primary);
+  transition: transform 0.3s ease-in-out;
+}
+
+.nav-link.active {
+  color: var(--brand-primary);
+  font-weight: 600;
+}
+
+.nav-link.active::after {
+  transform: translateX(-50%) scaleX(1);
+}
+
+.navbar-controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-left: 1.5rem;
+}
+
+.btn-login {
+  background-color: var(--brand-primary);
+  color: #fff;
+  padding: 0.6rem 1.5rem;
+  border-radius: 50px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.btn-login:hover {
+  background-color: #115293;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+@media (max-width: 991.98px) {
+  .nav-item {
+    margin: 0.5rem 0;
+    text-align: center;
+  }
+
+  .navbar-controls {
+    flex-direction: column;
+    margin-top: 1rem;
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .btn-login {
+    width: 100%;
+    text-align: center;
+  }
+}

@@ -38,8 +38,8 @@ export class LayoutComponent {
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
     if (event.target.innerWidth >= 768) {
-      this.isSidebarOpen = true; // Desktop: sidebar visible
-      this.isSidebarOpenMobile = false; // Asegura que el drawer esté cerrado
+      this.isSidebarOpen = true;
+      this.isSidebarOpenMobile = false;
       this.isMobile = false;
     } else {
       this.isSidebarOpen = false;

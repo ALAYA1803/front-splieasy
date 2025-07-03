@@ -1,68 +1,30 @@
-<!-- Reviews Section -->
-<section class="container my-5" id="reviews">
-  <h1 class="text-center mb-5">{{ 'REVIEWS.TITLE' | translate }}</h1>
-  <div class="row g-4 justify-content-center">
-
-    <!-- Reseña 1 -->
-    <div class="col-lg-4 col-md-6 d-flex">
-      <div class="card p-4 bg-black text-white border-white w-100 rounded-4 shadow-lg">
-        <div class="d-flex align-items-center mb-4">
-          <img
-            src="assets/images/random1.png"
-            alt="María López"
-            class="rounded-circle me-4"
-            width="80"
-            height="80"
-          />
-          <div>
-            <h2 class="mb-1 fs-4">{{ 'REVIEWS.REVIEW1.NAME' | translate }}</h2>
-            <small class="text-secondary fs-6">{{ 'REVIEWS.REVIEW1.ROLE' | translate }}</small><br />
-            <span class="text-warning fs-5">★★★★★</span>
-          </div>
-        </div>
-        <p class="fs-5">{{ 'REVIEWS.REVIEW1.TEXT' | translate }}</p>
-      </div>
+<section class="reviews-section" id="reviews">
+  <div class="container">
+    <div class="section-header text-center">
+      <h2 class="section-title">{{ 'REVIEWS.TITLE' | translate }}</h2>
+      <p class="section-lead">{{ 'REVIEWS.LEAD_TEXT' | translate }}</p>
     </div>
 
-    <!-- Reseña 2 -->
-    <div class="col-lg-4 col-md-6 d-flex">
-      <div class="card p-4 bg-black text-white border-white w-100 rounded-4 shadow-lg">
-        <div class="d-flex align-items-center mb-4">
-          <img
-            src="assets/images/random2.png"
-            alt="Carlos Fernández"
-            class="rounded-circle me-4"
-            width="80"
-            height="80"
-          />
-          <div>
-            <h2 class="mb-1 fs-4">{{ 'REVIEWS.REVIEW2.NAME' | translate }}</h2>
-            <small class="text-secondary fs-6">{{ 'REVIEWS.REVIEW2.ROLE' | translate }}</small><br />
-            <span class="text-warning fs-5">★★★★★</span>
-          </div>
-        </div>
-        <p class="fs-5">{{ 'REVIEWS.REVIEW2.TEXT' | translate }}</p>
-      </div>
-    </div>
+    <div class="row g-4 justify-content-center">
+      <div *ngFor="let testimonial of testimonials; let i = index" class="col-lg-4 col-md-6 d-flex">
 
-    <!-- Reseña 3 -->
-    <div class="col-lg-4 col-md-6 d-flex">
-      <div class="card p-4 bg-black text-white border-white w-100 rounded-4 shadow-lg">
-        <div class="d-flex align-items-center mb-4">
-          <img
-            src="assets/images/random3.png"
-            alt="José Ramírez"
-            class="rounded-circle me-4"
-            width="80"
-            height="80"
-          />
-          <div>
-            <h2 class="mb-1 fs-4">{{ 'REVIEWS.REVIEW3.NAME' | translate }}</h2>
-            <small class="text-secondary fs-6">{{ 'REVIEWS.REVIEW3.ROLE' | translate }}</small><br />
-            <span class="text-warning fs-5">★★★★☆</span>
+        <div class="testimonial-card" [style.animation-delay]="i * 150 + 'ms'">
+          <i class="bi bi-quote quote-icon"></i>
+          <p class="testimonial-text">"{{ testimonial.textKey | translate }}"</p>
+          <div class="testimonial-author">
+            <img [src]="testimonial.imageUrl" [alt]="testimonial.nameKey | translate" class="author-avatar"/>
+            <div class="author-info">
+              <strong class="author-name">{{ testimonial.nameKey | translate }}</strong>
+              <span class="author-role">{{ testimonial.roleKey | translate }}</span>
+            </div>
+            <div class="star-rating">
+              <i *ngFor="let star of stars" class="bi"
+                 [class.bi-star-fill]="star <= testimonial.rating"
+                 [class.bi-star]="star > testimonial.rating"></i>
+            </div>
           </div>
         </div>
-        <p class="fs-5">{{ 'REVIEWS.REVIEW3.TEXT' | translate }}</p>
+
       </div>
     </div>
   </div>

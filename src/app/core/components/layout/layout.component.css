@@ -1,54 +1,44 @@
-/* --- Variables de Diseño Global --- */
 :host {
   --sidebar-width: 280px;
   --header-height: 70px;
-  --background-main: #3a3a3a; /* Un gris muy claro y suave */
-  --border-color: #1c1c1c;     /* Color para bordes sutiles */
+  --background-main: #3a3a3a;
+  --border-color: #1c1c1c;
   --transition-speed: 0.3s;
   --transition-timing: ease-in-out;
 }
 
-/* --- 1. Layout Principal con CSS Grid --- */
 .app-layout {
   display: grid;
-  /* Define dos columnas: una para el sidebar y otra para el contenido */
   grid-template-columns: var(--sidebar-width) 1fr;
   height: 100vh;
   transition: grid-template-columns var(--transition-speed) var(--transition-timing);
 }
-
-/* Estado colapsado: la columna del sidebar se hace de 0px */
 .app-layout.sidebar-collapsed {
   grid-template-columns: 0px 1fr;
 }
-
-/* --- 2. Estilos del Sidebar (<aside>) --- */
 .app-sidebar {
   background-color: #ffffff;
   border-right: 1px solid var(--border-color);
-  overflow: hidden; /* Oculta el contenido cuando se colapsa */
+  overflow: hidden;
   transition: width var(--transition-speed) var(--transition-timing);
 }
 
-/* Cuando se colapsa, su ancho se va a cero */
 .sidebar-collapsed .app-sidebar {
   width: 0;
 }
 
-/* --- 3. Contenedor Principal (Header + Main) --- */
 .main-container {
   display: flex;
   flex-direction: column;
-  overflow: hidden; /* Evita dobles barras de scroll */
+  overflow: hidden;
 }
 
-/* --- 4. Estilos del Header (<header>) --- */
 .app-header {
   display: flex;
   align-items: center;
   height: var(--header-height);
-  min-height: var(--header-height); /* Evita que se encoja */
-  padding: 0 1.5rem; /* 24px de espaciado lateral */
+  min-height: var(--header-height);
+  padding: 0 1.5rem;
   background-color: #101010;
   border-bottom: 1px solid var(--border-color);
 }
@@ -62,45 +52,41 @@
   margin-left: 1rem;
 }
 
-/* --- 5. Estilos del Contenido Principal (<main>) --- */
 .main-content {
   flex-grow: 1;
-  overflow-y: auto; /* El scroll solo ocurre aquí */
+  overflow-y: auto;
   background-color: var(--background-main);
-  padding: 2rem; /* 32px de espaciado interno */
+  padding: 2rem;
 }
 
-/* --- 6. Lógica para Móviles --- */
 .mobile-menu-button {
-  display: none; /* Oculto por defecto */
+  display: none;
   position: fixed;
   top: 15px;
   left: 15px;
-  z-index: 1001; /* Por encima del contenido */
+  z-index: 1001;
   background: #ffffff !important;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-/* A partir de 992px (tablets/desktops), se usa el sidebar fijo */
-/* Por debajo de 992px, se usa el drawer y el botón de hamburguesa */
 @media (max-width: 991.98px) {
   .app-sidebar {
-    display: none; /* Oculta el sidebar de escritorio */
+    display: none;
   }
 
   .app-layout {
-    grid-template-columns: 0 1fr; /* El contenido ocupa todo */
+    grid-template-columns: 0 1fr;
   }
 
   .toggle-button {
-    display: none !important; /* Oculta el botón de toggle de escritorio */
+    display: none !important;
   }
 
   .mobile-menu-button {
-    display: block; /* Muestra el botón de hamburguesa */
+    display: block;
   }
 
   .app-header {
-    padding: 0 1rem 0 4rem; /* Hacemos espacio para el botón de menú */
+    padding: 0 1rem 0 4rem;
   }
 }

@@ -1,61 +1,57 @@
-<app-nav-bar></app-nav-bar>
+<div class="login-container">
 
-<section class="login-section d-flex align-items-center justify-content-center">
-  <div class="login-box shadow p-4 rounded">
-    <h2 class="text-center mb-4">{{ 'LOGIN.TITLE' | translate }}</h2>
-
-    <form (ngSubmit)="onLogin()">
-      <div class="mb-3">
-        <label for="email" class="form-label">{{ 'LOGIN.EMAIL_LABEL' | translate }}</label>
-        <input
-          id="email"
-          name="email"
-          type="email"
-          class="form-control"
-          [(ngModel)]="email"
-          [placeholder]="'LOGIN.EMAIL_PLACEHOLDER' | translate"
-          required
-        />
-      </div>
-
-      <div class="mb-3">
-        <label for="password" class="form-label">{{ 'LOGIN.PASSWORD_LABEL' | translate }}</label>
-        <input
-          id="password"
-          name="password"
-          type="password"
-          class="form-control"
-          [(ngModel)]="password"
-          [placeholder]="'LOGIN.PASSWORD_PLACEHOLDER' | translate"
-          required
-        />
-      </div>
-
-      <button type="submit" class="btn w-100 signin-button">
-        {{ 'LOGIN.BUTTON' | translate }}
-      </button>
-
-      <div class="text-danger mt-2 text-center" *ngIf="error">
-        {{ error }}
-      </div>
-
-      <div class="text-center mt-3">
-        <a
-          [routerLink]="['/autenticacion/forgot-password']"
-          class="text-decoration-none text-secondary"
-        >
-          {{ 'LOGIN.FORGOT_PASSWORD' | translate }}
-        </a>
-        <br />
-        <a
-          [routerLink]="['/autenticacion/register']"
-          class="text-decoration-none text-secondary"
-        >
-          {{ 'LOGIN.CREATE_ACCOUNT' | translate }}
-        </a>
-      </div>
-    </form>
+  <div class="branding-column">
+    <div class="branding-content">
+      <a routerLink="/" class="brand-logo">
+        <img src="assets/images/logo.png" alt="SplitEasy Logo">
+        <span>SplitEasy</span>
+      </a>
+      <h1 class="welcome-title">{{ 'LOGIN.BRANDING.TITLE' | translate }}</h1>
+      <p class="welcome-text">{{ 'LOGIN.BRANDING.SUBTITLE' | translate }}</p>
+    </div>
   </div>
-</section>
 
-<app-the-footer></app-the-footer>
+  <div class="form-column">
+    <div class="login-box">
+
+      <div class="login-header">
+        <app-language-switcher></app-language-switcher>
+        <a routerLink="/" class="btn-back" [title]="'LOGIN.BACK_BUTTON_TITLE' | translate">
+          <i class="bi bi-x-lg"></i>
+        </a>
+      </div>
+
+      <h2 class="form-title">{{ 'LOGIN.TITLE' | translate }}</h2>
+      <p class="form-subtitle">
+        {{ 'LOGIN.NO_ACCOUNT_PROMPT' | translate }}
+        <a [routerLink]="['/autenticacion/register']">{{ 'LOGIN.CREATE_ACCOUNT_LINK' | translate }}</a>
+      </p>
+
+      <form (ngSubmit)="onLogin()" class="mt-4">
+        <div class="form-group">
+          <label for="email" class="form-label">{{ 'LOGIN.EMAIL_LABEL' | translate }}</label>
+          <div class="input-group">
+            <i class="bi bi-envelope-fill input-icon"></i>
+            <input id="email" name="email" type="email" class="form-control" [(ngModel)]="email" [placeholder]="'LOGIN.EMAIL_PLACEHOLDER' | translate" required/>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="password" class="form-label">{{ 'LOGIN.PASSWORD_LABEL' | translate }}</label>
+          <div class="input-group">
+            <i class="bi bi-lock-fill input-icon"></i>
+            <input id="password" name="password" type="password" class="form-control" [(ngModel)]="password" [placeholder]="'LOGIN.PASSWORD_PLACEHOLDER' | translate" required/>
+          </div>
+        </div>
+
+        <div class="options-group">
+          <a [routerLink]="['/autenticacion/forgot-password']" class="forgot-password-link">{{ 'LOGIN.FORGOT_PASSWORD' | translate }}</a>
+        </div>
+        <div class="text-danger my-3 text-center" *ngIf="error">{{ error }}</div>
+
+        <button type="submit" class="btn btn-login w-100">{{ 'LOGIN.BUTTON' | translate }}</button>
+
+      </form>
+    </div>
+  </div>
+</div>

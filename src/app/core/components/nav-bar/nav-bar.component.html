@@ -1,99 +1,37 @@
-<nav class="navbar navbar-expand-lg fixed-top">
+<nav class="navbar navbar-expand-lg fixed-top site-navbar">
   <div class="container-xxl">
-    <a class="navbar-brand me-auto d-flex align-items-center" href="#">
-      <img
-        src="assets/images/logo.png"
-        alt="Logo"
-        width="60"
-        height="60"
-        class="d-inline-block"
-      />
-      <span class="ms-2">
+    <a class="navbar-brand brand-logo" routerLink="/">
+      <img src="assets/images/logo.png" alt="SplitEasy Logo" class="logo-img"/>
+      <span class="brand-text">
         <span class="text-split">Split</span><span class="text-easy">Easy</span>
       </span>
     </a>
 
-    <div
-      class="offcanvas offcanvas-end"
-      tabindex="-1"
-      id="offcanvasNavbar"
-      aria-labelledby="offcanvasNavbarLabel"
-    >
-      <div class="offcanvas-header">
-        <a class="navbar-brand" href="#">
-          <img
-            src="assets/images/logo.png"
-            alt="Logo"
-            width="30"
-            height="24"
-            class="d-inline-block align-text-top"
-          />
-          <span class="text-food">Split</span><span class="text-heaven">Easy</span>
-        </a>
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="offcanvas"
-          aria-label="Close"
-        ></button>
-      </div>
+    <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
+      <span class="navbar-toggler-icon"></span>
+    </button>
 
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+      <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Menú</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
       <div class="offcanvas-body">
-        <ul class="navbar-nav justify-content-center flex-grow-1 pe-3">
-          <li class="nav-item">
-            <a class="nav-link mx-lg-2" [routerLink]="['/']">
-              <i class="bi bi-house-door-fill"></i> {{ 'NAV.HOME' | translate }}
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link mx-lg-2" [routerLink]="['/']" fragment="about">
-              <i class="bi bi-info-circle-fill"></i> {{ 'NAV.ABOUT' | translate }}
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link mx-lg-2" [routerLink]="['/']" fragment="services">
-              <i class="bi bi-gear-fill"></i> {{ 'NAV.SERVICES' | translate }}
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link mx-lg-2" [routerLink]="['/']" fragment="howdoesitwork">
-              <i class="bi bi-question-circle-fill"></i> {{ 'NAV.HOW_IT_WORKS' | translate }}
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link mx-lg-2" [routerLink]="['/']" fragment="prices">
-              <i class="bi bi-currency-dollar"></i> {{ 'NAV.PRICES' | translate }}
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link mx-lg-2" [routerLink]="['/']" fragment="reviews">
-              <i class="bi bi-chat-left-quote-fill"></i> {{ 'NAV.REVIEWS' | translate }}
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link mx-lg-2" [routerLink]="['/']" fragment="contactus">
-              <i class="bi bi-envelope-fill"></i> {{ 'NAV.CONTACT' | translate }}
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+          <li *ngFor="let link of navLinks" class="nav-item">
+            <a class="nav-link" [routerLink]="['/']" [fragment]="link.fragment"
+               [class.active]="link.fragment === activeFragment"> {{ link.label | translate }}
             </a>
           </li>
         </ul>
+
+        <div class="navbar-controls">
+          <app-language-switcher></app-language-switcher>
+          <a [routerLink]="['/autenticacion/login']" class="btn btn-login">
+            {{ 'NAV.LOGIN' | translate }}
+          </a>
+        </div>
       </div>
     </div>
-
-    <app-language-switcher class="ms-3"></app-language-switcher>
-
-    <a [routerLink]="['/autenticacion/login']" class="login-button">
-      {{ 'NAV.LOGIN' | translate }}
-    </a>
-
-    <button
-      class="navbar-toggler pe-0"
-      type="button"
-      data-bs-toggle="offcanvas"
-      data-bs-target="#offcanvasNavbar"
-      aria-controls="offcanvasNavbar"
-      aria-label="Toggle navigation"
-    >
-      <span class="navbar-toggler-icon"></span>
-    </button>
   </div>
 </nav>

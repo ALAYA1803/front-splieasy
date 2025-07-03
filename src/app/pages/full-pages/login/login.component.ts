@@ -1,4 +1,3 @@
-// login.component.ts
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
@@ -18,14 +17,14 @@ export class LoginComponent {
 
   constructor(
     private authService: AuthService,
-    private sidebarService: SidebarService, // 👈 inyecta el servicio
+    private sidebarService: SidebarService,
     private router: Router
   ) { }
 
   onLogin() {
     this.authService.login(this.email, this.password).subscribe({
       next: user => {
-        this.sidebarService.generateMenu(); // 👈 genera el menú dinámico
+        this.sidebarService.generateMenu();
 
         if (user.role === 'REPRESENTANTE') {
           this.router.navigate(['/representante']);

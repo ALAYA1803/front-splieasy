@@ -1,12 +1,19 @@
-<!-- Hero Section -->
 <section class="hero-section">
-  <div class="container d-flex align-items-center justify-content-center fs-1 text-white flex-column">
-    <h3 class="text-center">
-      {{ 'HERO.DESCRIPTION' | translate }}
-    </h3>
-    <p>{{ 'HERO.SUBTEXT' | translate }}</p>
-    <a [routerLink]="['/register']" class="signin-button">
-      {{ 'HERO.REGISTER_BUTTON' | translate }}
-    </a>
+  <div class="hero-overlay"></div>
+  <div class="container hero-content text-center">
+
+    <h1 class="hero-title">{{ 'HERO.TITLE' | translate }}</h1>
+
+    <p class="hero-subtitle">{{ 'HERO.DESCRIPTION' | translate }}</p>
+
+    <div class="hero-actions">
+      <a [routerLink]="['/autenticacion/register']" class="btn btn-hero-primary">
+        {{ 'HERO.REGISTER_BUTTON' | translate }}
+      </a>
+      <a href="#howdoesitwork" class="btn btn-hero-secondary">
+        {{ 'HERO.HOW_IT_WORKS' | translate }} <i class="bi bi-arrow-down-circle ms-2"></i>
+      </a>
+    </div>
+
   </div>
 </section>

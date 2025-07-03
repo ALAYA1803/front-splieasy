@@ -10,37 +10,50 @@
     "LOGIN": "Login"
   },
   "ABOUT": {
-    "TITLE": "About The Product",
-    "MISSION_TITLE": "Mission",
-    "MISSION_TEXT": "Our mission is to facilitate household financial management through a digital tool that distributes shared expenses proportionally to each member's income, promoting equity, transparency, and harmony in living together.",
-    "VISION_TITLE": "Vision",
-    "VISION_TEXT": "Our vision is to become the leading shared financial management platform for households in Latin America, recognized for empowering people to make fair, responsible, and collaborative financial decisions.",
-    "WHY_TITLE": "Why was SplitEasy created?",
-    "WHY_TEXT_1": "SplitEasy was born out of the need of many families and cohabitation groups who face difficulties in sharing expenses fairly.",
-    "WHY_TEXT_2": "The platform addresses a common problem: the lack of financial clarity and equity in households, especially when incomes are unequal. With SplitEasy, we seek to eliminate unnecessary tension and promote a more harmonious and fair environment for all.",
-    "WHO_TITLE": "Who are we?",
-    "WHO_TEXT_1": "SplitEasy is a project developed by <strong>ChabeCode</strong>, a team of students from the Peruvian University of Applied Sciences (UPC) committed to offering digital solutions that promote equity and well-being in everyday life. Our approach combines technology with social empathy to solve real problems affecting thousands of households.",
-    "WHO_TEXT_2": "With SplitEasy, we want to transform the way people manage shared expenses, offering a simple, intuitive, and fair platform that adapts to the needs of each household. We know that financial management can be stressful, especially when incomes vary, and that's why we designed a tool that distributes expenses proportionally and transparently.",
-    "WHO_TEXT_3": "At <strong>ChabeCode</strong>, we believe that a good life starts with good financial organization. And SplitEasy is here to help."
+    "TAGLINE": "Our Mission",
+    "TITLE": "Created for a fairer and more transparent coexistence.",
+    "DESCRIPTION": "SplitEasy was born to eliminate stress and arguments about money at home. Our goal is to offer a simple and powerful tool that promotes financial equity, regardless of income differences, so you can focus on what really matters: enjoying time with the people you love.",
+    "BENEFIT_1_TITLE": "Proportional Distribution",
+    "BENEFIT_1_TEXT": "Distribute expenses according to each person's income.",
+    "BENEFIT_2_TITLE": "Total Transparency",
+    "BENEFIT_2_TEXT": "All members see expenses and debts in real time.",
+    "BENEFIT_3_TITLE": "Less Stress, More Harmony",
+    "BENEFIT_3_TEXT": "We calculate who owes whom to avoid uncomfortable conversations."
   },
   "HERO": {
-    "DESCRIPTION": "At SplitEasy, we know how important it is to maintain a balanced financial life. Our system allows you to divide and manage expenses equitably among household members, without complications or arguments. Divide expenses proportionally, based on each person's income, and maintain efficient and fair control for everyone.",
-    "SUBTEXT": "Make financial management easy and fair for everyone at home!",
-    "REGISTER_BUTTON": "Register"
+    "TITLE": "The easy and fair way to divide expenses at home.",
+    "DESCRIPTION": "Forget spreadsheets and arguments. SplitEasy calculates who owes what so your relationship is always transparent.",
+    "REGISTER_BUTTON": "Get started for free",
+    "HOW_IT_WORKS": "See how it works"
   },
   "HOW_IT_WORKS": {
-    "TITLE": "How does it work?",
-    "REP": {
-      "HEADER": "If you are a representative of the household",
-      "SIGNUP_TITLE": "Sign up",
-      "SIGNUP_TEXT": "Create your account in minutes and access it from any device.",
-      "CREATE_TITLE": "Create your home",
-      "CREATE_TEXT": "Add members and define your family or shared group.",
-      "ASSIGN_TITLE": "Assign contributions",
-      "ASSIGN_TEXT": "Define how much each person contributes according to their monthly income.",
-      "CONTROL_TITLE": "Control your finances",
-      "CONTROL_TEXT": "View expenses, balances, and alerts easily."
+    "TITLE": "How does SplitEasy work?",
+    "LEAD_TEXT": "We have a path for every type of user. Choose your role and discover how easy it is to get started.",
+    "TABS": {
+      "REP": "I am a Household Representative",
+      "MEMBER": "I am a Household Member"
     },
+    "REP": {
+      "STEP_1_TITLE": "Sign Up",
+      "STEP_1_TEXT": "Create your account in minutes and access it from any device.",
+      "STEP_2_TITLE": "Create your household",
+      "STEP_2_TEXT": "Add members and define your family or shared group.",
+      "STEP_3_TITLE": "Assign contributions",
+      "STEP_3_TEXT": "Define how much each person contributes based on their monthly income.",
+      "STEP_4_TITLE": "Take control of your finances",
+      "STEP_4_TEXT": "View expenses, balances, and alerts easily."
+    },
+    "MEMBER": {
+      "STEP_1_TITLE": "Register",
+      "STEP_1_TEXT": "Create your personal account to join a household.",
+      "STEP_2_TITLE": "Join with a Code",
+      "STEP_2_TEXT": "Use the invitation code sent to you by the representative.",
+      "STEP_3_TITLE": "Record your Contributions",
+      "STEP_3_TEXT": "Add the money you earn to the household fund.",
+      "STEP_4_TITLE": "Monitor Expenses",
+      "STEP_4_TEXT": "Review all transactions and the balance transparently."
+    }
+  },
     "MEMBER": {
       "HEADER": "If you are a member of the household",
       "SIGNUP_TITLE": "Sign up",
@@ -51,48 +64,79 @@
       "INCOME_TEXT": "Declare your monthly income to automatically calculate your contribution.",
       "MONITOR_TITLE": "Monitor your contributions",
       "MONITOR_TEXT": "Check your contributions and stay on top of your financial responsibilities."
-    }
+
   },
   "PRICES": {
-    "TITLE": "Prices",
+    "TITLE": "A Plan for Every Need",
+    "LEAD_TEXT": "Start for free or choose Premium to unlock the full potential of SplitEasy.",
+    "MONTHLY": "Monthly",
+    "YEARLY": "Annual",
+    "YEARLY_SAVE": "Save 2 months",
+    "RECOMMENDED_BADGE": "Recommended",
     "FREE": {
       "TITLE": "Free",
-      "PRICE": "S/ 0.00 / monthly",
-      "HOME": "1 home",
-      "MEMBERS": "Up to 3 members",
-      "RECORD": "Basic expense record",
-      "CTA": "Get started for free"
+      "PRICE_MONTHLY": "$0",
+      "PRICE_YEARLY": "$0",
+      "PERIOD": "/ month",
+      "FEATURES": [
+        "1 household",
+        "Up to 3 members",
+        "Basic expense tracking",
+        "Community support"
+      ],
+      "CTA": "Start for free"
     },
     "PREMIUM": {
       "TITLE": "Premium",
-      "PRICE": "S/ 9.90 / monthly",
-      "HOMES": "Unlimited homes",
-      "MEMBERS": "Unlimited members",
-      "GRAPH": "Graphic display",
-      "NOTIFICATIONS": "Smart notifications",
+      "PRICE_MONTHLY": "S/ 9.90",
+      "PRICE_YEARLY": "S/ 99",
+      "PERIOD": "/ month",
+      "PERIOD_YEARLY": "/ year",
+      "FEATURES": [
+        "Unlimited Households",
+        "Unlimited Members",
+        "Graphical Expense Display",
+        "Smart Notifications and Reminders",
+        "Priority Email Support"
+      ],
       "CTA": "Choose Premium"
     }
   },
   "REVIEWS": {
-    "TITLE": "Reviews",
-    "REVIEW1": {
-      "NAME": "María López",
-      "ROLE": "Graphic Designer",
-      "TEXT": "SplitEasy has helped me so much when splitting expenses with my roommates. Everything is clear and no one argues anymore!"
-    },
-    "REVIEW2": {
-      "NAME": "Carlos Fernández",
-      "ROLE": "Engineering Student",
-      "TEXT": "The app makes sharing expenses in my department super easy. Highly recommended."
-    },
-    "REVIEW3": {
-      "NAME": "José Ramírez",
-      "ROLE": "Family Guy",
-      "TEXT": "Thanks to SplitEasy, I can see how much each member of my family contributes. It's fair and easy to use!"
-    }
+    "TITLE": "What our users say",
+    "LEAD_TEXT": "The trust of our community is our greatest achievement. This is how SplitEasy is improving their daily lives.",
+    "ITEMS": [
+      {
+        "NAME": "María López",
+        "ROLE": "Graphic Designer",
+        "TEXT": "SplitEasy has helped me a lot when splitting expenses with my roommates. Everything is clear and there are no more arguments!",
+        "IMAGE_URL": "assets/images/random1.png",
+        "RATING": 5
+      },
+      {
+        "NAME": "Carlos Fernández",
+        "ROLE": "Engineering Student",
+        "TEXT": "The app makes it very easy to share expenses in my apartment. Highly recommended for anyone who lives with friends.",
+        "IMAGE_URL": "assets/images/random2.png",
+        "RATING": 5
+      },
+      {
+        "NAME": "José Ramírez",
+        "ROLE": "Family Guy",
+        "TEXT": "Thanks to SplitEasy, I can see how much each member of my family contributes. It's fair, transparent, and very easy to use.",
+        "IMAGE_URL": "assets/images/random3.png",
+        "RATING": 4
+      }
+    ]
+  },
+  "CTA": {
+    "TITLE": "Start Organizing Your Expenses Today",
+    "SUBTITLE": "Join thousands of people who have simplified their financial lives. It's free to get started and only takes a minute.",
+    "BUTTON": "Create My Free Account"
   },
   "SERVICES": {
-    "TITLE": "Services",
+    "TITLE": "Our Services",
+    "LEAD_TEXT": "Designed to give you full control of your shared finances with simple and powerful tools.",
     "SERVICE1": {
       "TITLE": "Proportional Calculus",
       "DESCRIPTION": "Automatically divide expenses based on each household member's income, promoting equity."
@@ -112,6 +156,7 @@
   },
   "FOOTER": {
     "FOLLOW_US": "Follow us",
+    "TAGLINE": "Fair expenses, harmonious home!",
     "LEGAL": {
       "TITLE": "Legal information",
       "LEGAL_NOTICE": "Legal notice",
@@ -127,40 +172,64 @@
     "RIGHTS": "All rights reserved."
   },
   "FORGOT": {
-    "TITLE": "Forgot Password",
-    "EMAIL_LABEL": "Email",
-    "CHANGE_PASSWORD_BUTTON": "Change Password",
-    "BACK_TO_LOGIN": "Back to login"
+    "TITLE": "Verify Your Account",
+    "DESCRIPTION": "Enter the email address associated with your account to confirm your identity. If the email is valid, we'll take you directly to the next step to reset your password.",
+    "EMAIL_LABEL": "Registered email address",
+    "BUTTON": "Verify & Continue",
+    "BACK_TO_LOGIN": "Back to Sign In"
   },
+
   "LOGIN": {
-    "TITLE": "Login",
-    "EMAIL_LABEL": "Email",
-    "EMAIL_PLACEHOLDER": "mem@example.com or rep@example.com",
+    "TITLE": "Sign In",
+    "EMAIL_LABEL": "Email Address",
+    "EMAIL_PLACEHOLDER": "you@email.com",
     "PASSWORD_LABEL": "Password",
-    "PASSWORD_PLACEHOLDER": "mem123 or rep123",
-    "BUTTON": "Login",
+    "PASSWORD_PLACEHOLDER": "Enter your password",
     "FORGOT_PASSWORD": "Forgot your password?",
-    "CREATE_ACCOUNT": "New here? Create an account"
+    "BUTTON": "Sign In",
+    "NO_ACCOUNT_PROMPT": "Don't have an account?",
+    "CREATE_ACCOUNT_LINK": "Create one here",
+    "DIVIDER_TEXT": "OR",
+    "SOCIAL_BUTTON": "Sign in with Google",
+    "BRANDING": {
+      "TITLE": "Welcome Back",
+      "SUBTITLE": "The smartest way to manage your shared expenses was waiting for you."
+    },
+    "BACK_BUTTON_TITLE": "Back to home"
   },
+
   "REGISTER": {
-    "TITLE": "Register",
+    "TITLE": "Create Your Account",
     "FIRST_NAME_LABEL": "First Name",
     "LAST_NAME_LABEL": "Last Name",
-    "EMAIL_LABEL": "Email",
+    "EMAIL_LABEL": "Email Address",
     "PASSWORD_LABEL": "Password",
     "REPEAT_PASSWORD_LABEL": "Repeat Password",
-    "ROLE_LABEL": "Role",
-    "ROLE_PLACEHOLDER": "--select a role--",
-    "ROLE_MEMBER": "Member",
-    "ROLE_REPRESENTATIVE": "Representative",
-    "BUTTON": "Register",
-    "HAVE_ACCOUNT": "I have an account"
+    "ROLE_LABEL": "I am a...",
+    "ROLE_PLACEHOLDER": "Select a role",
+    "ROLE_MEMBER": "Household Member",
+    "ROLE_REPRESENTATIVE": "Household Representative",
+    "BUTTON": "Sign Up",
+    "HAVE_ACCOUNT": "Already have an account? Sign In",
+    "BRANDING": {
+      "TITLE": "Join the Community",
+      "SUBTITLE": "Start organizing your expenses in a smart and collaborative way. Registration is quick and easy."
+    }
+
+},
+  "CONTACT_US": {
+    "TITLE": "Contact Us",
+    "NAME_LABEL": "Name",
+    "EMAIL_LABEL": "Email Address",
+    "PHONE_LABEL": "Phone Number",
+    "BUTTON": "Send Message"
   },
   "RESET": {
-    "TITLE": "Reset Password",
+    "TITLE": "Create Your New Password",
+    "DESCRIPTION": "Your new password must be secure and easy to remember. Once saved, you'll be able to sign in.",
     "NEW_PASSWORD_LABEL": "New Password",
-    "CONFIRM_PASSWORD_LABEL": "Confirm Password",
-    "BUTTON": "Reset Password"
+    "CONFIRM_PASSWORD_LABEL": "Confirm New Password",
+    "BUTTON": "Save & Continue"
   },
   "DASHBOARD": {
     "HOME_CARD": {

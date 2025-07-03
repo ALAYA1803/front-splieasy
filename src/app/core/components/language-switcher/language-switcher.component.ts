@@ -1,24 +1,50 @@
-import { Component, OnInit } from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { Component, HostListener, ElementRef } from '@angular/core';
+import { CommonModule, NgFor, NgIf } from '@angular/common';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+interface Language {
+  code: string;
+  name: string;
+  flag: string;
+}
 
 @Component({
   selector: 'app-language-switcher',
-  standalone: false,
+  standalone: true,
+  imports: [CommonModule, TranslateModule],
   templateUrl: './language-switcher.component.html',
+  styleUrls: ['./language-switcher.component.css']
 })
-export class LanguageSwitcherComponent implements OnInit {
-  selectedLang: string = 'en';
+export class LanguageSwitcherComponent {
+  availableLangs: Language[] = [
+    { code: 'es', name: 'Español', flag: '🇪🇸' },
+    { code: 'en', name: 'English', flag: 'ᴱᴺ' }
+  ];
 
-  constructor(private translate: TranslateService) {}
-
-  ngOnInit(): void {
-    this.selectedLang = this.translate.currentLang || this.translate.getDefaultLang() || 'en';
+  public isOpen = false;
+  public currentLang: Language;
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: Event) {
+    if (!this.elementRef.nativeElement.contains(event.target)) {
+      this.isOpen = false;
+    }
   }
 
-  changeLanguage(lang: string) {
-    this.selectedLang = lang;
-    this.translate.use(lang);
+  constructor(
+    public translate: TranslateService,
+    private elementRef: ElementRef
+  ) {
+    const browserLang = this.translate.currentLang || this.translate.defaultLang || 'es';
+    this.currentLang = this.availableLangs.find(lang => lang.code === browserLang) || this.availableLangs[0];
+  }
+
+  toggleDropdown() {
+    this.isOpen = !this.isOpen;
+  }
+
+  changeLanguage(lang: Language) {
+    console.log('Intentando cambiar idioma a:', lang.code);
+    this.translate.use(lang.code);
+    this.currentLang = lang;
+    this.isOpen = false;
   }
 }

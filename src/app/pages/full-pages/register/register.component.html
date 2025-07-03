@@ -1,67 +1,88 @@
-<app-nav-bar></app-nav-bar>
+<div class="login-container">
 
-<section class="login-section d-flex align-items-center justify-content-center">
-  <div class="login-box shadow p-4 rounded">
-    <h2 class="text-center mb-4">{{ 'REGISTER.TITLE' | translate }}</h2>
-    <form>
-      <div class="mb-3 d-flex gap-3">
-        <div>
-          <label for="firstName" class="form-label">{{ 'REGISTER.FIRST_NAME_LABEL' | translate }}</label>
-          <input type="text" class="form-control" />
-        </div>
-        <div class="ml-2">
-          <label for="lastName" class="form-label">{{ 'REGISTER.LAST_NAME_LABEL' | translate }}</label>
-          <input type="text" class="form-control" />
-        </div>
-      </div>
+  <div class="branding-column">
+    <div class="branding-content">
+      <a routerLink="/" class="brand-logo">
+        <img src="assets/images/logo.png" alt="SplitEasy Logo">
+        <span>SplitEasy</span>
+      </a>
+      <h1 class="welcome-title">{{ 'REGISTER.BRANDING.TITLE' | translate }}</h1>
+      <p class="welcome-text">{{ 'REGISTER.BRANDING.SUBTITLE' | translate }}</p>
+    </div>
+  </div>
 
-      <div class="mb-3">
-        <label for="email" class="form-label">{{ 'REGISTER.EMAIL_LABEL' | translate }}</label>
-        <input
-          type="email"
-          class="form-control"
-          placeholder="ejemplo@correo.com"
-        />
-      </div>
+  <div class="form-column">
+    <div class="login-box">
 
-      <div class="mb-3">
-        <label for="password" class="form-label">{{ 'REGISTER.PASSWORD_LABEL' | translate }}</label>
-        <input
-          type="password"
-          class="form-control"
-          placeholder="********"
-        />
-      </div>
-
-      <div class="mb-3">
-        <label for="repeat-password" class="form-label">{{ 'REGISTER.REPEAT_PASSWORD_LABEL' | translate }}</label>
-        <input
-          type="password"
-          class="form-control"
-          placeholder="********"
-        />
-      </div>
-
-      <div class="mb-3">
-        <label for="role" class="form-label">{{ 'REGISTER.ROLE_LABEL' | translate }}</label>
-        <select class="form-control">
-          <option disabled selected>{{ 'REGISTER.ROLE_PLACEHOLDER' | translate }}</option>
-          <option value="member">{{ 'REGISTER.ROLE_MEMBER' | translate }}</option>
-          <option value="representative">{{ 'REGISTER.ROLE_REPRESENTATIVE' | translate }}</option>
-        </select>
-      </div>
-
-      <button type="button" class="btn w-100 signin-button" [routerLink]="['/inicio']">
-        {{ 'REGISTER.BUTTON' | translate }}
-      </button>
-
-      <div class="text-center mt-3">
-        <a [routerLink]="['/autenticacion/login']" class="text-decoration-none text-secondary">
-          {{ 'REGISTER.HAVE_ACCOUNT' | translate }}
+      <div class="login-header">
+        <app-language-switcher></app-language-switcher>
+        <a routerLink="/" class="btn-back" [title]="'LOGIN.BACK_BUTTON_TITLE' | translate">
+          <i class="bi bi-x-lg"></i>
         </a>
       </div>
-    </form>
-  </div>
-</section>
 
-<app-the-footer></app-the-footer>
+      <h2 class="form-title">{{ 'REGISTER.TITLE' | translate }}</h2>
+
+      <form class="mt-4">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="firstName" class="form-label">{{ 'REGISTER.FIRST_NAME_LABEL' | translate }}</label>
+            <div class="input-group">
+              <i class="bi bi-person input-icon"></i>
+              <input id="firstName" name="firstName" type="text" class="form-control" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="lastName" class="form-label">{{ 'REGISTER.LAST_NAME_LABEL' | translate }}</label>
+            <div class="input-group">
+              <i class="bi bi-person input-icon"></i>
+              <input id="lastName" name="lastName" type="text" class="form-control" />
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="email" class="form-label">{{ 'REGISTER.EMAIL_LABEL' | translate }}</label>
+          <div class="input-group">
+            <i class="bi bi-envelope-fill input-icon"></i>
+            <input id="email" name="email" type="email" class="form-control" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="password" class="form-label">{{ 'REGISTER.PASSWORD_LABEL' | translate }}</label>
+          <div class="input-group">
+            <i class="bi bi-lock-fill input-icon"></i>
+            <input id="password" name="password" type="password" class="form-control" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="repeat-password" class="form-label">{{ 'REGISTER.REPEAT_PASSWORD_LABEL' | translate }}</label>
+          <div class="input-group">
+            <i class="bi bi-lock-fill input-icon"></i>
+            <input id="repeat-password" name="repeatPassword" type="password" class="form-control" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="role" class="form-label">{{ 'REGISTER.ROLE_LABEL' | translate }}</label>
+          <div class="input-group">
+            <i class="bi bi-person-badge input-icon"></i>
+            <select id="role" name="role" class="form-control">
+              <option value="" disabled selected>{{ 'REGISTER.ROLE_PLACEHOLDER' | translate }}</option>
+              <option value="member">{{ 'REGISTER.ROLE_MEMBER' | translate }}</option>
+              <option value="representative">{{ 'REGISTER.ROLE_REPRESENTATIVE' | translate }}</option>
+            </select>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-login w-100 mt-3">{{ 'REGISTER.BUTTON' | translate }}</button>
+
+        <div class="text-center mt-4">
+          <a [routerLink]="['/autenticacion/login']" class="form-subtitle">{{ 'REGISTER.HAVE_ACCOUNT' | translate }}</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
