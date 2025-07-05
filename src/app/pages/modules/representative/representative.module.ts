@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { RepresentativeRoutingModule } from './representative-routing.module';
 import { HomeComponent } from './home/home.component';
 import { ContributionsComponent } from './contributions/contributions.component';
@@ -10,8 +9,7 @@ import { MembersComponent } from './members/members.component';
 import { BillsComponent } from './bills/bills.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DropdownModule } from 'primeng/dropdown';
-import {TranslatePipe} from '@ngx-translate/core';
-
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   declarations: [
@@ -27,7 +25,7 @@ import {TranslatePipe} from '@ngx-translate/core';
     PrimeNgModule,
     ReactiveFormsModule,
     DropdownModule,
-    TranslatePipe
+    TranslateModule
   ]
 })
 export class RepresentativeModule { }

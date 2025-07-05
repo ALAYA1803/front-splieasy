@@ -8,7 +8,6 @@ const routes: Routes = [
   { path: '', redirectTo: 'inicio', pathMatch: 'full' },
   { path: 'inicio', loadChildren: () => import('./public/home/home.module').then(m => m.HomeModule) },
   { path: 'autenticacion', loadChildren: () => import('./pages/full-pages/authentication.module').then(m => m.AuthenticationModule) },
-
   {
     path: 'representante',
     component: LayoutComponent,

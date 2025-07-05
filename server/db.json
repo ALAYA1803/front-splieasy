@@ -31,7 +31,7 @@
       "name": "Casa Familiar",
       "description": "Hogar de Juan",
       "currency": "PEN",
-      "representante_id": 1
+      "representante_id": "1"
     }
   ],
   "household_members": [
@@ -62,6 +62,14 @@
       "monto": 120,
       "created_by": 1,
       "fecha": "2025-06-05"
+    },
+    {
+      "id": "33be",
+      "descripcion": "asd",
+      "monto": 8498489528592859,
+      "fecha": "2025-07-05",
+      "household_id": "1",
+      "created_by": "1"
     }
   ],
   "contributions": [
@@ -88,8 +96,14 @@
       "contribution_id": 1,
       "member_id": 2,
       "monto": 100,
-      "status": "PENDIENTE",
-      "pagado_en": "2025-06-22T08:18:58.255Z"
+      "status": "PAGADO",
+      "pagado_en": "2025-07-05T00:34:38.450Z",
+      "descripcion": "División luz abril",
+      "strategy": "INCOME_BASED",
+      "fechaLimite": "2025-06-30",
+      "billDescripcion": "Luz Abril",
+      "fechaFactura": "2025-06-01",
+      "montoFactura": 180
     },
     {
       "id": "2",

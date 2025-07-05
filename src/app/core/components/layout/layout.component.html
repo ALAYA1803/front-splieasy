@@ -1,48 +1,65 @@
-<div class="app-layout" [class.sidebar-collapsed]="!isSidebarOpen">
+<div class="layout-wrapper" [class.sidebar-collapsed]="!isSidebarOpen">
 
-  <aside class="app-sidebar">
+  <aside class="layout-sidebar">
     <app-sidebar></app-sidebar>
   </aside>
 
-  <div class="main-container">
-
-    <header class="app-header">
+  <div class="layout-main">
+    <header class="layout-header">
       <p-button
-        styleClass="toggle-button"
-        [rounded]="true"
-        [text]="true"
+        styleClass="p-button-text p-button-rounded sidebar-toggle-button"
         [icon]="isSidebarOpen ? 'pi pi-angle-left' : 'pi pi-angle-right'"
         (click)="toggleSidebar()"
-      ></p-button>
-
+        [style]="{ display: 'var(--desktop-display)' }"
+        size="small"
+        severity="secondary">
+      </p-button>
+      <p-button
+        styleClass="p-button-text p-button-rounded mobile-menu-button"
+        icon="pi pi-bars"
+        (click)="toggleMobileSidebar()"
+        [style]="{ display: 'var(--mobile-display)' }"
+        size="small"
+        severity="secondary">
+      </p-button>
       <div class="header-content">
         <app-header></app-header>
       </div>
     </header>
 
-    <main class="main-content">
-      <router-outlet></router-outlet>
+    <main class="layout-content">
+      <div class="content-container">
+        <router-outlet></router-outlet>
+      </div>
     </main>
-    <app-footer-sidebar class="w-100"></app-footer-sidebar>
+
+    <footer class="layout-footer">
+      <app-footer-sidebar></app-footer-sidebar>
+    </footer>
   </div>
 
-  <p-drawer
-    [(visible)]="isSidebarOpenMobile"
-    position="left"
-    [modal]="true"
-    [style]="{ width: '280px' }"
-  >
-    <ng-template pTemplate="content">
-      <app-sidebar (onNavigate)="isSidebarOpenMobile = false"></app-sidebar>
-    </ng-template>
-  </p-drawer>
-
-  <p-button
-    *ngIf="isMobile"
-    icon="pi pi-bars"
-    styleClass="mobile-menu-button"
-    [rounded]="true"
-    [text]="true"
-    (click)="isSidebarOpenMobile = true"
-  ></p-button>
+  <div
+    class="mobile-overlay"
+    [class.active]="isSidebarOpenMobile"
+    (click)="closeMobileSidebar()"
+    [style.display]="isSidebarOpenMobile ? 'block' : 'none'">
+  </div>
 </div>
+
+<p-drawer
+  id="mobile-sidebar"
+  [(visible)]="isSidebarOpenMobile"
+  position="left"
+  [modal]="true"
+  [style]="{
+    width: 'var(--sidebar-width-mobile)',
+    'z-index': 'var(--z-index-drawer)'
+  }"
+  styleClass="mobile-drawer"
+  (onHide)="closeMobileSidebar()">
+  <ng-template pTemplate="content">
+    <div class="mobile-sidebar-content">
+      <app-sidebar (onNavigate)="closeMobileSidebar()"></app-sidebar>
+    </div>
+  </ng-template>
+</p-drawer>

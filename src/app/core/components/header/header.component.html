@@ -1,19 +1,10 @@
-<div class="header-container d-flex align-items-center justify-content-between">
-  <div class="header-title text-truncate" [title]="breadcrumbFull">
-    <!-- Mostrar solo el breadcrumb corto en pantallas pequeñas -->
-    <span
-      pTooltip="{{ breadcrumbFull }}"
-      tooltipPosition="bottom"
-      class="d-sm-none"
-      >{{ breadcrumbDisplay }}</span
-    >
+<header class="header-container">
 
-    <!-- Mostrar breadcrumb completo en pantallas sm en adelante -->
-    <span
-      pTooltip="{{ breadcrumbFull }}"
-      tooltipPosition="bottom"
-      class="d-none d-sm-inline text-truncate"
-      >{{ breadcrumbFull }}</span
-    >
+  <h1 class="header-title" [title]="breadcrumbFull">
+    {{ breadcrumbFull }}
+  </h1>
+
+  <div class="header-profile">
   </div>
-</div>
+
+</header>

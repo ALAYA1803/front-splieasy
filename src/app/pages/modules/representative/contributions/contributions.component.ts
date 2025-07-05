@@ -68,7 +68,7 @@ export class ContributionsComponent implements OnInit {
             const hasRep = details.some(d => d.user?.id == representative.id);
 
             if (!hasRep) {
-              const monto = this.calculateMontoFaltante(c, details, representative, users);
+              const monto = this.calculateMontoFaltante(c, details, representative);
               details.push({
                 contribution_id: c.id,
                 member_id: representative.id,
@@ -155,20 +155,18 @@ export class ContributionsComponent implements OnInit {
     }
   }
 
-  calculateMontoFaltante(c: any, existingDetails: any[], rep: any, users: any[]) {
+  calculateMontoFaltante(c: any, existingDetails: any[], rep: any) {
     const bill = this.bills.find(b => b.id == c.bill_id);
     if (!bill) return 0;
 
     const total = bill.monto;
     const strategy = c.strategy;
-    const currentTotal = existingDetails.reduce((sum, d) => sum + d.monto, 0);
 
     if (strategy === 'EQUAL') {
-      const n = existingDetails.length + 1;
+      const n = this.members.length;
       return +(total / n).toFixed(2);
     } else {
-      const incomes = this.members.map(m => m.user.income);
-      const totalIncome = incomes.reduce((sum, i) => sum + i, 0);
+      const totalIncome = this.members.reduce((sum, m) => sum + m.user.income, 0);
       const porcentaje = rep.income / totalIncome;
       return +(total * porcentaje).toFixed(2);
     }
