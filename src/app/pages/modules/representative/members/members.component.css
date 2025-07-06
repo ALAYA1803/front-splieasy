@@ -1,0 +1,203 @@
+:host {
+  --brand-primary: #1565c0;
+  --brand-secondary: #ff6f00;
+  --background-main: #1a1a1a;
+  --background-card: #2d2d2d;
+  --border-color: #404040;
+  --shadow-color: rgba(0, 0, 0, 0.3);
+  --text-primary: #f8f9fa;
+  --text-secondary: #adb5bd;
+  --danger-color: #d32f2f;
+}
+
+.members-container {
+  padding: 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.members-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.header-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.header-subtitle {
+  font-size: 1rem;
+  color: var(--text-secondary);
+}
+
+.btn-add-member {
+  background-color: var(--brand-secondary);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  transition: background-color 0.3s ease;
+}
+
+.btn-add-member:hover {
+  background-color: #e66400;
+}
+
+.table-card {
+  background-color: var(--background-main);
+  border-radius: 16px;
+  border: 1px solid var(--background-card);
+  overflow: hidden;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+.members-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.members-table th, .members-table td {
+  padding: 1rem 1.5rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.members-table th {
+  background-color: #343a40;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.members-table tbody tr {
+  transition: background-color 0.2s ease;
+}
+
+.members-table tbody tr:hover {
+  background-color: #373737;
+}
+
+.members-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.user-cell {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-name {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.user-email {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.income-value {
+  font-weight: 600;
+  font-family: monospace;
+}
+
+.actions-cell {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.btn-icon {
+  background: none;
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: all 0.2s ease;
+}
+
+.btn-icon:hover {
+  background-color: var(--brand-primary);
+  color: #fff;
+  border-color: var(--brand-primary);
+}
+
+.btn-icon.btn-icon-danger:hover {
+  background-color: var(--danger-color);
+  border-color: var(--danger-color);
+}
+
+/* --- Estados de Carga y Vacío --- */
+.skeleton-loader, .empty-state {
+  padding: 3rem 1.5rem;
+}
+
+.skeleton-row {
+  height: 60px;
+  background: linear-gradient(90deg, #3a3a3a 25%, #404040 50%, #3a3a3a 75%);
+  background-size: 200% 100%;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  to { background-position: -200% 0; }
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: var(--text-secondary);
+}
+
+.empty-icon-wrapper {
+  background-color: var(--border-color);
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.empty-state .pi { font-size: 2.5rem; }
+.empty-title { font-size: 1.5rem; color: var(--text-primary); margin-bottom: 0.5rem; }
+
+.text-right { text-align: right; }
+.text-center { text-align: center; }

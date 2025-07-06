@@ -1,0 +1,217 @@
+:host {
+  --brand-primary: #1565c0;
+  --brand-secondary: #ff6f00;
+  --background-main: #1a1a1a;
+  --background-card: #2d2d2d;
+  --background-hover: #373737;
+  --border-color: #404040;
+  --text-primary: #f8f9fa;
+  --text-secondary: #adb5bd;
+  --danger-color: #d32f2f;
+  --primary-color: var(--brand-primary);
+  --primary-hover: #1e88e5;
+  --secondary-color: #64748b;
+  --success-color: #10b981;
+
+  --bg-primary: var(--background-main);
+  --bg-secondary: var(--background-card);
+  --bg-tertiary: #404040;
+  --bg-dark: #2d2d2d;
+  --bg-card: var(--background-card);
+
+  --text-primary-old: var(--brand-primary);
+  --text-secondary-old: #ffff;
+  --text-muted: #94a3b8;
+
+  --border-radius: 8px;
+  --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3);
+  --shadow-hover: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+
+  --transition: 0.2s ease;
+
+  display: block;
+  background-color: #2d2d2d;
+  min-height: 10vh;
+  padding: 1rem;
+}
+
+:host ::ng-deep .p-card {
+  background: var(--bg-primary);
+  border: 0px solid var(--border-color);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+:host ::ng-deep .p-card .p-card-header {
+  background: #343a40;
+  color: var(--text-primary);
+  padding: var(--spacing-lg);
+  border-bottom: 1px solid var(--border-color);
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+:host ::ng-deep .p-card .p-card-content {
+  padding: 0;
+}
+
+:host ::ng-deep .p-button {
+  background: var(--brand-secondary);
+  border: none;
+  border-radius: var(--border-radius);
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  color: #fff;
+  transition: all var(--transition);
+  cursor: pointer;
+}
+
+:host ::ng-deep .p-button:hover {
+  background: #e66400;
+  box-shadow: var(--shadow-hover);
+}
+
+:host ::ng-deep .p-datatable {
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid var(--background-card);
+  background-color: var(--background-main);
+}
+
+:host ::ng-deep .p-datatable .p-datatable-thead > tr > th {
+  background: #343a40;
+  color: var(--text-secondary);
+  font-weight: 600;
+  font-size: 0.85rem;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+  text-align: left;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+:host ::ng-deep .p-datatable .p-datatable-tbody > tr {
+  background-color: transparent;
+  border-bottom: 1px solid var(--border-color);
+  transition: background-color var(--transition);
+}
+
+:host ::ng-deep .p-datatable .p-datatable-tbody > tr:hover {
+  background-color: var(--background-hover);
+}
+
+:host ::ng-deep .p-datatable .p-datatable-tbody > tr:last-child {
+  border-bottom: none;
+}
+
+:host ::ng-deep .p-datatable .p-datatable-tbody > tr > td {
+  padding: 1rem 1.5rem;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  border: none;
+}
+
+:host ::ng-deep .p-datatable .p-datatable-tbody > tr > td:first-child {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+:host ::ng-deep .p-datatable .p-button.p-button-icon-only {
+  background: none;
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+:host ::ng-deep .p-datatable .p-button.p-button-icon-only:hover {
+  background-color: var(--brand-primary);
+  color: #fff;
+  border-color: var(--brand-primary);
+}
+
+:host ::ng-deep .p-datatable .p-button.p-button-danger.p-button-icon-only:hover {
+  background-color: var(--danger-color);
+  border-color: var(--danger-color);
+}
+
+
+:host ::ng-deep .p-dialog {
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-hover);
+  border: 1px solid var(--border-color);
+  overflow: hidden;
+  background-color: var(--background-card);
+}
+
+:host ::ng-deep .p-dialog .p-dialog-header {
+  background: var(--brand-primary);
+  color: white;
+  padding: var(--spacing-lg);
+  font-weight: 600;
+  font-size: 1.25rem;
+}
+
+:host ::ng-deep .p-dialog .p-dialog-content {
+  padding: var(--spacing-xl);
+  background-color: var(--background-card);
+  color: var(--text-primary);
+}
+
+:host ::ng-deep .p-dialog .p-dialog-footer {
+  padding: var(--spacing-lg) var(--spacing-xl);
+  background: #404040;
+  border-top: 1px solid var(--border-color);
+}
+
+:host .field label {
+  font-weight: 500;
+  margin-bottom: var(--spacing-sm);
+  display: block;
+  color: var(--text-primary);
+  font-size: 0.875rem;
+}
+
+:host ::ng-deep .p-inputtext,
+:host ::ng-deep .p-dropdown {
+  background-color: var(--background-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  border-radius: var(--border-radius);
+  transition: all var(--transition);
+}
+
+:host ::ng-deep .p-inputtext:hover,
+:host ::ng-deep .p-dropdown:hover {
+  border-color: var(--brand-primary);
+}
+
+@media (max-width: 768px) {
+  :host {
+    padding: var(--spacing-md);
+  }
+
+  :host ::ng-deep .p-card .p-card-header {
+    font-size: 1.25rem;
+    padding: var(--spacing-md);
+  }
+
+  :host ::ng-deep .p-datatable .p-datatable-thead > tr > th,
+  :host ::ng-deep .p-datatable .p-datatable-tbody > tr > td {
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: 0.8125rem;
+  }
+
+  :host ::ng-deep .p-dialog {
+    width: 95% !important;
+    max-width: none !important;
+  }
+}

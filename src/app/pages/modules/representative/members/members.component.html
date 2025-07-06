@@ -1,20 +1,69 @@
-<div class="p-4 max-w-screen-lg mx-auto">
-  <p-card [header]="'HOUSEHOLD.MEMBERS.TITLE' | translate" class="mt-4">
-    <p-table [value]="members" [loading]="loading" responsiveLayout="scroll">
-      <ng-template pTemplate="header">
+<div class="members-container">
+  <div class="members-header">
+    <div class="header-content">
+      <h1 class="header-title">{{ 'HOUSEHOLD.MEMBERS.TITLE' | translate }}</h1>
+      <p class="header-subtitle">{{ 'HOUSEHOLD.MEMBERS.SUBTITLE' | translate }}</p>
+    </div>
+    <div class="header-actions">
+      <button class="btn-add-member">
+        <i class="pi pi-plus mr-2"></i>
+        <span>{{ 'HOUSEHOLD.MEMBERS.ADD_BUTTON' | translate }}</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="table-card">
+    <div *ngIf="loading" class="skeleton-loader">
+      <div class="skeleton-row" *ngFor="let i of [1,2,3]"></div>
+    </div>
+
+    <div *ngIf="!loading && members.length === 0" class="empty-state">
+      <div class="empty-icon-wrapper">
+        <i class="pi pi-users"></i>
+      </div>
+      <h3 class="empty-title">{{ 'HOUSEHOLD.MEMBERS.EMPTY_TITLE' | translate }}</h3>
+      <p class="empty-text">{{ 'HOUSEHOLD.MEMBERS.EMPTY_TEXT' | translate }}</p>
+      <button class="btn-add-member mt-3">
+        <span>{{ 'HOUSEHOLD.MEMBERS.ADD_FIRST_BUTTON' | translate }}</span>
+      </button>
+    </div>
+
+    <div *ngIf="!loading && members.length > 0" class="table-wrapper">
+      <table class="members-table">
+        <thead>
         <tr>
           <th>{{ 'HOUSEHOLD.MEMBERS.NAME' | translate }}</th>
-          <th>{{ 'HOUSEHOLD.MEMBERS.EMAIL' | translate }}</th>
-          <th>{{ 'HOUSEHOLD.MEMBERS.INCOME' | translate }}</th>
+          <th class="text-right">{{ 'HOUSEHOLD.MEMBERS.INCOME' | translate }}</th>
+          <th class="text-center">{{ 'HOUSEHOLD.MEMBERS.ACTIONS' | translate }}</th>
         </tr>
-      </ng-template>
-      <ng-template pTemplate="body" let-member>
-        <tr>
-          <td>{{ member.name }}</td>
-          <td>{{ member.email }}</td>
-          <td>S/. {{ member.income | number }}</td>
+        </thead>
+        <tbody>
+        <tr *ngFor="let member of members">
+          <td>
+            <div class="user-cell">
+              <p-avatar [label]="member.name.charAt(0) || 'U'" shape="circle"></p-avatar>
+              <div class="user-info">
+                <span class="user-name">{{ member.name }}</span>
+                <span class="user-email">{{ member.email }}</span>
+              </div>
+            </div>
+          </td>
+          <td class="text-right">
+            <span class="income-value">S/. {{ member.income | number:'1.2-2' }}</span>
+          </td>
+          <td class="text-center">
+            <div class="actions-cell">
+              <button class="btn-icon" pTooltip="Editar Miembro" tooltipPosition="top">
+                <i class="pi pi-pencil"></i>
+              </button>
+              <button class="btn-icon btn-icon-danger" pTooltip="Eliminar Miembro" tooltipPosition="top">
+                <i class="pi pi-trash"></i>
+              </button>
+            </div>
+          </td>
         </tr>
-      </ng-template>
-    </p-table>
-  </p-card>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>

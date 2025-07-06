@@ -1,24 +1,53 @@
-<div class="p-4 max-w-screen-lg mx-auto">
-  <p-card [header]="'SUMMARY.TITLE' | translate" class="mb-4">
-    <div class="text-xl mb-2">{{ household?.name }}</div>
-    <div class="text-muted mb-3">{{ household?.description }}</div>
+<div class="dashboard-container">
+  <div class="main-card">
+    <div class="card-header">
+      <h1 class="card-title">{{ 'SUMMARY.TITLE' | translate }}</h1>
+      <span class="card-subtitle">{{ 'SUMMARY.SUBTITLE' | translate }}</span>
+    </div>
 
-    <div class="grid">
-      <div class="col-12 md:col-4">
-        <p-panel [header]="'SUMMARY.MEMBERS' | translate">
-          <div class="text-center text-2xl">{{ members.length }}</div>
-        </p-panel>
+    <div class="household-info" *ngIf="household">
+      <h2 class="household-name">
+        <i class="pi pi-home"></i>
+        <span>{{ household.name }}</span>
+      </h2>
+      <p class="household-description">
+        {{ household.description }}
+      </p>
+    </div>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon-wrapper members">
+        <i class="pi pi-users stat-icon"></i>
       </div>
-      <div class="col-12 md:col-4">
-        <p-panel [header]="'SUMMARY.BILLS' | translate">
-          <div class="text-center text-2xl">{{ bills.length }}</div>
-        </p-panel>
-      </div>
-      <div class="col-12 md:col-4">
-        <p-panel [header]="'SUMMARY.CONTRIBUTIONS' | translate">
-          <div class="text-center text-2xl">{{ contributions.length }}</div>
-        </p-panel>
+      <div class="stat-content">
+        <span class="stat-label">{{ 'SUMMARY.MEMBERS' | translate }}</span>
+        <div class="stat-number">{{ members.length }}</div>
+        <span class="stat-sublabel">{{ 'SUMMARY.MEMBERS_ACTIVE' | translate }}</span>
       </div>
     </div>
-  </p-card>
+
+    <div class="stat-card">
+      <div class="stat-icon-wrapper expenses">
+        <i class="pi pi-chart-line stat-icon"></i>
+      </div>
+      <div class="stat-content">
+        <span class="stat-label">{{ 'SUMMARY.BILLS' | translate }}</span>
+        <div class="stat-number">{{ bills.length }}</div>
+        <span class="stat-sublabel">{{ 'SUMMARY.BILLS_MONTH' | translate }}</span>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon-wrapper contributions">
+        <i class="pi pi-wallet stat-icon"></i>
+      </div>
+      <div class="stat-content">
+        <span class="stat-label">{{ 'SUMMARY.CONTRIBUTIONS' | translate }}</span>
+        <div class="stat-number">{{ contributions.length }}</div>
+        <span class="stat-sublabel">{{ 'SUMMARY.CONTRIBUTIONS_MADE' | translate }}</span>
+      </div>
+    </div>
+  </div>
 </div>

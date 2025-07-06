@@ -1,11 +1,8 @@
 <div class="p-4 max-w-screen-lg mx-auto">
   <p-card [header]="'BILLS.TITLE' | translate" class="mt-4">
-    <p-button
-      [label]="'BILLS.REGISTER_BUTTON' | translate"
-      icon="pi pi-plus"
-      (click)="showForm()"
-      class="mb-3"
-    />
+    <button class="btn-custom mb-3" (click)="showForm()">
+      <i class="pi pi-plus"></i> <span>{{ 'BILLS.REGISTER_BUTTON' | translate }}</span>
+    </button>
 
     <p-table [value]="bills" [loading]="loading" responsiveLayout="scroll">
       <ng-template pTemplate="header">
@@ -25,7 +22,6 @@
     </p-table>
   </p-card>
 
-  <!-- Formulario modal -->
   <p-dialog
     [header]="'BILLS.NEW_BILL_DIALOG' | translate"
     [(visible)]="formVisible"
@@ -47,14 +43,17 @@
           <input id="fecha" type="date" pInputText formControlName="fecha" />
         </div>
       </div>
-      <p-footer>
-        <p-button
-          pButton
-          type="submit"
-          [label]="'BILLS.SAVE_BUTTON' | translate"
-          [disabled]="billForm.invalid"
-        />
-      </p-footer>
     </form>
+
+    <ng-template pTemplate="footer">
+      <button
+        type="submit"
+        class="btn-custom"
+        (click)="submit()"
+        [disabled]="billForm.invalid"> <i class="pi pi-check"></i>
+        <span>{{ 'BILLS.SAVE_BUTTON' | translate }}</span>
+      </button>
+    </ng-template>
+
   </p-dialog>
 </div>

@@ -18,6 +18,7 @@ import { TranslateModule } from '@ngx-translate/core';
     BillsComponent,
     MembersComponent,
     SettingsComponent,
+
   ],
   imports: [
     CommonModule,

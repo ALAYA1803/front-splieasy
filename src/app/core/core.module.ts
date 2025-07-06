@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TheFooterComponent } from './components/the-footer/the-footer.component';
-import { NavBarComponent } from './components/nav-bar/nav-bar.component'; // La importación del archivo está bien
+import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 import { LanguageSwitcherComponent } from './components/language-switcher/language-switcher.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { FormsModule } from '@angular/forms';
@@ -26,7 +26,8 @@ import { FooterSidebarComponent } from './components/footer-sidebar/footer-sideb
     FormsModule,
     RouterModule,
     PrimeNgModule,
-    NavBarComponent
+    NavBarComponent,
+    LanguageSwitcherComponent
   ],
   exports: [
     TheFooterComponent,

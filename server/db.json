@@ -66,8 +66,32 @@
     {
       "id": "33be",
       "descripcion": "asd",
-      "monto": 8498489528592859,
+      "monto": 859,
       "fecha": "2025-07-05",
+      "household_id": "1",
+      "created_by": "1"
+    },
+    {
+      "id": "f418",
+      "descripcion": "asdasdasd",
+      "monto": 15,
+      "fecha": "2025-07-05",
+      "household_id": "1",
+      "created_by": "1"
+    },
+    {
+      "id": "12b4",
+      "descripcion": "asd",
+      "monto": 124,
+      "fecha": "2025-07-05",
+      "household_id": "1",
+      "created_by": "1"
+    },
+    {
+      "id": "6618",
+      "descripcion": "wawa",
+      "monto": 123,
+      "fecha": "2025-07-09",
       "household_id": "1",
       "created_by": "1"
     }
@@ -140,11 +164,11 @@
   ],
   "settings": [
     {
-      "id": "1",
-      "user_id": 1,
       "language": "es",
       "dark_mode": true,
-      "notifications_enabled": true
+      "notifications_enabled": true,
+      "user_id": "1",
+      "id": "1"
     },
     {
       "id": "2",
