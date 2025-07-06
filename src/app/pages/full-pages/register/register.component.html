@@ -23,20 +23,20 @@
 
       <h2 class="form-title">{{ 'REGISTER.TITLE' | translate }}</h2>
 
-      <form class="mt-4">
+      <form class="mt-4" [formGroup]="registerForm" (ngSubmit)="register()">
         <div class="form-row">
           <div class="form-group">
             <label for="firstName" class="form-label">{{ 'REGISTER.FIRST_NAME_LABEL' | translate }}</label>
             <div class="input-group">
               <i class="bi bi-person input-icon"></i>
-              <input id="firstName" name="firstName" type="text" class="form-control" />
+              <input id="firstName" type="text" class="form-control" formControlName="firstName" />
             </div>
           </div>
           <div class="form-group">
             <label for="lastName" class="form-label">{{ 'REGISTER.LAST_NAME_LABEL' | translate }}</label>
             <div class="input-group">
               <i class="bi bi-person input-icon"></i>
-              <input id="lastName" name="lastName" type="text" class="form-control" />
+              <input id="lastName" type="text" class="form-control" formControlName="lastName" />
             </div>
           </div>
         </div>
@@ -45,7 +45,7 @@
           <label for="email" class="form-label">{{ 'REGISTER.EMAIL_LABEL' | translate }}</label>
           <div class="input-group">
             <i class="bi bi-envelope-fill input-icon"></i>
-            <input id="email" name="email" type="email" class="form-control" />
+            <input id="email" type="email" class="form-control" formControlName="email" />
           </div>
         </div>
 
@@ -53,7 +53,7 @@
           <label for="password" class="form-label">{{ 'REGISTER.PASSWORD_LABEL' | translate }}</label>
           <div class="input-group">
             <i class="bi bi-lock-fill input-icon"></i>
-            <input id="password" name="password" type="password" class="form-control" />
+            <input id="password" type="password" class="form-control" formControlName="password" />
           </div>
         </div>
 
@@ -61,7 +61,10 @@
           <label for="repeat-password" class="form-label">{{ 'REGISTER.REPEAT_PASSWORD_LABEL' | translate }}</label>
           <div class="input-group">
             <i class="bi bi-lock-fill input-icon"></i>
-            <input id="repeat-password" name="repeatPassword" type="password" class="form-control" />
+            <input id="repeat-password" type="password" class="form-control" formControlName="repeatPassword" />
+          </div>
+          <div *ngIf="registerForm.hasError('mismatch') && registerForm.get('repeatPassword')?.touched" class="invalid-feedback d-block">
+            Las contraseñas no coinciden.
           </div>
         </div>
 
@@ -69,10 +72,10 @@
           <label for="role" class="form-label">{{ 'REGISTER.ROLE_LABEL' | translate }}</label>
           <div class="input-group">
             <i class="bi bi-person-badge input-icon"></i>
-            <select id="role" name="role" class="form-control">
-              <option value="" disabled selected>{{ 'REGISTER.ROLE_PLACEHOLDER' | translate }}</option>
-              <option value="member">{{ 'REGISTER.ROLE_MEMBER' | translate }}</option>
-              <option value="representative">{{ 'REGISTER.ROLE_REPRESENTATIVE' | translate }}</option>
+            <select id="role" class="form-control" formControlName="role">
+              <option value="" disabled>{{ 'REGISTER.ROLE_PLACEHOLDER' | translate }}</option>
+              <option value="MIEMBRO">{{ 'REGISTER.ROLE_MEMBER' | translate }}</option>
+              <option value="REPRESENTANTE">{{ 'REGISTER.ROLE_REPRESENTATIVE' | translate }}</option>
             </select>
           </div>
         </div>

@@ -1,0 +1,120 @@
+:host {
+  --brand-primary: #1565c0;
+  --success-color: #2e7d32;
+  --warning-color: #ff8f00;
+  --background-main: #1a1a1a;
+  --background-card: #2d2d2d;
+  --background-hover: #3a3a3a;
+  --border-color: #404040;
+  --shadow-color: rgba(0, 0, 0, 0.3);
+  --text-primary: #f8f9fa;
+  --text-secondary: #adb5bd;
+}
+.contributions-member-container {
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  animation: fadeIn 0.5s ease-out;
+}
+
+.card {
+  background-color: var(--background-card);
+  border-radius: 16px;
+  padding: 2rem;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 8px 20px var(--shadow-color);
+}
+
+.card-header {
+  padding-bottom: 1.5rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.card-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.card-subtitle {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  margin-top: 0.25rem;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+:host ::ng-deep .p-datatable {
+  background-color: transparent;
+}
+
+:host ::ng-deep .p-datatable .p-datatable-thead > tr > th {
+  background: transparent;
+  border-bottom: 2px solid var(--border-color);
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  padding: 1rem 1.25rem;
+}
+
+:host ::ng-deep .p-datatable .p-datatable-tbody > tr {
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--border-color);
+  transition: background-color 0.2s ease;
+}
+
+:host ::ng-deep .p-datatable .p-datatable-tbody > tr:last-child {
+  border-bottom: none;
+}
+
+:host ::ng-deep .p-datatable .p-datatable-tbody > tr:hover {
+  background-color: var(--background-hover);
+}
+
+:host ::ng-deep .p-datatable .p-datatable-tbody > tr > td {
+  padding: 1.25rem;
+  vertical-align: middle;
+}
+:host ::ng-deep .p-paginator {
+  background-color: transparent;
+  color: var(--text-secondary);
+  border-top: 1px solid var(--border-color);
+  padding: 1rem;
+}
+:host ::ng-deep .p-paginator .p-paginator-element:not(.p-disabled):not(.p-highlight):hover {
+  background: var(--background-hover);
+}
+:host ::ng-deep .p-paginator .p-dropdown {
+  background: var(--background-main);
+  border-color: var(--border-color);
+}
+.status-badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 0.8rem;
+  color: #fff;
+  text-transform: uppercase;
+}
+
+.status-badge.status-paid {
+  background-color: var(--success-color);
+}
+
+.status-badge.status-pending {
+  background-color: var(--warning-color);
+}
+
+.status-icon-paid {
+  font-size: 1.5rem;
+  color: var(--success-color);
+}
+
+.actions-cell {
+  text-align: center;
+}

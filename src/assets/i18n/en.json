@@ -248,17 +248,41 @@
       "TITLE": "Household Members"
     }
   },
+  "PROFILE": {
+    "TITLE": "Manage Profile",
+    "SUBTITLE": "Update your personal information and profile picture.",
+    "CHANGE_PHOTO_BUTTON": "Change Photo",
+    "NAME_LABEL": "Name",
+    "EMAIL_LABEL": "Email",
+    "BIO_LABEL": "Bio",
+    "SAVE_BUTTON": "Save Profile"
+  },
   "SETTINGS": {
-    "TITLE": "User Settings",
+    "TITLE": "Preferences",
+    "PAGE_TITLE": "Profile Personalization",
     "LANGUAGE": {
       "LABEL": "Language",
-      "PLACEHOLDER": "Select a language",
-      "ES": "Spanish",
-      "EN": "English"
+      "OPTIONS": {
+        "ES": "Spanish",
+        "EN": "English"
+      }
     },
-    "DARK_MODE": "Dark mode",
-    "NOTIFICATIONS": "Receive notifications",
-    "SAVE_BUTTON": "Save"
+    "DARK_MODE": "Dark Mode",
+    "NOTIFICATIONS": "Turn on Notifications",
+    "SAVE_BUTTON": "Save Preferences"
+  },
+  "SECURITY": {
+    "TITLE": "Security",
+    "SUBTITLE": "Manage your password to keep your account secure.",
+    "CURRENT_PASSWORD_LABEL": "Current Password",
+    "NEW_PASSWORD_LABEL": "New Password",
+    "CONFIRM_PASSWORD_LABEL": "Confirm New Password",
+    "SAVE_BUTTON": "Update Password"
+  },
+  "DANGER_ZONE": {
+    "TITLE": "Danger Zone",
+    "WARNING_TEXT": "Deleting your account is permanent and irreversible. All your data will be erased.",
+    "DELETE_ACCOUNT_BUTTON": "Delete My Account"
   },
   "CONTRIBUTIONS_STATUS": {
     "TITLE": "My Contributions Status",

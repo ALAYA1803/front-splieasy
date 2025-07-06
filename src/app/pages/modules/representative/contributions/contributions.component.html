@@ -1,6 +1,12 @@
-<div class="p-4 max-w-screen-lg mx-auto">
-  <p-card header="Contribuciones del hogar" class="mt-4">
-    <p-button label="Nueva contribución" icon="pi pi-plus" (click)="openForm()" class="mb-3" />
+<div class="contributions-container">
+  <div class="main-card">
+    <div class="card-header">
+      <div>
+        <h1 class="card-title">Contribuciones del Hogar</h1>
+        <p class="card-subtitle">Gestiona los pagos y aportes de los miembros.</p>
+      </div>
+      <button type="button" pButton label="Nueva contribución" icon="pi pi-plus" (click)="openForm()"></button>
+    </div>
 
     <p-table [value]="contributions" [loading]="loading" responsiveLayout="scroll">
       <ng-template pTemplate="header">
@@ -13,15 +19,18 @@
       </ng-template>
 
       <ng-template pTemplate="body" let-contribution>
-        <tr>
-          <td>{{ contribution.descripcion }}</td>
+        <tr [pSelectableRow]="contribution">
+          <td>
+            <i [class]="contribution.expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'" (click)="contribution.expanded = !contribution.expanded" class="toggler"></i>
+            {{ contribution.descripcion }}
+          </td>
           <td>{{ getBillDescription(contribution.bill_id) }}</td>
           <td>{{ contribution.strategy === 'EQUAL' ? 'Igualitaria' : 'Según Ingresos' }}</td>
           <td>{{ contribution.fecha_limite | date: 'dd/MM/yyyy' }}</td>
         </tr>
-        <tr>
-          <td colspan="4">
-            <p-table [value]="contribution.details" [responsiveLayout]="'scroll'" [paginator]="false" styleClass="p-datatable-sm">
+        <tr [hidden]="!contribution.expanded">
+          <td colspan="4" class="nested-td">
+            <p-table [value]="contribution.details" styleClass="p-datatable-nested">
               <ng-template pTemplate="header">
                 <tr>
                   <th>Miembro</th>
@@ -35,12 +44,14 @@
                   <td>{{ detail.user?.name }}</td>
                   <td>{{ detail.user?.role === 'REPRESENTANTE' ? 'Representante' : 'Miembro' }}</td>
                   <td>{{ detail.monto | number: '1.2-2' }}</td>
-                  <td>{{ detail.status }}</td>
+                  <td>
+                    <span [ngClass]="'status-' + (detail.status ? detail.status.toLowerCase() : '')">{{ detail.status }}</span>
+                  </td>
                 </tr>
               </ng-template>
               <ng-template pTemplate="emptymessage">
                 <tr>
-                  <td colspan="4" class="text-center">Sin registros de pagos</td>
+                  <td colspan="4" class="empty-message">Sin registros de pagos</td>
                 </tr>
               </ng-template>
             </p-table>
@@ -50,38 +61,80 @@
 
       <ng-template pTemplate="emptymessage">
         <tr>
-          <td colspan="4" class="text-center">No hay contribuciones registradas.</td>
+          <td colspan="4" class="empty-message">No hay contribuciones registradas.</td>
         </tr>
       </ng-template>
     </p-table>
-  </p-card>
-
-  <p-dialog header="Nueva contribución" [(visible)]="showForm" [modal]="true" style="width: 400px">
-    <form [formGroup]="contributionForm" (ngSubmit)="submit()">
-      <div class="p-fluid">
-        <div class="field">
-          <label for="descripcion">Descripción</label>
-          <input id="descripcion" type="text" pInputText formControlName="descripcion" />
-        </div>
-        <div class="field">
-          <label for="bill_id">Cuenta</label>
-          <p-dropdown inputId="bill_id" [options]="bills" optionLabel="descripcion" optionValue="id" formControlName="bill_id" placeholder="Seleccione una cuenta"></p-dropdown>
-        </div>
-        <div class="field">
-          <label for="fecha_limite">Fecha Límite</label>
-          <input id="fecha_limite" type="date" pInputText formControlName="fecha_limite" />
-        </div>
-        <div class="field">
-          <label for="strategy">Estrategia</label>
-          <p-dropdown inputId="strategy" [options]="[
-            { label: 'Igualitaria', value: 'EQUAL' },
-            { label: 'Según Ingresos', value: 'INCOME_BASED' }
-          ]" formControlName="strategy" placeholder="Seleccione una estrategia"></p-dropdown>
-        </div>
-      </div>
-      <ng-template pTemplate="footer">
-        <p-button type="submit" label="Guardar" [disabled]="contributionForm.invalid" />
-      </ng-template>
-    </form>
-  </p-dialog>
+  </div>
 </div>
+
+<p-dialog header="Nueva contribución"
+          [(visible)]="showForm"
+          [modal]="true"
+          [draggable]="false"
+          [resizable]="false"
+          styleClass="contribution-dialog">
+
+  <form [formGroup]="contributionForm" (ngSubmit)="submit()">
+    <div class="p-fluid">
+      <div class="field">
+        <label for="descripcion">Descripción</label>
+        <input id="descripcion"
+               type="text"
+               pInputText
+               formControlName="descripcion" />
+      </div>
+
+      <div class="field">
+        <label for="bill_id">Cuenta</label>
+        <p-dropdown inputId="bill_id"
+                    [options]="bills"
+                    optionLabel="descripcion"
+                    optionValue="id"
+                    formControlName="bill_id"
+                    placeholder="Seleccione una cuenta"
+                    appendTo="body">
+        </p-dropdown>
+      </div>
+
+      <div class="field">
+        <label for="fecha_limite">Fecha Límite</label>
+        <p-calendar id="fecha_limite"
+                    formControlName="fecha_limite"
+                    [showIcon]="true"
+                    dateFormat="dd/mm/yy"
+                    appendTo="body">
+        </p-calendar>
+      </div>
+
+      <div class="field">
+        <label for="strategy">Estrategia de División</label>
+        <p-dropdown inputId="strategy"
+                    [options]="[
+                      { label: 'Igualitaria', value: 'EQUAL' },
+                      { label: 'Según Ingresos', value: 'INCOME_BASED' }
+                    ]"
+                    formControlName="strategy"
+                    placeholder="Seleccione una estrategia"
+                    appendTo="body">
+        </p-dropdown>
+      </div>
+    </div>
+    <p-footer>
+      <button type="button"
+              pButton
+              label="Cancelar"
+              icon="pi pi-times"
+              class="p-button-text"
+              (click)="showForm = false">
+      </button>
+
+      <button type="submit"
+              pButton
+              label="Guardar"
+              icon="pi pi-check"
+              [disabled]="contributionForm.invalid">
+      </button>
+    </p-footer>
+  </form>
+</p-dialog>

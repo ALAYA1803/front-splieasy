@@ -234,18 +234,7 @@
       "TITLE": "Miembros del hogar"
     }
   },
-  "SETTINGS": {
-    "TITLE": "Configuración de usuario",
-    "LANGUAGE": {
-      "LABEL": "Idioma",
-      "PLACEHOLDER": "Selecciona un idioma",
-      "ES": "Español",
-      "EN": "Inglés"
-    },
-    "DARK_MODE": "Modo oscuro",
-    "NOTIFICATIONS": "Recibir notificaciones",
-    "SAVE_BUTTON": "Guardar"
-  },
+
   "CONTRIBUTIONS_STATUS": {
     "TITLE": "Estado de mis contribuciones",
     "INVOICE": "Factura",
@@ -326,5 +315,43 @@
     "actions": "Acciones",
     "pay": "Pagar",
     "pageReport": "Mostrando {first} a {last} de {totalRecords} contribuciones"
+  },
+
+  "PROFILE": {
+    "TITLE": "Gestionar Perfil",
+    "SUBTITLE": "Actualiza tu información personal y foto de perfil.",
+    "CHANGE_PHOTO_BUTTON": "Cambiar Foto",
+    "NAME_LABEL": "Nombre",
+    "EMAIL_LABEL": "Correo Electrónico",
+    "BIO_LABEL": "Biografía",
+    "SAVE_BUTTON": "Guardar Perfil"
+  },
+  "SETTINGS": {
+    "TITLE": "Preferencias",
+    "PAGE_TITLE": "Personalización de Perfil",
+    "LANGUAGE": {
+      "LABEL": "Idioma",
+      "OPTIONS": {
+        "ES": "Español",
+        "EN": "Inglés"
+      }
+    },
+    "DARK_MODE": "Modo Oscuro",
+    "NOTIFICATIONS": "Activar Notificaciones",
+    "SAVE_BUTTON": "Guardar Preferencias"
+  },
+  "SECURITY": {
+    "TITLE": "Seguridad",
+    "SUBTITLE": "Gestiona tu contraseña para mantener tu cuenta segura.",
+    "CURRENT_PASSWORD_LABEL": "Contraseña Actual",
+    "NEW_PASSWORD_LABEL": "Nueva Contraseña",
+    "CONFIRM_PASSWORD_LABEL": "Confirmar Nueva Contraseña",
+    "SAVE_BUTTON": "Actualizar Contraseña"
+  },
+  "DANGER_ZONE": {
+    "TITLE": "Zona de Peligro",
+    "WARNING_TEXT": "La eliminación de tu cuenta es una acción permanente e irreversible. Todos tus datos serán borrados.",
+    "DELETE_ACCOUNT_BUTTON": "Eliminar mi Cuenta"
   }
 }
+

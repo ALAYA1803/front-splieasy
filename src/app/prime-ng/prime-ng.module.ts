@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-
 import { AvatarModule } from 'primeng/avatar';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
@@ -36,6 +35,10 @@ import { TextareaModule } from 'primeng/textarea';
 import { ToastModule } from 'primeng/toast';
 import { ToggleButtonModule } from 'primeng/togglebutton';
 import { TooltipModule } from 'primeng/tooltip';
+import { DropdownModule } from 'primeng/dropdown';
+import { CalendarModule } from 'primeng/calendar';
+import { RippleModule } from 'primeng/ripple';
+import { TagModule } from 'primeng/tag';
 
 
 @NgModule({
@@ -48,6 +51,7 @@ import { TooltipModule } from 'primeng/tooltip';
     ConfirmDialogModule,
     DatePickerModule,
     DialogModule,
+    TagModule,
     DynamicDialogModule,
     DrawerModule,
     FieldsetModule,
@@ -72,6 +76,17 @@ import { TooltipModule } from 'primeng/tooltip';
     SelectModule,
     TableModule,
     TabsModule,
+    ButtonModule,
+    TableModule,
+    DialogModule,
+    DropdownModule,
+    CalendarModule,
+    InputTextModule,
+    ToastModule,
+    ConfirmDialogModule,
+    TooltipModule,
+    RippleModule,
+    AvatarModule,
     TextareaModule,
     ToastModule,
     ToggleButtonModule,

@@ -26,7 +26,7 @@ export class ContributionsComponent implements OnInit {
     this.contributionForm = this.fb.group({
       bill_id: [null, Validators.required],
       descripcion: ['', Validators.required],
-      fecha_limite: ['', Validators.required],
+      fecha_limite: [null, Validators.required],
       strategy: ['EQUAL', Validators.required]
     });
 
@@ -81,7 +81,8 @@ export class ContributionsComponent implements OnInit {
 
             return {
               ...c,
-              details
+              details,
+              expanded: false
             };
           });
 
@@ -92,18 +93,27 @@ export class ContributionsComponent implements OnInit {
   }
 
   openForm() {
-    this.showForm = true;
     this.contributionForm.reset({
       bill_id: null,
       descripcion: '',
-      fecha_limite: '',
+      fecha_limite: null,
       strategy: 'EQUAL'
     });
+    this.showForm = true;
   }
 
   submit() {
+    if (this.contributionForm.invalid) {
+      return;
+    }
+
+    const formValue = this.contributionForm.value;
+    const fechaLimite = new Date(formValue.fecha_limite);
+    const formattedDate = fechaLimite.toISOString().split('T')[0];
+
     const data = {
-      ...this.contributionForm.value,
+      ...formValue,
+      fecha_limite: formattedDate,
       household_id: this.householdId
     };
 
@@ -120,12 +130,14 @@ export class ContributionsComponent implements OnInit {
     this.http.post('http://localhost:3000/contributions', data).subscribe((savedContribution: any) => {
       const memberContributions = this.calculateDivision(total, data.strategy, savedContribution.id);
 
-      memberContributions.forEach(mc => {
-        this.http.post('http://localhost:3000/member_contributions', mc).subscribe();
-      });
+      const requests = memberContributions.map(mc =>
+        this.http.post('http://localhost:3000/member_contributions', mc)
+      );
 
-      this.contributions.push(savedContribution);
-      this.showForm = false;
+      forkJoin(requests).subscribe(() => {
+        this.ngOnInit();
+        this.showForm = false;
+      });
     });
   }
 

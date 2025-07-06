@@ -1,40 +1,49 @@
-<p-table [value]="contributions" *ngIf="!isLoading"
-         [paginator]="true" [rows]="5" [responsiveLayout]="'scroll'"
-         [showCurrentPageReport]="true"
-         [currentPageReportTemplate]="'contributions.pageReport' | translate">
-  <ng-template pTemplate="header">
-    <tr>
-      <th>{{ 'contributions.bill' | translate }}</th>
-      <th>{{ 'contributions.description' | translate }}</th>
-      <th>{{ 'contributions.amount' | translate }}</th>
-      <th>{{ 'contributions.strategy' | translate }}</th>
-      <th>{{ 'contributions.dueDate' | translate }}</th>
-      <th>{{ 'contributions.status' | translate }}</th>
-      <th>{{ 'contributions.actions' | translate }}</th>
-    </tr>
-  </ng-template>
+<div class="contributions-member-container">
+  <div class="card">
+    <div class="card-header">
+      <div>
+        <h1 class="card-title">{{ 'MEMBER_CONTRIBUTIONS.TITLE' | translate }}</h1>
+        <p class="card-subtitle">{{ 'MEMBER_CONTRIBUTIONS.SUBTITLE' | translate }}</p>
+      </div>
+    </div>
 
-  <ng-template pTemplate="body" let-c>
-    <tr>
-      <td>{{ c.billDescripcion }}</td>
-      <td>{{ c.descripcion }}</td>
-      <td>{{ c.monto | currency }}</td>
-      <td>{{ c.strategy }}</td>
-      <td>{{ c.fechaLimite | date: 'longDate' }}</td>
-      <td>
-        <span class="badge" [ngClass]="{
-          'bg-success': c.status === 'PAGADO',
-          'bg-warning': c.status === 'PENDIENTE'
-        }">
-          {{ c.status }}
-        </span>
-      </td>
-      <td>
-        <button *ngIf="c.status === 'PENDIENTE'" class="btn btn-sm btn-primary" (click)="pagar(c)">
-          {{ 'contributions.pay' | translate }}
-        </button>
-        <i *ngIf="c.status === 'PAGADO'" class="pi pi-check-circle text-success"></i>
-      </td>
-    </tr>
-  </ng-template>
-</p-table>
+    <p-table [value]="contributions" *ngIf="!isLoading"
+             [paginator]="true" [rows]="5" [responsiveLayout]="'scroll'"
+             [showCurrentPageReport]="true"
+             [currentPageReportTemplate]="'contributions.pageReport' | translate">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>{{ 'contributions.bill' | translate }}</th>
+          <th>{{ 'contributions.description' | translate }}</th>
+          <th>{{ 'contributions.amount' | translate }}</th>
+          <th>{{ 'contributions.strategy' | translate }}</th>
+          <th>{{ 'contributions.dueDate' | translate }}</th>
+          <th>{{ 'contributions.status' | translate }}</th>
+          <th>{{ 'contributions.actions' | translate }}</th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-c>
+        <tr>
+          <td>{{ c.billDescripcion }}</td>
+          <td>{{ c.descripcion }}</td>
+          <td>{{ c.monto | currency:'S/.' }}</td>
+          <td>{{ c.strategy === 'EQUAL' ? ('STRATEGIES.EQUAL' | translate) : ('STRATEGIES.INCOME_BASED' | translate) }}</td>
+          <td>{{ c.fechaLimite | date: 'dd/MM/yyyy' }}</td>
+          <td>
+            <span class="status-badge" [ngClass]="{
+              'status-paid': c.status === 'PAGADO',
+              'status-pending': c.status === 'PENDIENTE'
+            }">
+              {{ c.status === 'PAGADO' ? ('STATUS.PAID' | translate) : ('STATUS.PENDING' | translate) }}
+            </span>
+          </td>
+          <td class="actions-cell">
+            <button *ngIf="c.status === 'PENDIENTE'" pButton type="button" [label]="'contributions.pay' | translate" class="p-button-sm" (click)="pagar(c)"></button>
+            <i *ngIf="c.status === 'PAGADO'" class="pi pi-check-circle status-icon-paid" pTooltip="Pagado" tooltipPosition="top"></i>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>

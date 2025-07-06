@@ -1,9 +1,161 @@
-:host ::ng-deep .p-card {
-  max-width: 500px;
-  margin: 0 auto;
+:host {
+  --brand-primary: #1565c0;
+  --brand-secondary: #ff6f00;
+  --danger-color: #d32f2f;
+  --warning-color: #f57c00;
+  --success-color: #2e7d32;
+  --background-main: #1a1a1a;
+  --background-card: #2d2d2d;
+  --border-color: #404040;
+  --shadow-color: rgba(0, 0, 0, 0.3);
+  --text-primary: #f8f9fa;
+  --text-secondary: #adb5bd;
 }
 
-.p-field {
+.settings-container {
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.main-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border-color);
+}
+.settings-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 2rem;
+}
+
+.settings-column {
   display: flex;
   flex-direction: column;
+  gap: 2rem;
+}
+.settings-card {
+  background-color: var(--background-card);
+  border-radius: 16px;
+  padding: 2rem;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 8px 20px var(--shadow-color);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  animation: fadeInUp 0.5s ease-out forwards;
+  opacity: 0;
+}
+.settings-card:hover {
+  transform: translateY(-5px);
+  border-color: var(--brand-primary);
+}
+.settings-grid .settings-column:nth-child(1) .settings-card:nth-child(1) { animation-delay: 0.1s; }
+.settings-grid .settings-column:nth-child(1) .settings-card:nth-child(2) { animation-delay: 0.2s; }
+.settings-grid .settings-column:nth-child(2) .settings-card:nth-child(1) { animation-delay: 0.3s; }
+.settings-grid .settings-column:nth-child(2) .settings-card:nth-child(2) { animation-delay: 0.4s; }
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.card-icon {
+  font-size: 1.8rem;
+  color: var(--brand-primary);
+}
+
+.card-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.card-subtitle {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.field {
+  margin-bottom: 1.5rem;
+}
+
+.field label, .field-switch label {
+  display: block;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+}
+
+.field-switch {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+:host ::ng-deep .p-inputtext,
+:host ::ng-deep .p-dropdown,
+:host ::ng-deep .p-password-input {
+  width: 100%;
+}
+
+.danger-zone {
+  border-color: var(--danger-color);
+}
+
+.danger-zone .card-icon {
+  color: var(--danger-color);
+}
+
+.danger-zone:hover {
+  border-color: #ff5252;
+}
+
+.danger-text {
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 992px) {
+  .settings-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 576px) {
+  .settings-container {
+    padding: 1rem;
+  }
+  .main-title {
+    font-size: 2rem;
+  }
+  .settings-card {
+    padding: 1.5rem;
+  }
 }

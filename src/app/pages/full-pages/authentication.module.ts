@@ -10,7 +10,7 @@ import { RegisterComponent } from './register/register.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { CoreModule } from '../../core/core.module';
 import { AppRoutingModule } from '../../app-routing.module';
-import { FormsModule } from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {TranslatePipe} from '@ngx-translate/core';
 import { TranslateModule } from '@ngx-translate/core';
 import { LanguageSwitcherComponent } from '../../core/components/language-switcher/language-switcher.component';
@@ -28,6 +28,7 @@ import { LanguageSwitcherComponent } from '../../core/components/language-switch
     AuthenticationRoutingModule,
     FormsModule,
     TranslateModule,
+    ReactiveFormsModule,
     LanguageSwitcherComponent
   ]
 })
