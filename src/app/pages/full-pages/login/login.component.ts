@@ -28,14 +28,19 @@ export class LoginComponent {
     };
 
     this.authService.signIn(payload).subscribe({
-      next: (res) => {
-        // ✅ Guarda token y userId
-        localStorage.setItem('accessToken', res.token);
-        localStorage.setItem('userId', res.id.toString());
+      next: () => {
+        // ✅ Ya guardó token + id en localStorage dentro del service
 
-        // ✅ Obtiene user completo para saber roles
-        this.authService.getUserById(res.id).subscribe({
+        const userId = localStorage.getItem('userId');
+        if (!userId) {
+          this.error = 'ID de usuario no encontrado.';
+          return;
+        }
+
+        this.authService.getUserById(Number(userId)).subscribe({
           next: (user: User) => {
+            console.log('Usuario obtenido:', user);
+
             const userRole = user.roles[0];
 
             if (userRole === 'ROLE_REPRESENTANTE') {
@@ -43,18 +48,17 @@ export class LoginComponent {
             } else if (userRole === 'ROLE_MIEMBRO') {
               this.router.navigate(['/miembro']);
             } else {
-              // Rol desconocido: redirige a home o error
               this.router.navigate(['/']);
             }
           },
           error: (err) => {
-            this.error = 'No se pudo obtener información del usuario';
+            this.error = 'No se pudo obtener información del usuario.';
             console.error(err);
           }
         });
       },
       error: (err) => {
-        this.error = 'Credenciales inválidas';
+        this.error = 'Credenciales inválidas.';
         console.error(err);
       }
     });
