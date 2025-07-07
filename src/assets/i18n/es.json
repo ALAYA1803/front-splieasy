@@ -193,23 +193,23 @@
     "BACK_BUTTON_TITLE": "Volver al inicio"
   },
   "REGISTER": {
-    "TITLE": "Crea tu Cuenta",
-    "FIRST_NAME_LABEL": "Nombres",
-    "LAST_NAME_LABEL": "Apellidos",
-    "EMAIL_LABEL": "Correo Electrónico",
-    "PASSWORD_LABEL": "Contraseña",
-    "REPEAT_PASSWORD_LABEL": "Repetir Contraseña",
-    "ROLE_LABEL": "Soy un...",
-    "ROLE_PLACEHOLDER": "Selecciona un rol",
-    "ROLE_MEMBER": "Miembro del Hogar",
-    "ROLE_REPRESENTATIVE": "Representante del Hogar",
-    "BUTTON": "Registrarme",
-    "HAVE_ACCOUNT": "¿Ya tienes una cuenta? Inicia sesión",
+    "TITLE": "Crear tu cuenta",
     "BRANDING": {
-      "TITLE": "Únete a la Comunidad",
-      "SUBTITLE": "Empieza a organizar tus gastos de forma inteligente y colaborativa. El registro es rápido y sencillo."
-    }
+      "TITLE": "Bienvenido a SplitEasy",
+      "SUBTITLE": "Regístrate para dividir fácilmente los gastos del hogar."
     },
+    "USERNAME_LABEL": "Nombre de usuario",
+    "EMAIL_LABEL": "Correo electrónico",
+    "PASSWORD_LABEL": "Contraseña",
+    "REPEAT_PASSWORD_LABEL": "Repetir contraseña",
+    "INCOME_LABEL": "Ingresos mensuales",
+    "ROLE_LABEL": "Rol",
+    "ROLE_PLACEHOLDER": "Seleccione un rol",
+    "ROLE_MEMBER": "Miembro",
+    "ROLE_REPRESENTATIVE": "Representante",
+    "BUTTON": "Registrarse",
+    "HAVE_ACCOUNT": "¿Ya tienes una cuenta? Inicia sesión aquí"
+  },
   "RESET": {
     "TITLE": "Crea tu Nueva Contraseña",
     "DESCRIPTION": "Tu nueva contraseña debe ser segura y fácil de recordar. Una vez guardada, podrás iniciar sesión.",

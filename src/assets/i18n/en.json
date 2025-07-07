@@ -197,26 +197,24 @@
     },
     "BACK_BUTTON_TITLE": "Back to home"
   },
-
   "REGISTER": {
-    "TITLE": "Create Your Account",
-    "FIRST_NAME_LABEL": "First Name",
-    "LAST_NAME_LABEL": "Last Name",
-    "EMAIL_LABEL": "Email Address",
+    "TITLE": "Create your account",
+    "BRANDING": {
+      "TITLE": "Welcome to SplitEasy",
+      "SUBTITLE": "Register to split your household expenses easily."
+    },
+    "USERNAME_LABEL": "Username",
+    "EMAIL_LABEL": "Email",
     "PASSWORD_LABEL": "Password",
     "REPEAT_PASSWORD_LABEL": "Repeat Password",
-    "ROLE_LABEL": "I am a...",
+    "INCOME_LABEL": "Monthly Income",
+    "ROLE_LABEL": "Role",
     "ROLE_PLACEHOLDER": "Select a role",
-    "ROLE_MEMBER": "Household Member",
-    "ROLE_REPRESENTATIVE": "Household Representative",
-    "BUTTON": "Sign Up",
-    "HAVE_ACCOUNT": "Already have an account? Sign In",
-    "BRANDING": {
-      "TITLE": "Join the Community",
-      "SUBTITLE": "Start organizing your expenses in a smart and collaborative way. Registration is quick and easy."
-    }
-
-},
+    "ROLE_MEMBER": "Member",
+    "ROLE_REPRESENTATIVE": "Representative",
+    "BUTTON": "Register",
+    "HAVE_ACCOUNT": "Already have an account? Log in here"
+  },
   "CONTACT_US": {
     "TITLE": "Contact Us",
     "NAME_LABEL": "Name",
