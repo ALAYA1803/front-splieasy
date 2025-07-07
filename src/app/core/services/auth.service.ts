@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../environments/environment';
 import { Router } from '@angular/router';
 import { map, Observable, tap } from 'rxjs';
@@ -13,7 +13,7 @@ export class AuthService {
   private authUrl = `${environment.urlBackend}/authentication`;
   private usersUrl = `${environment.urlBackend}/users`;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   signUp(payload: SignUpRequest): Observable<any> {
     return this.http.post(`${this.authUrl}/sign-up`, payload);
@@ -29,10 +29,20 @@ export class AuthService {
   }
 
   getUserById(id: number): Observable<User> {
-    return this.http.get<User>(`${this.usersUrl}/${id}`);
+    const token = localStorage.getItem('accessToken');
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
+
+    return this.http.get<User>(`${this.usersUrl}/${id}`, { headers });
   }
 
   getAllUsers(): Observable<User[]> {
-    return this.http.get<User[]>(`${this.usersUrl}`);
+    const token = localStorage.getItem('accessToken');
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
+
+    return this.http.get<User[]>(`${this.usersUrl}`, { headers });
   }
 }
