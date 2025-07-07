@@ -176,8 +176,8 @@
   },
   "LOGIN": {
     "TITLE": "Inicia Sesión",
-    "EMAIL_LABEL": "Correo Electrónico",
-    "EMAIL_PLACEHOLDER": "tu@correo.com",
+    "USERNAME_LABEL": "Usuario",
+    "USERNAME_PLACEHOLDER": "Introduce tu usuario",
     "PASSWORD_LABEL": "Contraseña",
     "PASSWORD_PLACEHOLDER": "Introduce tu contraseña",
     "FORGOT_PASSWORD": "¿Olvidaste tu contraseña?",

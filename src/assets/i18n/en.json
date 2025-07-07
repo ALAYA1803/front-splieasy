@@ -181,8 +181,8 @@
 
   "LOGIN": {
     "TITLE": "Sign In",
-    "EMAIL_LABEL": "Email Address",
-    "EMAIL_PLACEHOLDER": "you@email.com",
+    "USERNAME_LABEL": "Username",
+    "USERNAME_PLACEHOLDER": "Enter your username",
     "PASSWORD_LABEL": "Password",
     "PASSWORD_PLACEHOLDER": "Enter your password",
     "FORGOT_PASSWORD": "Forgot your password?",
