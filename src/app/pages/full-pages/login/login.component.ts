@@ -18,6 +18,7 @@ export class LoginComponent {
 
   constructor(
     private authService: AuthService,
+    private sidebarService: SidebarService, // ✅ inyectar el servicio aquí
     private router: Router
   ) {}
 
@@ -29,8 +30,6 @@ export class LoginComponent {
 
     this.authService.signIn(payload).subscribe({
       next: () => {
-        // ✅ Ya guardó token + id en localStorage dentro del service
-
         const userId = localStorage.getItem('userId');
         if (!userId) {
           this.error = 'ID de usuario no encontrado.';
@@ -41,8 +40,13 @@ export class LoginComponent {
           next: (user: User) => {
             console.log('Usuario obtenido:', user);
 
-            const userRole = user.roles[0];
+            // ✅ Guardar en localStorage para el sidebar
+            localStorage.setItem('currentUser', JSON.stringify(user));
 
+            // ✅ Generar menú basado en el rol
+            this.sidebarService.generateMenu();
+
+            const userRole = user.roles[0];
             if (userRole === 'ROLE_REPRESENTANTE') {
               this.router.navigate(['/representante']);
             } else if (userRole === 'ROLE_MIEMBRO') {

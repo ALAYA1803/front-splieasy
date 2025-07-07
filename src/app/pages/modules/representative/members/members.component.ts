@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { switchMap, map, forkJoin, of } from 'rxjs';
+import { switchMap, map, forkJoin, of, tap } from 'rxjs';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { TranslateModule } from '@ngx-translate/core';
 import { ToastModule } from 'primeng/toast';
@@ -14,20 +14,10 @@ import { DialogModule } from 'primeng/dialog';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { AvatarModule } from 'primeng/avatar';
 import { TooltipModule } from 'primeng/tooltip';
-
-interface User {
-  id: number;
-  name: string;
-  email: string;
-  role: 'REPRESENTANTE' | 'MIEMBRO';
-  income: number;
-}
-
-interface HouseholdMember {
-  id: number;
-  user_id: number;
-  household_id: number;
-}
+import { environment } from '../../../../core/environments/environment';
+import { HouseholdMemberService } from '../../services/household-member.service';
+import { HouseholdMember } from '../../interfaces/household-member';
+import { User } from '../../../../core/interfaces/auth';
 
 @Component({
   selector: 'app-members',
@@ -60,13 +50,21 @@ export class MembersComponent implements OnInit {
 
   private householdId!: number;
   private householdMembersLinks: HouseholdMember[] = [];
-  private readonly API_URL = 'http://localhost:3000';
+  private readonly API_URL = environment.urlBackend;
+
+  private getAuthHeaders(): HttpHeaders {
+    const token = localStorage.getItem('accessToken');
+    return new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
+  }
 
   constructor(
     private http: HttpClient,
     private fb: FormBuilder,
     private confirmationService: ConfirmationService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private householdMemberService: HouseholdMemberService
   ) {
     this.addMemberForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]]
@@ -77,54 +75,174 @@ export class MembersComponent implements OnInit {
     this.loadMembers();
   }
 
+  // MÉTODO CORREGIDO: loadMembers()
   loadMembers(): void {
     this.loading = true;
     const currentUser = JSON.parse(localStorage.getItem('currentUser')!);
 
-    this.http.get<any[]>(`${this.API_URL}/households?representante_id=${currentUser.id}`).pipe(
+    console.log('👤 Usuario actual:', currentUser);
+
+    // PASO 1: Obtener el hogar del representante
+    this.http.get<any[]>(`${this.API_URL}/households?representanteId=${currentUser.id}`, {
+      headers: this.getAuthHeaders()
+    }).pipe(
+      tap(households => {
+        console.log('🏠 Hogares encontrados:', households);
+        console.log('🔍 Buscando hogar para representante ID:', currentUser.id);
+      }),
       switchMap(households => {
-        if (!households || households.length === 0) return of([]);
-        this.householdId = households[0].id;
-        return this.http.get<HouseholdMember[]>(`${this.API_URL}/household_members?household_id=${this.householdId}`);
+        if (!households || households.length === 0) {
+          console.log('❌ No se encontraron hogares para el representante');
+          return of([]);
+        }
+
+        // VERIFICAR que el hogar pertenezca al usuario actual
+        const userHousehold = households.find(h => h.representanteId === currentUser.id);
+        if (!userHousehold) {
+          console.log('❌ No se encontró hogar donde el usuario sea representante');
+          return of([]);
+        }
+
+        this.householdId = userHousehold.id;
+        console.log('✅ Hogar correcto encontrado - ID:', this.householdId);
+        console.log('✅ Hogar:', userHousehold);
+
+        // PASO 2: Obtener miembros del hogar específico
+        return this.householdMemberService.getByHouseholdId(this.householdId);
+      }),
+      tap(memberLinks => {
+        console.log('🔗 Enlaces de miembros del hogar', this.householdId, ':', memberLinks);
+        this.householdMembersLinks = memberLinks;
       }),
       switchMap(memberLinks => {
-        this.householdMembersLinks = memberLinks;
-        if (memberLinks.length === 0) return of([]);
-        const memberIds = memberLinks.map(link => link.user_id);
-        const userRequests = memberIds.map(id => this.http.get<User>(`${this.API_URL}/users/${id}`));
+        if (memberLinks.length === 0) {
+          console.log('ℹ️ No hay miembros en este hogar');
+          return of([]);
+        }
+
+        // PASO 3: Obtener datos de usuarios
+        const memberIds = memberLinks.map(link => link.userId);
+        console.log('👥 IDs de miembros a obtener:', memberIds);
+
+        const userRequests = memberIds.map(id =>
+          this.http.get<User>(`${this.API_URL}/users/${id}`, {
+            headers: this.getAuthHeaders()
+          }).pipe(
+            tap(user => console.log(`✅ Usuario ${id} obtenido:`, user))
+          )
+        );
         return forkJoin(userRequests);
       })
     ).subscribe({
       next: (membersData) => {
+        console.log('🎉 Datos finales de miembros:', membersData);
         this.members = membersData;
         this.loading = false;
       },
       error: (err) => {
-        console.error("Error al cargar los miembros", err);
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudieron cargar los miembros.' });
+        console.error("❌ Error al cargar los miembros:", err);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'No se pudieron cargar los miembros.'
+        });
         this.loading = false;
       }
     });
   }
 
+  // MÉTODO PARA VERIFICAR DATOS DEL USUARIO
+  verifyUserData(): void {
+    const currentUser = JSON.parse(localStorage.getItem('currentUser')!);
+    console.log('🔍 === VERIFICACIÓN DE DATOS ===');
+    console.log('👤 Usuario en localStorage:', currentUser);
+
+    // Verificar en base de datos
+    this.http.get<User>(`${this.API_URL}/users/${currentUser.id}`, {
+      headers: this.getAuthHeaders()
+    }).subscribe({
+      next: (userFromDB) => {
+        console.log('🗄️ Usuario en base de datos:', userFromDB);
+        console.log('✅ Datos coinciden:',
+          currentUser.username === userFromDB.username &&
+          currentUser.email === userFromDB.email
+        );
+
+        if (currentUser.username !== userFromDB.username) {
+          console.log('⚠️ INCONSISTENCIA: Los datos del localStorage no coinciden con la BD');
+          console.log('💡 Recomendación: Limpiar localStorage y reloguearse');
+        }
+      },
+      error: (err) => {
+        console.error('❌ Error al verificar usuario:', err);
+      }
+    });
+  }
+
+  // MÉTODO PARA LIMPIAR Y RECARGAR DATOS
+  clearAndReload(): void {
+    console.log('🧹 Limpiando datos y recargando...');
+    localStorage.removeItem('currentUser');
+    localStorage.removeItem('accessToken');
+    // Redirigir al login
+    window.location.href = '/login';
+  }
+
+  // Agrega este método de debugging mejorado:
+  debugHouseholdMembers(): void {
+    console.log('🐛 === DEBUG HOUSEHOLD MEMBERS ===');
+    console.log('🆔 Household ID:', this.householdId);
+
+    // Primero debuggear la estructura de datos
+    this.householdMemberService.debugHouseholdMembers().subscribe(() => {
+      console.log('🔍 Debugging completado, revisa la consola');
+    });
+
+    // Luego probar todos los métodos disponibles
+    console.log('🧪 Probando método getByHouseholdId...');
+    this.householdMemberService.getByHouseholdId(this.householdId).subscribe(result => {
+      console.log('📊 Resultado getByHouseholdId:', result);
+    });
+
+    console.log('🧪 Probando método getByHouseholdIdWithQuery...');
+    this.householdMemberService.getByHouseholdIdWithQuery(this.householdId).subscribe(result => {
+      console.log('📊 Resultado getByHouseholdIdWithQuery:', result);
+    });
+
+  }
+
   deleteMember(memberToDelete: User): void {
     this.confirmationService.confirm({
-      message: `¿Estás seguro de que quieres eliminar a <strong>${memberToDelete.name}</strong> del hogar?`,
+      message: `¿Estás seguro de que quieres eliminar a <strong>${memberToDelete.username}</strong> del hogar?`,
       header: 'Confirmar eliminación',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
-        const linkToDelete = this.householdMembersLinks.find(link => link.user_id === memberToDelete.id);
+        const linkToDelete = this.householdMembersLinks.find(link => link.userId === memberToDelete.id);
         if (!linkToDelete) {
-          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo encontrar la relación del miembro.' });
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'No se pudo encontrar la relación del miembro.'
+          });
           return;
         }
-        this.http.delete(`${this.API_URL}/household_members/${linkToDelete.id}`).subscribe({
+
+        this.householdMemberService.deleteMemberLink(linkToDelete.id).subscribe({
           next: () => {
-            this.messageService.add({ severity: 'success', summary: 'Éxito', detail: `Se ha eliminado a ${memberToDelete.name}.` });
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Éxito',
+              detail: `Se ha eliminado a ${memberToDelete.username}.`
+            });
             this.loadMembers();
           },
           error: (err) => {
-            this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo completar la eliminación.' });
+            console.error("Error al eliminar miembro:", err);
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: 'No se pudo completar la eliminación.'
+            });
           }
         });
       }
@@ -140,13 +258,20 @@ export class MembersComponent implements OnInit {
     if (this.addMemberForm.invalid) {
       return;
     }
+
     this.isSaving = true;
     const { email } = this.addMemberForm.value;
 
-    this.http.get<User[]>(`${this.API_URL}/users?email=${email}`).subscribe({
+    this.http.get<User[]>(`${this.API_URL}/users?email=${email}`, {
+      headers: this.getAuthHeaders()
+    }).subscribe({
       next: (users) => {
         if (users.length === 0) {
-          this.messageService.add({ severity: 'warn', summary: 'No encontrado', detail: 'No se encontró ningún usuario con ese email.' });
+          this.messageService.add({
+            severity: 'warn',
+            summary: 'No encontrado',
+            detail: 'No se encontró ningún usuario con ese email.'
+          });
           this.isSaving = false;
           return;
         }
@@ -154,32 +279,57 @@ export class MembersComponent implements OnInit {
         const userToAdd = users[0];
 
         if (this.members.some(m => m.id === userToAdd.id)) {
-          this.messageService.add({ severity: 'warn', summary: 'Miembro existente', detail: 'Este usuario ya forma parte del hogar.' });
+          this.messageService.add({
+            severity: 'warn',
+            summary: 'Miembro existente',
+            detail: 'Este usuario ya forma parte del hogar.'
+          });
           this.isSaving = false;
           return;
         }
 
-        const newLink = {
-          user_id: userToAdd.id,
-          household_id: this.householdId
+        const newMemberData = {
+          id: 0,
+          userId: userToAdd.id,
+          householdId: this.householdId
         };
-        this.http.post(`${this.API_URL}/household_members`, newLink).subscribe({
+
+        this.householdMemberService.createMemberLink(newMemberData).subscribe({
           next: () => {
-            this.messageService.add({ severity: 'success', summary: 'Éxito', detail: `${userToAdd.name} ha sido añadido al hogar.` });
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Éxito',
+              detail: `${userToAdd.username} ha sido añadido al hogar.`
+            });
             this.loadMembers();
             this.showAddMemberForm = false;
             this.isSaving = false;
           },
           error: (err) => {
-            this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo añadir al miembro.' });
+            console.error("Error al añadir miembro:", err);
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: 'No se pudo añadir al miembro.'
+            });
             this.isSaving = false;
           }
         });
       },
-      error: () => {
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Ocurrió un error al buscar el usuario.' });
+      error: (err) => {
+        console.error("Error al buscar usuario:", err);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Ocurrió un error al buscar el usuario.'
+        });
         this.isSaving = false;
       }
     });
+  }
+
+  closeAddMemberDialog(): void {
+    this.showAddMemberForm = false;
+    this.addMemberForm.reset();
   }
 }

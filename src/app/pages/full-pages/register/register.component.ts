@@ -14,6 +14,7 @@ import { AuthService } from '../../../core/services/auth.service';
 export class RegisterComponent {
 
   registerForm: FormGroup;
+  isSubmitting = false; // ✅ Agregado para evitar doble envío
 
   constructor(
     private fb: FormBuilder,
@@ -46,10 +47,16 @@ export class RegisterComponent {
    * Acción de registro
    */
   register() {
-    if (this.registerForm.invalid) {
-      this.registerForm.markAllAsTouched();
+    // ✅ Prevenir doble envío
+    if (this.registerForm.invalid || this.isSubmitting) {
+      if (this.registerForm.invalid) {
+        this.registerForm.markAllAsTouched();
+      }
       return;
     }
+
+    // ✅ Marcar como enviando
+    this.isSubmitting = true;
 
     const formValue = this.registerForm.value;
 
@@ -61,13 +68,17 @@ export class RegisterComponent {
       roles: [formValue.role] // Importante: backend espera un array
     };
 
+    console.log('Enviando payload:', payload); // ✅ Debug
+
     this.authService.signUp(payload).subscribe({
-      next: () => {
-        console.log('Registro exitoso');
-        this.router.navigate(['/autenticacion/login']); // Redirige al login
+      next: (response) => {
+        console.log('Registro exitoso:', response);
+        this.isSubmitting = false; // ✅ Resetear estado
+        this.router.navigate(['/autenticacion/login']);
       },
       error: (err) => {
         console.error('Error en registro:', err);
+        this.isSubmitting = false; // ✅ Resetear estado en error
         // Aquí puedes mostrar un mensaje de error si quieres
       }
     });

@@ -13,10 +13,16 @@ export class AuthService {
   private authUrl = `${environment.urlBackend}/authentication`;
   private usersUrl = `${environment.urlBackend}/users`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private router: Router) { }
 
-  signUp(payload: SignUpRequest): Observable<any> {
-    return this.http.post(`${this.authUrl}/sign-up`, payload);
+  signUp(payload: SignUpRequest): Observable<User> {
+    // ✅ Removido la navegación automática para evitar duplicados
+    return this.http.post<User>(`${this.authUrl}/sign-up`, payload).pipe(
+      tap(user => {
+        console.log('Usuario registrado correctamente:', user);
+        // La navegación se maneja en el componente
+      })
+    );
   }
 
   signIn(payload: SignInRequest): Observable<AuthResponse> {
@@ -24,6 +30,10 @@ export class AuthService {
       tap(res => {
         localStorage.setItem('accessToken', res.token);
         localStorage.setItem('userId', res.id.toString());
+
+        this.getUserById(res.id).subscribe(user => {
+          localStorage.setItem('currentUser', JSON.stringify(user));
+        });
       })
     );
   }
