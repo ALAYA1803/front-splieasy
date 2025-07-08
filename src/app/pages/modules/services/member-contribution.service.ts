@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../../core/environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { MemberContribution } from '../interfaces/member.contribution';
+import { MemberContribution } from '../interfaces/member-contribution';
 import { Observable } from 'rxjs';
 
 @Injectable({
