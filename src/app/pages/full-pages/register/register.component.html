@@ -1,6 +1,5 @@
 <div class="login-container">
 
-  <!-- Branding column -->
   <div class="branding-column">
     <div class="branding-content">
       <a routerLink="/" class="brand-logo">
@@ -12,12 +11,10 @@
     </div>
   </div>
 
-  <!-- Form column -->
   <div class="form-column">
     <app-language-switcher class="language-switcher"></app-language-switcher>
     <div class="login-box">
 
-      <!-- Header -->
       <div class="login-header">
         <a routerLink="/" class="btn-back" [title]="'LOGIN.BACK_BUTTON_TITLE' | translate">
           <i class="bi bi-x-lg"></i>
@@ -28,7 +25,6 @@
 
       <form class="mt-4" [formGroup]="registerForm" (ngSubmit)="register()">
 
-        <!-- Username -->
         <div class="form-group">
           <label for="username" class="form-label">{{ 'REGISTER.USERNAME_LABEL' | translate }}</label>
           <div class="input-group">
@@ -37,7 +33,6 @@
           </div>
         </div>
 
-        <!-- Email -->
         <div class="form-group">
           <label for="email" class="form-label">{{ 'REGISTER.EMAIL_LABEL' | translate }}</label>
           <div class="input-group">
@@ -46,7 +41,6 @@
           </div>
         </div>
 
-        <!-- Password -->
         <div class="form-group">
           <label for="password" class="form-label">{{ 'REGISTER.PASSWORD_LABEL' | translate }}</label>
           <div class="input-group">
@@ -55,7 +49,6 @@
           </div>
         </div>
 
-        <!-- Repeat Password -->
         <div class="form-group">
           <label for="repeat-password" class="form-label">{{ 'REGISTER.REPEAT_PASSWORD_LABEL' | translate }}</label>
           <div class="input-group">
@@ -68,7 +61,6 @@
           </div>
         </div>
 
-        <!-- Income -->
         <div class="form-group">
           <label for="income" class="form-label">{{ 'REGISTER.INCOME_LABEL' | translate }}</label>
           <div class="input-group">
@@ -77,25 +69,22 @@
           </div>
         </div>
 
-        <!-- Role -->
         <div class="form-group">
           <label for="role" class="form-label">{{ 'REGISTER.ROLE_LABEL' | translate }}</label>
           <div class="input-group">
             <i class="bi bi-person-badge input-icon"></i>
             <select id="role" class="form-control" formControlName="role">
               <option value="" disabled>{{ 'REGISTER.ROLE_PLACEHOLDER' | translate }}</option>
-              <option value="MIEMBRO">{{ 'REGISTER.ROLE_MEMBER' | translate }}</option>
-              <option value="REPRESENTANTE">{{ 'REGISTER.ROLE_REPRESENTATIVE' | translate }}</option>
+              <option value="ROLE_MIEMBRO">{{ 'REGISTER.ROLE_MEMBER' | translate }}</option>
+              <option value="ROLE_REPRESENTANTE">{{ 'REGISTER.ROLE_REPRESENTATIVE' | translate }}</option>
             </select>
           </div>
         </div>
 
-        <!-- Submit button -->
-        <button type="submit" class="btn btn-login w-100 mt-3">
+        <button type="submit" class="btn btn-login w-100 mt-3" [disabled]="isSubmitting">
           {{ 'REGISTER.BUTTON' | translate }}
         </button>
 
-        <!-- Link to login -->
         <div class="text-center mt-4">
           <a [routerLink]="['/autenticacion/login']" class="form-subtitle">
             {{ 'REGISTER.HAVE_ACCOUNT' | translate }}

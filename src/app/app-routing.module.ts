@@ -26,7 +26,7 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        loadChildren: () => import('./pages/modules/member/member.module').then(m => m.MemberModule)
+        loadChildren: () => import('./pages/modules/member/member-routing.module').then(m => m.MemberRoutingModule)
       }
     ]
   }

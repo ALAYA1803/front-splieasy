@@ -73,13 +73,13 @@ export class SettingsComponent implements OnInit, OnDestroy {
     return newPassword === confirmPassword ? null : { mismatch: true };
   }
   loadUserData(): void {
-    this.http.get<any>(`http://localhost:3000/users/${this.userId}`)
+    this.http.get<any>(`https://backend-app-1-vd66.onrender.com/api/v1/users/${this.userId}`)
       .pipe(takeUntil(this.destroy$))
       .subscribe(userData => this.profileForm.patchValue(userData));
   }
 
   loadSettingsData(): void {
-    this.http.get<any[]>(`http://localhost:3000/settings?user_id=${this.userId}`)
+    this.http.get<any[]>(`https://backend-app-1-vd66.onrender.com/api/v1/settings?user_id=${this.userId}`)
       .pipe(takeUntil(this.destroy$))
       .subscribe(settings => {
         const existingSetting = settings[0];
@@ -92,7 +92,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
   saveProfile(): void {
     if (this.profileForm.invalid) return;
-    this.http.patch(`http://localhost:3000/users/${this.userId}`, this.profileForm.value)
+    this.http.patch(`https://backend-app-1-vd66.onrender.com/api/v1/users/${this.userId}`, this.profileForm.value)
       .pipe(takeUntil(this.destroy$))
       .subscribe(() => alert('Perfil actualizado con éxito'));
   }
@@ -101,8 +101,8 @@ export class SettingsComponent implements OnInit, OnDestroy {
     if (this.settingsForm.invalid) return;
     const settingsPayload = { ...this.settingsForm.value, user_id: this.userId };
     const request = this.settingId
-      ? this.http.patch(`http://localhost:3000/settings/${this.settingId}`, settingsPayload)
-      : this.http.post(`http://localhost:3000/settings`, settingsPayload);
+      ? this.http.patch(`https://backend-app-1-vd66.onrender.com/api/v1/settings/${this.settingId}`, settingsPayload)
+      : this.http.post(`https://backend-app-1-vd66.onrender.com/api/v1/settings`, settingsPayload);
     request.pipe(takeUntil(this.destroy$)).subscribe(() => alert('Configuración guardada'));
   }
 
@@ -111,10 +111,10 @@ export class SettingsComponent implements OnInit, OnDestroy {
       return;
     }
     const { currentPassword, newPassword } = this.passwordForm.value;
-    this.http.get<any>(`http://localhost:3000/users/${this.userId}`)
+    this.http.get<any>(`https://backend-app-1-vd66.onrender.com/api/v1/users/${this.userId}`)
       .subscribe(user => {
         if (user && user.password === currentPassword) {
-          this.http.patch(`http://localhost:3000/users/${this.userId}`, { password: newPassword })
+          this.http.patch(`https://backend-app-1-vd66.onrender.com/api/v1/users/${this.userId}`, { password: newPassword })
             .subscribe(() => {
               alert('Contraseña actualizada con éxito');
               this.passwordForm.reset();
@@ -129,7 +129,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
   deleteAccount(): void {
     const confirmation = prompt('Esta acción es irreversible. Para confirmar, escribe tu correo electrónico:');
     if (confirmation && confirmation.toLowerCase() === this.profileForm.value.email.toLowerCase()) {
-      this.http.delete(`http://localhost:3000/users/${this.userId}`)
+      this.http.delete(`https://backend-app-1-vd66.onrender.com/api/v1/users/${this.userId}`)
         .pipe(takeUntil(this.destroy$))
         .subscribe(() => alert('Cuenta eliminada.'));
     } else {

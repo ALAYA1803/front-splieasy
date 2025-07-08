@@ -1,9 +1,19 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {TranslateModule} from '@ngx-translate/core';
+import {TableModule} from 'primeng/table';
+import {CardModule} from 'primeng/card';
 
 @Component({
   selector: 'app-memb-settings',
-  standalone: false,
+  standalone: true,
+  imports: [
+    CommonModule,
+    TranslateModule,
+    TableModule,
+    CardModule
+  ],
   templateUrl: './memb-settings.component.html',
   styleUrl: './memb-settings.component.css'
 })
@@ -22,7 +32,7 @@ export class MembSettingsComponent implements OnInit {
     const user = JSON.parse(localStorage.getItem('currentUser')!);
     this.userId = +user.id;
 
-    this.http.get<any[]>(`http://localhost:3000/settings?user_id=${this.userId}`).subscribe(res => {
+    this.http.get<any[]>(`https://backend-app-1-vd66.onrender.com/api/v1/settings?user_id=${this.userId}`).subscribe(res => {
       if (res.length > 0) {
         this.settings = { ...res[0] };
         this.settingsId = res[0].id;
@@ -31,7 +41,7 @@ export class MembSettingsComponent implements OnInit {
   }
 
   save(): void {
-    this.http.patch(`http://localhost:3000/settings/${this.settingsId}`, this.settings).subscribe(() => {
+    this.http.patch(`https://backend-app-1-vd66.onrender.com/api/v1/settings/${this.settingsId}`, this.settings).subscribe(() => {
       alert('Preferencias actualizadas correctamente.');
     });
   }

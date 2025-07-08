@@ -1,9 +1,19 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
+import { TableModule } from 'primeng/table';
+import { CardModule } from 'primeng/card';
 
 @Component({
   selector: 'app-memb-status',
-  standalone: false,
+  standalone: true,
+  imports: [
+    CommonModule,
+    TranslateModule,
+    TableModule,
+    CardModule
+  ],
   templateUrl: './memb-status.component.html',
   styleUrl: './memb-status.component.css'
 })
@@ -20,11 +30,11 @@ export class MembStatusComponent implements OnInit {
   }
 
   loadStatus(): void {
-    this.http.get<any[]>(`http://localhost:3000/member_contributions?member_id=${this.userId}`).subscribe(mcList => {
+    this.http.get<any[]>(`https://backend-app-1-vd66.onrender.com/api/v1/member_contributions?member_id=${this.userId}`).subscribe(mcList => {
       const contribIds = mcList.map(mc => mc.contribution_id);
 
-      this.http.get<any[]>(`http://localhost:3000/contributions`).subscribe(allContribs => {
-        this.http.get<any[]>(`http://localhost:3000/bills`).subscribe(bills => {
+      this.http.get<any[]>(`https://backend-app-1-vd66.onrender.com/api/v1/contributions`).subscribe(allContribs => {
+        this.http.get<any[]>(`https://backend-app-1-vd66.onrender.com/api/v1/bills`).subscribe(bills => {
           this.statusList = mcList.map(mc => {
             const contrib = allContribs.find(c => c.id === mc.contribution_id);
             const bill = bills.find(b => b.id === contrib?.bill_id);

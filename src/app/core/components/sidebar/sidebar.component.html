@@ -38,7 +38,6 @@
 
   <!-- Footer: Perfil + Logout -->
   <div class="sidebar-footer p-3">
-    <!-- Perfil de usuario -->
     <div class="user-profile-card p-3 mb-3"
          role="button"
          tabindex="0"
@@ -47,16 +46,16 @@
          aria-label="Abrir configuración de usuario">
       <div class="user-profile flex align-items-center">
         <div class="avatar-container">
-          <p-avatar [label]="user?.name?.charAt(0)?.toUpperCase() || 'U'"
+          <p-avatar [label]="user?.username?.charAt(0)?.toUpperCase() || 'U'"
                     shape="circle"
                     styleClass="user-avatar bg-primary-500 text-white">
           </p-avatar>
           <div class="avatar-status online"></div>
         </div>
         <div class="user-info ml-3 flex-1">
-          <div class="user-name font-bold text-sm">{{ user?.name || 'Usuario' }}</div>
+          <div class="user-name font-bold text-sm">{{ user?.username || 'Usuario' }}</div>
           <div class="user-email text-xs text-color-secondary">{{ user?.email || 'usuario@ejemplo.com' }}</div>
-          <div class="user-role text-xs">{{ user?.role || 'Miembro' }}</div>
+          <div class="user-role text-xs">{{ user?.roles?.[0] || 'Miembro' }}</div>
         </div>
       </div>
     </div>
