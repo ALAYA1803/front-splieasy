@@ -288,13 +288,15 @@ export class MembersComponent implements OnInit {
           return;
         }
 
-        const newMemberData = {
-          id: 0,
+        // CORRECCIÓN: Crear un miembro del hogar (household_members)
+        const newHouseholdMemberData = {
+          id: 0, // Se autogenera
           userId: userToAdd.id,
           householdId: this.householdId
         };
 
-        this.householdMemberService.createMemberLink(newMemberData).subscribe({
+        // USAR EL ENDPOINT CORRECTO: household-members (o el que tengas para esto)
+        this.householdMemberService.createMemberLink(newHouseholdMemberData).subscribe({
           next: () => {
             this.messageService.add({
               severity: 'success',
