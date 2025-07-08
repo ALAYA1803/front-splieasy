@@ -206,17 +206,19 @@ export class MembersComponent implements OnInit {
       headers: this.getAuthHeaders()
     }).subscribe({
       next: (users) => {
-        if (users.length === 0) {
+        const userToAdd = users.find(user =>
+          user.email.toLowerCase().trim() === email.toLowerCase().trim()
+        );
+
+        if (!userToAdd) {
           this.messageService.add({
             severity: 'warn',
             summary: 'No encontrado',
-            detail: 'No se encontró ningún usuario con ese email.'
+            detail: 'No se encontró ningún usuario con ese email exacto.'
           });
           this.isSaving = false;
           return;
         }
-
-        const userToAdd = users[0];
 
         if (this.members.some(m => m.id === userToAdd.id)) {
           this.messageService.add({
@@ -228,7 +230,6 @@ export class MembersComponent implements OnInit {
           return;
         }
 
-        // ✅ CORRECCIÓN: Enviar SOLO userId y householdId (sin id)
         const newHouseholdMemberData = {
           userId: userToAdd.id,
           householdId: this.householdId
@@ -271,5 +272,4 @@ export class MembersComponent implements OnInit {
       }
     });
   }
-
 }

@@ -48,16 +48,10 @@
             <td class="date-cell">{{ bill.fecha | date:'dd/MM/yyyy' }}</td>
             <td class="user-cell">{{ bill.createdBy }}</td>
             <td *ngIf="isRepresentante" class="actions-cell">
-              <button
-                class="btn-icon edit"
-                (click)="editBill(bill)"
-                [title]="'BILLS.EDIT' | translate">
+              <button class="btn-icon edit" (click)="editBill(bill)" [title]="'BILLS.EDIT' | translate">
                 <i class="pi pi-pencil"></i>
               </button>
-              <button
-                class="btn-icon delete"
-                (click)="deleteBill(bill.id)"
-                [title]="'BILLS.DELETE' | translate">
+              <button class="btn-icon delete" (click)="deleteBill(bill.id)" [title]="'BILLS.DELETE' | translate">
                 <i class="pi pi-trash"></i>
               </button>
             </td>
@@ -86,79 +80,54 @@
   </div>
 
   <!-- Modal -->
-  <div class="modal-overlay" *ngIf="formVisible">
-    <div class="modal">
-      <div class="modal-header">
-        {{ editingBillId ? ('BILLS.EDIT_BILL_DIALOG' | translate) : ('BILLS.NEW_BILL_DIALOG' | translate) }}
-      </div>
-
-      <div class="modal-content">
-        <form [formGroup]="billForm" (ngSubmit)="submit()">
-          <div class="form-group">
-            <label class="form-label" for="descripcion">{{ 'BILLS.DESCRIPTION' | translate }} *</label>
-            <input
-              id="descripcion"
-              type="text"
-              class="form-control"
-              formControlName="descripcion"
-              [class.is-invalid]="billForm.get('descripcion')?.invalid && billForm.get('descripcion')?.touched"
-              placeholder="Ingresa la descripción de la factura"
-            />
-            <div *ngIf="billForm.get('descripcion')?.invalid && billForm.get('descripcion')?.touched" class="invalid-feedback">
-              La descripción es requerida
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label class="form-label" for="monto">{{ 'BILLS.AMOUNT' | translate }} *</label>
-            <input
-              id="monto"
-              type="number"
-              step="0.01"
-              min="0"
-              class="form-control"
-              formControlName="monto"
-              [class.is-invalid]="billForm.get('monto')?.invalid && billForm.get('monto')?.touched"
-              placeholder="0.00"
-            />
-            <div *ngIf="billForm.get('monto')?.invalid && billForm.get('monto')?.touched" class="invalid-feedback">
-              El monto es requerido y debe ser mayor a 0
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label class="form-label" for="fecha">{{ 'BILLS.DATE' | translate }} *</label>
-            <input
-              id="fecha"
-              type="date"
-              class="form-control"
-              formControlName="fecha"
-              [class.is-invalid]="billForm.get('fecha')?.invalid && billForm.get('fecha')?.touched"
-            />
-            <div *ngIf="billForm.get('fecha')?.invalid && billForm.get('fecha')?.touched" class="invalid-feedback">
-              La fecha es requerida
-            </div>
-          </div>
-        </form>
-
-        <div class="form-actions">
-          <button
-            type="button"
-            class="btn-secondary"
-            (click)="cancelForm()">
-            <i class="pi pi-times"></i>
-            <span>{{ 'BILLS.CANCEL_BUTTON' | translate }}</span>
-          </button>
-          <button
-            type="submit"
-            class="btn-primary"
-            (click)="submit()"
-            [disabled]="billForm.invalid">
-            <i class="pi pi-check"></i>
-            <span>{{ editingBillId ? ('BILLS.UPDATE_BUTTON' | translate) : ('BILLS.SAVE_BUTTON' | translate) }}</span>
-          </button>
+  <p-dialog
+    header="{{ editingBillId ? ('BILLS.EDIT_BILL_DIALOG' | translate) : ('BILLS.NEW_BILL_DIALOG' | translate) }}"
+    [(visible)]="formVisible" [modal]="true" [closable]="true" [dismissableMask]="true" [style]="{ width: '500px' }"
+    (onHide)="cancelForm()">
+    <form [formGroup]="billForm" (ngSubmit)="submit()">
+      <div class="form-group">
+        <label for="descripcion">{{ 'BILLS.DESCRIPTION' | translate }} *</label>
+        <br>
+        <input id="descripcion" type="text" pInputText formControlName="descripcion"
+          [class.ng-invalid]="billForm.get('descripcion')?.invalid && billForm.get('descripcion')?.touched"
+          placeholder="Ingresa la descripción de la factura" />
+        <div *ngIf="billForm.get('descripcion')?.invalid && billForm.get('descripcion')?.touched"
+          class="invalid-feedback">
+          La descripción es requerida
         </div>
       </div>
-    </div>
-  </div>
+
+      <div class="form-group">
+        <label for="monto">{{ 'BILLS.AMOUNT' | translate }} *</label>
+        <br>
+        <input id="monto" type="number" pInputText step="0.01" min="0" formControlName="monto"
+          [class.ng-invalid]="billForm.get('monto')?.invalid && billForm.get('monto')?.touched" placeholder="0.00" />
+        <div *ngIf="billForm.get('monto')?.invalid && billForm.get('monto')?.touched" class="invalid-feedback">
+          El monto es requerido y debe ser mayor a 0
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="fecha">{{ 'BILLS.DATE' | translate }} *</label>
+        <br>
+        <input id="fecha" type="date" pInputText formControlName="fecha"
+          [class.ng-invalid]="billForm.get('fecha')?.invalid && billForm.get('fecha')?.touched" />
+        <div *ngIf="billForm.get('fecha')?.invalid && billForm.get('fecha')?.touched" class="invalid-feedback">
+          La fecha es requerida
+        </div>
+      </div>
+
+      <div class="form-actions mt-3">
+        <button pButton type="button" label="{{ 'BILLS.CANCEL_BUTTON' | translate }}" class="p-button-secondary"
+          (click)="cancelForm()">
+          <i class="pi pi-times"></i>
+        </button>
+        <button pButton type="submit" [disabled]="billForm.invalid"
+          [label]="editingBillId ? ('BILLS.UPDATE_BUTTON' | translate) : ('BILLS.SAVE_BUTTON' | translate)">
+          <i class="pi pi-check"></i>
+        </button>
+      </div>
+    </form>
+  </p-dialog>
+
 </div>
