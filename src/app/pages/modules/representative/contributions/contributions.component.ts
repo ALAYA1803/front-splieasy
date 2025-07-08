@@ -23,10 +23,18 @@ export class ContributionsComponent implements OnInit {
   contributions: any[] = [];
   bills: any[] = [];
   members: any[] = [];
+  miembros: any[] = []; // Para el multiSelect
   currentUser!: User;
   loading = true;
   showForm = false;
+  mostrarDialogo = false; // Para el dialog
   contributionForm!: FormGroup;
+
+  // Opciones para el dropdown de estrategias
+  estrategias = [
+    { label: 'Igualitaria', value: 'EQUAL' },
+    { label: 'Según Ingresos', value: 'INCOME_BASED' }
+  ];
 
   constructor(
     private http: HttpClient,
@@ -37,183 +45,349 @@ export class ContributionsComponent implements OnInit {
     private authService: AuthService,
     private billService: BillsService,
     private memberContributionService: MemberContributionService
-  ) {}
+  ) { }
 
-  ngOnInit() {
-  const currentUserData = localStorage.getItem('currentUser');
-  if (!currentUserData) {
-    console.error('No se encontró información del usuario actual');
-    return;
+  ngOnInit(): void {
+    this.contributionForm = this.fb.group({
+      billId: [null, Validators.required],
+      description: ['', Validators.required],
+      fechaLimite: [null, Validators.required],
+      strategy: ['EQUAL', Validators.required],
+      miembros: [[], Validators.required]
+    });
+
+    this.loadData();
   }
 
-  this.currentUser = JSON.parse(currentUserData);
 
-  this.contributionForm = this.fb.group({
-    billId: [null, Validators.required],
-    description: ['', Validators.required],
-    fechaLimite: [null, Validators.required],
-    strategy: ['EQUAL', Validators.required]
-  });
-
-  // ✅ Usar servicio con headers correctos
-  this.householdService.getHouseholdByRepresentante(this.currentUser.id).subscribe(households => {
-    const household = households[0];
-    if (household) {
-      this.householdId = household.id;
-
-      forkJoin({
-        hms: this.householdMemberService.getByHouseholdId(this.householdId),
-        users: this.authService.getAllUsers(),
-        bills: this.billService.getBillsByHousehold(this.householdId),
-        contributions: this.contributionsService.getContributionsByHouseholdId(this.householdId),
-        memberContributions: this.memberContributionService.getAll()
-      }).subscribe(({ hms, users, bills, contributions, memberContributions }) => {
-        this.bills = bills;
-        const representative = users.find(u => u.id == this.currentUser.id);
-
-        this.members = [
-          ...hms.map(hm => ({
-            ...hm,
-            user: users.find(u => u.id == hm.userId)
-          })),
-          ...(representative ? [{
-            userId: representative.id,
-            householdId: this.householdId,
-            user: representative
-          }] : [])
-        ];
-
-        this.contributions = contributions.map(c => {
-          const details = memberContributions
-            .filter((mc: any) => mc.contribution_id == c.id)
-            .map((mc: any) => ({
-              ...mc,
-              user: users.find(u => u.id == mc.member_id)
-            }));
-
-          const hasRep = representative ? details.some((d: any) => d.user?.id == representative.id) : false;
-
-          if (representative && !hasRep) {
-            const monto = this.calculateMontoFaltante(c, details, representative);
-            details.push({
-              contribution_id: c.id,
-              member_id: representative.id,
-              monto,
-              status: 'PENDIENTE',
-              pagado_en: null,
-              user: representative
-            });
-          }
-
-          return {
-            ...c,
-            details,
-            expanded: false
-          };
-        });
-
-        this.loading = false;
-      });
+  private loadData(): void {
+    const currentUserData = localStorage.getItem('currentUser');
+    if (!currentUserData) {
+      console.error('No se encontró información del usuario actual');
+      return;
     }
-  });
-}
 
-  openForm() {
+    this.currentUser = JSON.parse(currentUserData);
+    this.loading = true;
+
+    this.householdService.getHouseholdByRepresentante(this.currentUser.id).subscribe(households => {
+      const household = households[0];
+      if (household) {
+        this.householdId = household.id;
+
+        forkJoin({
+          hms: this.householdMemberService.getByHouseholdId(this.householdId),
+          users: this.authService.getAllUsers(),
+          bills: this.billService.getBillsByHousehold(this.householdId),
+          contributions: this.contributionsService.getContributionsByHouseholdId(this.householdId),
+          memberContributions: this.memberContributionService.getAll()
+        }).subscribe(({ hms, users, bills, contributions, memberContributions }) => {
+          this.bills = bills;
+          const representative = users.find(u => u.id == this.currentUser.id);
+
+          this.members = [
+            ...hms.map(hm => ({
+              ...hm,
+              user: users.find(u => u.id == hm.userId)
+            })),
+            ...(representative ? [{
+              userId: representative.id,
+              householdId: this.householdId,
+              user: representative
+            }] : [])
+          ];
+
+          this.miembros = this.members.map(m => ({
+            id: m.userId,
+            name: m.user?.username || 'Sin nombre',
+            role: m.user?.role || 'MIEMBRO'
+          }));
+
+          this.contributions = contributions
+            .filter(c => this.bills.some(b => b.id === c.billId))
+            .map(c => {
+              const bill = this.bills.find(b => b.id === c.billId);
+              const details = memberContributions
+                .filter((mc: any) => mc.contribution_id == c.id)
+                .map((mc: any) => ({
+                  ...mc,
+                  user: users.find(u => u.id == mc.member_id)
+                }));
+
+              const hasRep = representative ? details.some((d: any) => d.user?.id == representative.id) : false;
+
+              if (representative && !hasRep) {
+                const monto = this.calculateMontoFaltante(c, details, representative);
+                details.push({
+                  contribution_id: c.id,
+                  member_id: representative.id,
+                  monto,
+                  status: 'PENDIENTE',
+                  pagado_en: null,
+                  user: representative
+                });
+              }
+
+              return {
+                ...c,
+                montoTotal: bill?.monto ?? 0,
+                details,
+                expanded: false
+              };
+            });
+
+          this.loading = false;
+        });
+      }
+    });
+  }
+
+
+  // Método para abrir el diálogo (usado en el template)
+  abrirDialogo() {
     this.contributionForm.reset({
       billId: null,
       description: '',
       fechaLimite: null,
-      strategy: 'EQUAL'
+      strategy: 'EQUAL',
+      miembros: []
     });
-    this.showForm = true;
+    this.mostrarDialogo = true;
   }
 
-  submit() {
+  // Método para cerrar el diálogo
+  cerrarDialogo() {
+    this.mostrarDialogo = false;
+  }
+
+  // ✅ MÉTODO CORREGIDO: guardarContribution()
+  guardarContribution() {
     if (this.contributionForm.invalid) {
+      console.error('Formulario inválido:', this.contributionForm.errors);
       return;
     }
 
+    this.loading = true;
     const formValue = this.contributionForm.value;
-    const fechaLimite = new Date(formValue.fechaLimite);
-    const formattedDate = fechaLimite.toISOString().split('T')[0];
 
+    // ✅ CORRECCIÓN: Validar que billId no sea null/undefined
+    if (!formValue.billId) {
+      console.error('billId es requerido');
+      this.loading = false;
+      return;
+    }
+
+    // ✅ CORRECCIÓN: Validar que householdId no sea null/undefined
+    if (!this.householdId) {
+      console.error('householdId es requerido');
+      this.loading = false;
+      return;
+    }
+
+    // ✅ CORRECCIÓN: Formatear correctamente la fecha
+    let formattedDate: string;
+    if (formValue.fechaLimite instanceof Date) {
+      formattedDate = formValue.fechaLimite.toISOString().split('T')[0];
+    } else if (typeof formValue.fechaLimite === 'string') {
+      const dateObj = new Date(formValue.fechaLimite);
+      formattedDate = dateObj.toISOString().split('T')[0];
+    } else {
+      console.error('Formato de fecha inválido:', formValue.fechaLimite);
+      this.loading = false;
+      return;
+    }
+
+    // ✅ CORRECCIÓN: Crear el request con validaciones
     const createRequest: CreateContributionRequest = {
-      billId: +formValue.billId,
-      householdId: this.householdId,
-      description: formValue.description,
+      billId: parseInt(formValue.billId.toString()), // Convertir a entero de forma segura
+      householdId: parseInt(this.householdId.toString()), // Convertir a entero de forma segura
+      description: formValue.description.trim(),
       strategy: formValue.strategy,
       fechaLimite: formattedDate
     };
 
-    const bill = this.bills.find(b => +b.id === createRequest.billId);
+    // ✅ DEBUGGING: Verificar que los valores sean válidos antes de enviar
+    console.log('📊 Valores del formulario:', formValue);
+    console.log('📊 householdId actual:', this.householdId);
+    console.log('📤 Request final:', createRequest);
 
-    if (!bill) {
-      alert('Error: no se encontró la cuenta seleccionada.');
+    // Validar que no sean 0 después de la conversión
+    if (createRequest.billId === 0 || createRequest.householdId === 0) {
+      console.error('❌ Error: billId o householdId son 0 después de la conversión');
+      console.error('billId original:', formValue.billId);
+      console.error('householdId original:', this.householdId);
+      this.loading = false;
       return;
     }
 
-    const total = bill.monto;
+    this.contributionsService.createContribution(createRequest).subscribe({
+      next: (savedContribution: Contribution) => {
+        console.log('✅ Contribución creada exitosamente:', savedContribution);
 
-    // Usar el service para crear la contribución
-    this.contributionsService.createContribution(createRequest).subscribe((savedContribution: Contribution) => {
-      const memberContributions = this.calculateDivision(total, createRequest.strategy, savedContribution.id);
+        // Obtener miembros seleccionados
+        const selectedMembers = this.members.filter(m =>
+          formValue.miembros.includes(m.userId)
+        );
 
-      const requests = memberContributions.map(mc =>
-        this.http.post(`${environment.urlBackend}/member_contributions`, mc)
-      );
+        if (selectedMembers.length === 0) {
+          console.error('❌ No se seleccionaron miembros');
+          this.loading = false;
+          return;
+        }
 
-      forkJoin(requests).subscribe(() => {
-        this.ngOnInit();
-        this.showForm = false;
-      });
+        // Obtener el monto total de la factura
+        const bill = this.bills.find(b => b.id === formValue.billId);
+        const montoTotal = bill?.monto || 0;
+
+        if (montoTotal <= 0) {
+          console.error('❌ El monto de la factura debe ser mayor a 0');
+          this.loading = false;
+          return;
+        }
+
+        // Crear las contribuciones individuales para cada miembro
+        const memberContributions = this.calculateDivisionForSelected(
+          montoTotal,
+          formValue.strategy,
+          savedContribution.id,
+          selectedMembers
+        );
+
+        console.log('📤 Enviando contribuciones de miembros:', memberContributions);
+
+        const requests = memberContributions.map(mc =>
+          this.memberContributionService.create(mc)
+        );
+
+        forkJoin(requests).subscribe({
+          next: (results) => {
+            console.log('✅ Contribuciones de miembros creadas:', results);
+            this.ngOnInit();
+            this.mostrarDialogo = false;
+            this.loading = false;
+          },
+          error: (error) => {
+            console.error('❌ Error al crear contribuciones de miembros:', error);
+            this.loading = false;
+          }
+        });
+      },
+      error: (error) => {
+        console.error('❌ Error al crear contribución:', error);
+        console.error('❌ Status:', error.status);
+        console.error('❌ Error body:', error.error);
+
+        let errorMessage = 'Error desconocido al crear la contribución';
+        if (error.status === 400) {
+          errorMessage = 'Datos inválidos proporcionados';
+        } else if (error.status === 401) {
+          errorMessage = 'No autorizado para realizar esta acción';
+        } else if (error.status === 404) {
+          errorMessage = 'Recurso no encontrado';
+        } else if (error.status === 500) {
+          errorMessage = 'Error interno del servidor';
+        }
+
+        this.loading = false;
+      }
     });
   }
 
-  calculateDivision(total: number, strategy: string, contribution_id: number) {
+  // ✅ Método para calcular el monto faltante del representante
+  private calculateMontoFaltante(contribution: any, details: any[], representative: User): number {
+    const bill = this.bills.find(b => b.id === contribution.billId);
+    const montoTotal = bill?.monto || 0;
+
+    // Calcular el monto ya asignado a otros miembros
+    const montoAsignado = details.reduce((sum, detail) => sum + (detail.monto || 0), 0);
+
+    // El representante paga lo que falta
+    return montoTotal - montoAsignado;
+  }
+
+  // ✅ Método para calcular la división entre miembros seleccionados
+  private calculateDivisionForSelected(
+    montoTotal: number,
+    strategy: string,
+    contributionId: number,
+    selectedMembers: any[]
+  ): any[] {
+    const memberContributions: any[] = [];
+
     if (strategy === 'EQUAL') {
-      const amount = +(total / this.members.length).toFixed(2);
-      return this.members.map(m => ({
-        contribution_id,
-        member_id: m.userId,
-        monto: amount,
-        status: 'PENDIENTE',
-        pagado_en: null
-      }));
-    } else {
-      const totalIncome = this.members.reduce((sum, m) => sum + m.user.income, 0);
-      return this.members.map(m => {
-        const porcentaje = m.user.income / totalIncome;
-        const monto = +(total * porcentaje).toFixed(2);
-        return {
-          contribution_id,
-          member_id: m.userId,
-          monto,
+      // División igualitaria
+      const montoPorMiembro = montoTotal / selectedMembers.length;
+
+      selectedMembers.forEach(member => {
+        memberContributions.push({
+          contribution_id: contributionId,
+          member_id: member.userId,
+          monto: Math.round(montoPorMiembro * 100) / 100, // Redondear a 2 decimales
           status: 'PENDIENTE',
           pagado_en: null
-        };
+        });
       });
+    } else if (strategy === 'INCOME_BASED') {
+      // División basada en ingresos
+      // Obtener los ingresos de cada miembro
+      const totalIngresos = selectedMembers.reduce((sum, member) => {
+        return sum + (member.user?.ingresos || 0);
+      }, 0);
+
+      if (totalIngresos > 0) {
+        selectedMembers.forEach(member => {
+          const ingresosMiembro = member.user?.ingresos || 0;
+          const porcentaje = ingresosMiembro / totalIngresos;
+          const montoMiembro = montoTotal * porcentaje;
+
+          memberContributions.push({
+            contribution_id: contributionId,
+            member_id: member.userId,
+            monto: Math.round(montoMiembro * 100) / 100, // Redondear a 2 decimales
+            status: 'PENDIENTE',
+            pagado_en: null
+          });
+        });
+      } else {
+        // Si no hay ingresos registrados, fallback a división igualitaria
+        console.warn('No hay ingresos registrados, usando división igualitaria');
+        return this.calculateDivisionForSelected(montoTotal, 'EQUAL', contributionId, selectedMembers);
+      }
+    }
+
+    return memberContributions;
+  }
+
+  get selectedBillMonto(): number {
+    const billId = this.contributionForm.get('billId')?.value;
+    return this.bills.find(b => b.id === billId)?.monto || 0;
+  }
+
+
+  getStatusClass(status: string): string {
+    switch (status?.toLowerCase()) {
+      case 'pagado':
+        return 'p-tag-success';
+      case 'pendiente':
+        return 'p-tag-warning';
+      case 'vencido':
+        return 'p-tag-danger';
+      default:
+        return 'p-tag-secondary';
     }
   }
 
-  calculateMontoFaltante(c: any, existingDetails: any[], rep: any) {
-    const bill = this.bills.find(b => b.id == c.billId);
-    if (!bill) return 0;
-
-    const total = bill.monto;
-    const strategy = c.strategy;
-
-    if (strategy === 'EQUAL') {
-      const n = this.members.length;
-      return +(total / n).toFixed(2);
-    } else {
-      const totalIncome = this.members.reduce((sum, m) => sum + m.user.income, 0);
-      const porcentaje = rep.income / totalIncome;
-      return +(total * porcentaje).toFixed(2);
+  getStatusLabel(status: string): string {
+    switch (status?.toLowerCase()) {
+      case 'pagado':
+        return 'Pagado';
+      case 'pendiente':
+        return 'Pendiente';
+      case 'vencido':
+        return 'Vencido';
+      default:
+        return status || 'Sin estado';
     }
   }
 
-  getBillDescription(billId: number): string {
-    const bill = this.bills.find(b => +b.id === +billId);
-    return bill ? bill.descripcion : 'Cuenta no encontrada';
-  }
 }
