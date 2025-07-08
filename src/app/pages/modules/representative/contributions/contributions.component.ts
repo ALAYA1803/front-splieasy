@@ -62,7 +62,7 @@ export class ContributionsComponent implements OnInit {
       this.householdId = household.id;
 
       forkJoin({
-        hms: this.householdMemberService.getByHouseholdIdWithQuery(this.householdId),
+        hms: this.householdMemberService.getByHouseholdId(this.householdId),
         users: this.authService.getAllUsers(),
         bills: this.billService.getBillsByHousehold(this.householdId),
         contributions: this.contributionsService.getContributionsByHouseholdId(this.householdId),

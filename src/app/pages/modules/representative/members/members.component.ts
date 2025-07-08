@@ -151,66 +151,6 @@ export class MembersComponent implements OnInit {
     });
   }
 
-  // MÉTODO PARA VERIFICAR DATOS DEL USUARIO
-  verifyUserData(): void {
-    const currentUser = JSON.parse(localStorage.getItem('currentUser')!);
-    console.log('🔍 === VERIFICACIÓN DE DATOS ===');
-    console.log('👤 Usuario en localStorage:', currentUser);
-
-    // Verificar en base de datos
-    this.http.get<User>(`${this.API_URL}/users/${currentUser.id}`, {
-      headers: this.getAuthHeaders()
-    }).subscribe({
-      next: (userFromDB) => {
-        console.log('🗄️ Usuario en base de datos:', userFromDB);
-        console.log('✅ Datos coinciden:',
-          currentUser.username === userFromDB.username &&
-          currentUser.email === userFromDB.email
-        );
-
-        if (currentUser.username !== userFromDB.username) {
-          console.log('⚠️ INCONSISTENCIA: Los datos del localStorage no coinciden con la BD');
-          console.log('💡 Recomendación: Limpiar localStorage y reloguearse');
-        }
-      },
-      error: (err) => {
-        console.error('❌ Error al verificar usuario:', err);
-      }
-    });
-  }
-
-  // MÉTODO PARA LIMPIAR Y RECARGAR DATOS
-  clearAndReload(): void {
-    console.log('🧹 Limpiando datos y recargando...');
-    localStorage.removeItem('currentUser');
-    localStorage.removeItem('accessToken');
-    // Redirigir al login
-    window.location.href = '/login';
-  }
-
-  // Agrega este método de debugging mejorado:
-  debugHouseholdMembers(): void {
-    console.log('🐛 === DEBUG HOUSEHOLD MEMBERS ===');
-    console.log('🆔 Household ID:', this.householdId);
-
-    // Primero debuggear la estructura de datos
-    this.householdMemberService.debugHouseholdMembers().subscribe(() => {
-      console.log('🔍 Debugging completado, revisa la consola');
-    });
-
-    // Luego probar todos los métodos disponibles
-    console.log('🧪 Probando método getByHouseholdId...');
-    this.householdMemberService.getByHouseholdId(this.householdId).subscribe(result => {
-      console.log('📊 Resultado getByHouseholdId:', result);
-    });
-
-    console.log('🧪 Probando método getByHouseholdIdWithQuery...');
-    this.householdMemberService.getByHouseholdIdWithQuery(this.householdId).subscribe(result => {
-      console.log('📊 Resultado getByHouseholdIdWithQuery:', result);
-    });
-
-  }
-
   deleteMember(memberToDelete: User): void {
     this.confirmationService.confirm({
       message: `¿Estás seguro de que quieres eliminar a <strong>${memberToDelete.username}</strong> del hogar?`,
@@ -288,16 +228,17 @@ export class MembersComponent implements OnInit {
           return;
         }
 
-        // CORRECCIÓN: Crear un miembro del hogar (household_members)
+        // ✅ CORRECCIÓN: Enviar SOLO userId y householdId (sin id)
         const newHouseholdMemberData = {
-          id: 0, // Se autogenera
           userId: userToAdd.id,
           householdId: this.householdId
         };
 
-        // USAR EL ENDPOINT CORRECTO: household-members (o el que tengas para esto)
+        console.log('📤 Enviando datos al backend:', newHouseholdMemberData);
+
         this.householdMemberService.createMemberLink(newHouseholdMemberData).subscribe({
-          next: () => {
+          next: (response) => {
+            console.log('✅ Respuesta del backend:', response);
             this.messageService.add({
               severity: 'success',
               summary: 'Éxito',
@@ -308,7 +249,8 @@ export class MembersComponent implements OnInit {
             this.isSaving = false;
           },
           error: (err) => {
-            console.error("Error al añadir miembro:", err);
+            console.error("❌ Error al añadir miembro:", err);
+            console.error("❌ Detalles del error:", err.error);
             this.messageService.add({
               severity: 'error',
               summary: 'Error',
@@ -330,8 +272,4 @@ export class MembersComponent implements OnInit {
     });
   }
 
-  closeAddMemberDialog(): void {
-    this.showAddMemberForm = false;
-    this.addMemberForm.reset();
-  }
 }
