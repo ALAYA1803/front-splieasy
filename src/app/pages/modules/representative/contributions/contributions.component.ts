@@ -47,7 +47,20 @@ export class ContributionsComponent implements OnInit {
     private memberContributionService: MemberContributionService
   ) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
+    this.contributionForm = this.fb.group({
+      billId: [null, Validators.required],
+      description: ['', Validators.required],
+      fechaLimite: [null, Validators.required],
+      strategy: ['EQUAL', Validators.required],
+      miembros: [[], Validators.required]
+    });
+
+    this.loadData();
+  }
+
+
+  private loadData(): void {
     const currentUserData = localStorage.getItem('currentUser');
     if (!currentUserData) {
       console.error('No se encontró información del usuario actual');
@@ -55,15 +68,7 @@ export class ContributionsComponent implements OnInit {
     }
 
     this.currentUser = JSON.parse(currentUserData);
-
-    // Inicializar el formulario con los campos correctos
-    this.contributionForm = this.fb.group({
-      billId: [null, Validators.required],
-      description: ['', Validators.required],
-      fechaLimite: [null, Validators.required],
-      strategy: ['EQUAL', Validators.required],
-      miembros: [[], Validators.required] // Para el multiSelect
-    });
+    this.loading = true;
 
     this.householdService.getHouseholdByRepresentante(this.currentUser.id).subscribe(households => {
       const household = households[0];
@@ -92,10 +97,9 @@ export class ContributionsComponent implements OnInit {
             }] : [])
           ];
 
-          // ✅ FIX: Preparar miembros para el multiSelect con la estructura correcta
           this.miembros = this.members.map(m => ({
             id: m.userId,
-            name: m.user?.username || 'Sin nombre', // ✅ Usar 'name' en lugar de 'username'
+            name: m.user?.username || 'Sin nombre',
             role: m.user?.role || 'MIEMBRO'
           }));
 
@@ -138,6 +142,7 @@ export class ContributionsComponent implements OnInit {
     });
   }
 
+
   // Método para abrir el diálogo (usado en el template)
   abrirDialogo() {
     this.contributionForm.reset({
@@ -162,16 +167,28 @@ export class ContributionsComponent implements OnInit {
       return;
     }
 
-    this.loading = true; // Activar loading durante el proceso
-
+    this.loading = true;
     const formValue = this.contributionForm.value;
 
-    // ✅ CORRECCIÓN 1: Formatear correctamente la fecha
+    // ✅ CORRECCIÓN: Validar que billId no sea null/undefined
+    if (!formValue.billId) {
+      console.error('billId es requerido');
+      this.loading = false;
+      return;
+    }
+
+    // ✅ CORRECCIÓN: Validar que householdId no sea null/undefined
+    if (!this.householdId) {
+      console.error('householdId es requerido');
+      this.loading = false;
+      return;
+    }
+
+    // ✅ CORRECCIÓN: Formatear correctamente la fecha
     let formattedDate: string;
     if (formValue.fechaLimite instanceof Date) {
       formattedDate = formValue.fechaLimite.toISOString().split('T')[0];
     } else if (typeof formValue.fechaLimite === 'string') {
-      // Si ya es string, verificar formato
       const dateObj = new Date(formValue.fechaLimite);
       formattedDate = dateObj.toISOString().split('T')[0];
     } else {
@@ -180,19 +197,29 @@ export class ContributionsComponent implements OnInit {
       return;
     }
 
-    // ✅ CORRECCIÓN 2: Crear el request exactamente como espera el backend
+    // ✅ CORRECCIÓN: Crear el request con validaciones
     const createRequest: CreateContributionRequest = {
-      billId: Number(formValue.billId), // Asegurar que es number
-      householdId: Number(this.householdId), // Asegurar que es number
-      description: String(formValue.description).trim(), // Asegurar que es string
-      strategy: String(formValue.strategy), // Asegurar que es string
-      fechaLimite: formattedDate // Formato YYYY-MM-DD
+      billId: parseInt(formValue.billId.toString()), // Convertir a entero de forma segura
+      householdId: parseInt(this.householdId.toString()), // Convertir a entero de forma segura
+      description: formValue.description.trim(),
+      strategy: formValue.strategy,
+      fechaLimite: formattedDate
     };
 
-    console.log('📤 Enviando request:', createRequest);
-    console.log('📤 URL del endpoint:', `${environment.urlBackend}/contributions`);
+    // ✅ DEBUGGING: Verificar que los valores sean válidos antes de enviar
+    console.log('📊 Valores del formulario:', formValue);
+    console.log('📊 householdId actual:', this.householdId);
+    console.log('📤 Request final:', createRequest);
 
-    // ✅ CORRECCIÓN 3: Usar el servicio con manejo de errores mejorado
+    // Validar que no sean 0 después de la conversión
+    if (createRequest.billId === 0 || createRequest.householdId === 0) {
+      console.error('❌ Error: billId o householdId son 0 después de la conversión');
+      console.error('billId original:', formValue.billId);
+      console.error('householdId original:', this.householdId);
+      this.loading = false;
+      return;
+    }
+
     this.contributionsService.createContribution(createRequest).subscribe({
       next: (savedContribution: Contribution) => {
         console.log('✅ Contribución creada exitosamente:', savedContribution);
@@ -228,7 +255,6 @@ export class ContributionsComponent implements OnInit {
 
         console.log('📤 Enviando contribuciones de miembros:', memberContributions);
 
-        // ✅ CORRECCIÓN 4: Usar el servicio para crear las contribuciones de miembros
         const requests = memberContributions.map(mc =>
           this.memberContributionService.create(mc)
         );
@@ -236,19 +262,12 @@ export class ContributionsComponent implements OnInit {
         forkJoin(requests).subscribe({
           next: (results) => {
             console.log('✅ Contribuciones de miembros creadas:', results);
-            // Mostrar mensaje de éxito (opcional)
-            // this.messageService.add({
-            //   severity: 'success',
-            //   summary: 'Éxito',
-            //   detail: 'Contribución creada exitosamente'
-            // });
-            this.ngOnInit(); // Recargar datos
+            this.ngOnInit();
             this.mostrarDialogo = false;
             this.loading = false;
           },
           error: (error) => {
             console.error('❌ Error al crear contribuciones de miembros:', error);
-            console.error('❌ Detalles del error:', error.error);
             this.loading = false;
           }
         });
@@ -257,9 +276,7 @@ export class ContributionsComponent implements OnInit {
         console.error('❌ Error al crear contribución:', error);
         console.error('❌ Status:', error.status);
         console.error('❌ Error body:', error.error);
-        console.error('❌ URL:', error.url);
 
-        // Mostrar mensaje de error más específico
         let errorMessage = 'Error desconocido al crear la contribución';
         if (error.status === 400) {
           errorMessage = 'Datos inválidos proporcionados';
@@ -270,12 +287,6 @@ export class ContributionsComponent implements OnInit {
         } else if (error.status === 500) {
           errorMessage = 'Error interno del servidor';
         }
-
-        // this.messageService.add({
-        //   severity: 'error',
-        //   summary: 'Error',
-        //   detail: errorMessage
-        // });
 
         this.loading = false;
       }
