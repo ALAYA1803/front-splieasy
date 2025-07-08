@@ -10,31 +10,115 @@
   --text-primary: #f8f9fa;
   --text-secondary: #adb5bd;
 }
-:host ::ng-deep .p-card {
-  background-color: var(--background-card);
-  border: 1px solid var(--border-color);
-  border-radius: 16px;
-  box-shadow: 0 8px 20px var(--shadow-color);
+
+.bills-container {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
   animation: fadeIn 0.5s ease-out;
-}
-:host ::ng-deep .p-card .p-card-title {
-  font-size: 2rem;
-  font-weight: 700;
-  color: var(--text-primary);
-  padding-bottom: 1.5rem;
-  margin-bottom: 1.5rem;
-  border-bottom: 1px solid var(--border-color);
-}
-:host ::ng-deep .p-card .p-card-content {
-  padding: 0;
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(15px); }
-  to { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
-.btn-custom {
+.bills-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.header-title {
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.header-subtitle {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  margin-top: 0.25rem;
+}
+
+.table-card {
+  background-color: var(--background-card);
+  border-radius: 16px;
+  border: 1px solid var(--border-color);
+  overflow: hidden;
+  box-shadow: 0 8px 20px var(--shadow-color);
+}
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+.bills-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.bills-table th {
+  background: transparent;
+  border-bottom: 2px solid var(--border-color);
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 1rem 1.5rem;
+}
+
+.bills-table td {
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-primary);
+}
+
+.bills-table tbody tr {
+  transition: background-color 0.2s ease;
+}
+
+.bills-table tbody tr:hover {
+  background-color: var(--background-hover);
+}
+
+.bills-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.amount-cell, .date-cell, .user-cell {
+  color: var(--text-secondary);
+}
+
+.actions-cell .btn-icon {
+  background-color: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.actions-cell .btn-icon:hover {
+  border-color: var(--danger-color);
+  background-color: var(--danger-color);
+  color: #fff;
+  transform: scale(1.1);
+}
+
+.btn-add-bill {
   background-color: var(--brand-primary);
   color: #fff;
   border: none;
@@ -44,90 +128,90 @@
   cursor: pointer;
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
   transition: background-color 0.3s ease, transform 0.2s ease;
+  margin-bottom: 1.5rem;
 }
 
-.btn-custom:hover {
+.btn-add-bill:hover {
   background-color: #1e88e5;
   transform: translateY(-2px);
 }
 
-.btn-custom:disabled {
-  background-color: #555;
-  cursor: not-allowed;
-  opacity: 0.7;
+.skeleton-loader {
+  padding: 1.5rem;
 }
 
-:host ::ng-deep .p-datatable {
-  background-color: transparent;
+.skeleton-row {
+  height: 65px;
+  background: linear-gradient(90deg, var(--background-card) 25%, var(--background-hover) 50%, var(--background-card) 75%);
+  background-size: 200% 100%;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  animation: shimmer 1.5s infinite;
 }
 
-:host ::ng-deep .p-datatable .p-datatable-thead > tr > th {
-  background: transparent;
-  border-bottom: 2px solid var(--border-color);
+@keyframes shimmer {
+  to { background-position: -200% 0; }
+}
+
+.empty-state {
+  padding: 4rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
   color: var(--text-secondary);
-  font-size: 0.8rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  padding: 1rem 1.25rem;
 }
 
-:host ::ng-deep .p-datatable .p-datatable-tbody > tr {
-  color: var(--text-secondary);
-  border-bottom: 1px solid var(--border-color);
-  transition: background-color 0.2s ease;
+.empty-icon-wrapper {
+  background-color: var(--background-main);
+  border: 1px solid var(--border-color);
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  margin-bottom: 1.5rem;
 }
 
-:host ::ng-deep .p-datatable .p-datatable-tbody > tr:last-child {
-  border-bottom: none;
-}
-
-:host ::ng-deep .p-datatable .p-datatable-tbody > tr:hover {
-  background-color: var(--background-hover);
-}
-
-:host ::ng-deep .p-datatable .p-datatable-tbody > tr > td {
-  padding: 1.25rem;
-  vertical-align: middle;
-}
-
-:host ::ng-deep .p-datatable .p-datatable-tbody > tr > td:first-child {
-  color: var(--text-primary);
-  font-weight: 500;
-}
+.empty-state .pi { font-size: 2.5rem; color: var(--brand-primary); }
+.empty-title { font-size: 1.5rem; color: var(--text-primary); margin-bottom: 0.5rem; }
 
 :host ::ng-deep .p-dialog {
   background: var(--background-card);
   border: 1px solid var(--border-color);
   border-radius: 16px;
 }
-
 :host ::ng-deep .p-dialog .p-dialog-header {
   color: var(--text-primary);
   border-bottom: 1px solid var(--border-color);
-  padding: 1.5rem;
 }
-
 :host ::ng-deep .p-dialog .p-dialog-content {
-  padding: 1.5rem;
   color: var(--text-secondary);
 }
 
-:host ::ng-deep .p-dialog .p-dialog-footer {
-  border-top: 1px solid var(--border-color);
-  padding: 1rem 1.5rem;
+.form-actions {
   display: flex;
   justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
 }
 
-.field {
-  margin-bottom: 1.25rem;
+.p-button-primary, .btn-primary {
+  background-color: var(--brand-primary) !important;
+  color: #fff !important;
+  border: none !important;
+  border-radius: 8px !important;
+  padding: 0.75rem 1.5rem !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
 }
-
-.field label {
-  display: block;
-  margin-bottom: 0.5rem;
-  font-weight: 500;
-  color: var(--text-primary);
+.p-button-secondary, .btn-secondary {
+  background-color: var(--border-color) !important;
+  color: var(--text-primary) !important;
+  border: none !important;
+  border-radius: 8px !important;
+  padding: 0.75rem 1.5rem !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
 }

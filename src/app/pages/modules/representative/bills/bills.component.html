@@ -1,59 +1,133 @@
-<div class="p-4 max-w-screen-lg mx-auto">
-  <p-card [header]="'BILLS.TITLE' | translate" class="mt-4">
-    <button class="btn-custom mb-3" (click)="showForm()">
-      <i class="pi pi-plus"></i> <span>{{ 'BILLS.REGISTER_BUTTON' | translate }}</span>
+<div class="bills-container">
+  <div class="bills-header">
+    <div>
+      <h1 class="header-title">{{ 'BILLS.TITLE' | translate }}</h1>
+      <p class="header-subtitle">Gestiona las facturas de tu hogar</p>
+    </div>
+  </div>
+
+  <!-- Mensaje de error -->
+  <div *ngIf="errorMessage" class="alert alert-danger">
+    {{ errorMessage }}
+    <button class="btn-retry" (click)="reloadData()">
+      <i class="pi pi-refresh"></i> Reintentar
     </button>
+  </div>
 
-    <p-table [value]="bills" [loading]="loading" responsiveLayout="scroll">
-      <ng-template pTemplate="header">
-        <tr>
-          <th>{{ 'BILLS.DESCRIPTION' | translate }}</th>
-          <th>{{ 'BILLS.AMOUNT' | translate }}</th>
-          <th>{{ 'BILLS.DATE' | translate }}</th>
-        </tr>
-      </ng-template>
-      <ng-template pTemplate="body" let-bill>
-        <tr>
-          <td>{{ bill.descripcion }}</td>
-          <td>{{ bill.monto }}</td>
-          <td>{{ bill.fecha }}</td>
-        </tr>
-      </ng-template>
-    </p-table>
-  </p-card>
+  <button class="btn-add-bill" (click)="showForm()">
+    <i class="pi pi-plus"></i>
+    <span>{{ 'BILLS.REGISTER_BUTTON' | translate }}</span>
+  </button>
 
+  <div class="table-card">
+    <div class="table-wrapper">
+      <table class="bills-table">
+        <thead>
+          <tr>
+            <th>{{ 'BILLS.DESCRIPTION' | translate }}</th>
+            <th>{{ 'BILLS.AMOUNT' | translate }}</th>
+            <th>{{ 'BILLS.DATE' | translate }}</th>
+            <th>{{ 'BILLS.CREATED_BY' | translate }}</th>
+            <th *ngIf="isRepresentante">{{ 'BILLS.ACTIONS' | translate }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngIf="loading">
+            <td [attr.colspan]="isRepresentante ? 5 : 4" class="text-center">
+              <div class="skeleton-loader">
+                <div class="skeleton-row"></div>
+                <div class="skeleton-row"></div>
+                <div class="skeleton-row"></div>
+              </div>
+            </td>
+          </tr>
+
+          <tr *ngFor="let bill of bills" class="bill-row">
+            <td class="description-cell">{{ bill.descripcion }}</td>
+            <td class="amount-cell">{{ formatCurrency(bill.monto) }}</td>
+            <td class="date-cell">{{ bill.fecha | date:'dd/MM/yyyy' }}</td>
+            <td class="user-cell">{{ bill.createdBy }}</td>
+            <td *ngIf="isRepresentante" class="actions-cell">
+              <button class="btn-icon edit" (click)="editBill(bill)" [title]="'BILLS.EDIT' | translate">
+                <i class="pi pi-pencil"></i>
+              </button>
+              <button class="btn-icon delete" (click)="deleteBill(bill.id)" [title]="'BILLS.DELETE' | translate">
+                <i class="pi pi-trash"></i>
+              </button>
+            </td>
+          </tr>
+
+          <tr *ngIf="!loading && bills.length === 0">
+            <td [attr.colspan]="isRepresentante ? 5 : 4">
+              <div class="empty-state">
+                <div class="empty-icon-wrapper">
+                  <i class="pi pi-file-o"></i>
+                </div>
+                <h3 class="empty-title">No hay facturas</h3>
+                <p>{{ 'BILLS.NO_BILLS' | translate }}</p>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="pagination" *ngIf="bills.length > 0">
+      <span class="pagination-info">
+        Mostrando {{ bills.length }} facturas
+      </span>
+    </div>
+  </div>
+
+  <!-- Modal -->
   <p-dialog
-    [header]="'BILLS.NEW_BILL_DIALOG' | translate"
-    [(visible)]="formVisible"
-    [modal]="true"
-    [style]="{ width: '400px' }"
-  >
+    header="{{ editingBillId ? ('BILLS.EDIT_BILL_DIALOG' | translate) : ('BILLS.NEW_BILL_DIALOG' | translate) }}"
+    [(visible)]="formVisible" [modal]="true" [closable]="true" [dismissableMask]="true" [style]="{ width: '500px' }"
+    (onHide)="cancelForm()">
     <form [formGroup]="billForm" (ngSubmit)="submit()">
-      <div class="p-fluid">
-        <div class="field">
-          <label for="descripcion">{{ 'BILLS.DESCRIPTION' | translate }}</label>
-          <input id="descripcion" type="text" pInputText formControlName="descripcion" />
-        </div>
-        <div class="field">
-          <label for="monto">{{ 'BILLS.AMOUNT' | translate }}</label>
-          <input id="monto" type="number" pInputText formControlName="monto" />
-        </div>
-        <div class="field">
-          <label for="fecha">{{ 'BILLS.DATE' | translate }}</label>
-          <input id="fecha" type="date" pInputText formControlName="fecha" />
+      <div class="form-group">
+        <label for="descripcion">{{ 'BILLS.DESCRIPTION' | translate }} *</label>
+        <br>
+        <input id="descripcion" type="text" pInputText formControlName="descripcion"
+          [class.ng-invalid]="billForm.get('descripcion')?.invalid && billForm.get('descripcion')?.touched"
+          placeholder="Ingresa la descripción de la factura" />
+        <div *ngIf="billForm.get('descripcion')?.invalid && billForm.get('descripcion')?.touched"
+          class="invalid-feedback">
+          La descripción es requerida
         </div>
       </div>
+
+      <div class="form-group">
+        <label for="monto">{{ 'BILLS.AMOUNT' | translate }} *</label>
+        <br>
+        <input id="monto" type="number" pInputText step="0.01" min="0" formControlName="monto"
+          [class.ng-invalid]="billForm.get('monto')?.invalid && billForm.get('monto')?.touched" placeholder="0.00" />
+        <div *ngIf="billForm.get('monto')?.invalid && billForm.get('monto')?.touched" class="invalid-feedback">
+          El monto es requerido y debe ser mayor a 0
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="fecha">{{ 'BILLS.DATE' | translate }} *</label>
+        <br>
+        <input id="fecha" type="date" pInputText formControlName="fecha"
+          [class.ng-invalid]="billForm.get('fecha')?.invalid && billForm.get('fecha')?.touched" />
+        <div *ngIf="billForm.get('fecha')?.invalid && billForm.get('fecha')?.touched" class="invalid-feedback">
+          La fecha es requerida
+        </div>
+      </div>
+
+      <div class="form-actions mt-3">
+        <button pButton type="button" label="{{ 'BILLS.CANCEL_BUTTON' | translate }}" class="p-button-secondary"
+          (click)="cancelForm()">
+          <i class="pi pi-times"></i>
+        </button>
+        <button pButton type="submit" [disabled]="billForm.invalid"
+          [label]="editingBillId ? ('BILLS.UPDATE_BUTTON' | translate) : ('BILLS.SAVE_BUTTON' | translate)">
+          <i class="pi pi-check"></i>
+        </button>
+      </div>
     </form>
-
-    <ng-template pTemplate="footer">
-      <button
-        type="submit"
-        class="btn-custom"
-        (click)="submit()"
-        [disabled]="billForm.invalid"> <i class="pi pi-check"></i>
-        <span>{{ 'BILLS.SAVE_BUTTON' | translate }}</span>
-      </button>
-    </ng-template>
-
   </p-dialog>
+
 </div>

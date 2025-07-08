@@ -28,19 +28,35 @@
       </p>
 
       <form (ngSubmit)="onLogin()" class="mt-4">
+        <!-- CAMBIO: Campo username -->
         <div class="form-group">
-          <label for="email" class="form-label">{{ 'LOGIN.EMAIL_LABEL' | translate }}</label>
+          <label for="username" class="form-label">{{ 'LOGIN.USERNAME_LABEL' | translate }}</label>
           <div class="input-group">
-            <i class="bi bi-envelope-fill input-icon"></i>
-            <input id="email" name="email" type="email" class="form-control" [(ngModel)]="email" [placeholder]="'LOGIN.EMAIL_PLACEHOLDER' | translate" required/>
+            <i class="bi bi-person-fill input-icon"></i>
+            <input
+              id="username"
+              name="username"
+              type="text"
+              class="form-control"
+              [(ngModel)]="username"
+              [placeholder]="'LOGIN.USERNAME_PLACEHOLDER' | translate"
+              required>
           </div>
         </div>
 
+        <!-- Campo password igual -->
         <div class="form-group">
           <label for="password" class="form-label">{{ 'LOGIN.PASSWORD_LABEL' | translate }}</label>
           <div class="input-group">
             <i class="bi bi-lock-fill input-icon"></i>
-            <input id="password" name="password" type="password" class="form-control" [(ngModel)]="password" [placeholder]="'LOGIN.PASSWORD_PLACEHOLDER' | translate" required/>
+            <input
+              id="password"
+              name="password"
+              type="password"
+              class="form-control"
+              [(ngModel)]="password"
+              [placeholder]="'LOGIN.PASSWORD_PLACEHOLDER' | translate"
+              required>
           </div>
         </div>
 

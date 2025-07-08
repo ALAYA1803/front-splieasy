@@ -44,9 +44,10 @@
         <tr *ngFor="let member of members">
           <td>
             <div class="user-cell">
-              <p-avatar [label]="member.name.charAt(0) || 'U'" shape="circle"></p-avatar>
+              <p-avatar [label]="member.username" shape="circle"></p-avatar>
               <div class="user-info">
-                <span class="user-name">{{ member.name }}</span>
+                <span class="user-name">{{ member.username }}</span>
+                <br>
                 <span class="user-email">{{ member.email }}</span>
               </div>
             </div>

@@ -27,6 +27,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
     if (currentUserString) {
       this.user = JSON.parse(currentUserString);
     }
+
     this.menuSubscription = this.sidebarService.items$.subscribe(menuItems => {
       this.items = menuItems;
     });
@@ -37,16 +38,20 @@ export class SidebarComponent implements OnInit, OnDestroy {
       this.menuSubscription.unsubscribe();
     }
   }
+
   trackByRoute(index: number, item: SidebarItem): string {
     return item.route;
   }
+
   openSettings(): void {
-    if (!this.user || !this.user.role) {
+    const role = this.user?.roles?.[0]; // Ajustado para usar 'roles'
+
+    if (!role) {
       console.error('No se pudo determinar el rol del usuario para navegar a ajustes.');
       return;
     }
 
-    const baseRoute = this.user.role === 'REPRESENTANTE' ? '/representante' : '/miembro';
+    const baseRoute = role === 'ROLE_REPRESENTANTE' ? '/representante' : '/miembro';
     const settingsRoute = `${baseRoute}/settings`;
 
     this.router.navigate([settingsRoute]);

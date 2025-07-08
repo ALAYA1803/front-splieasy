@@ -1,4 +1,4 @@
 export const environment = {
-  production: false,
-  urlBackend: 'http://localhost:3000',
+  production: true,
+  urlBackend: 'https://backend-app-1-vd66.onrender.com/api/v1'
 };

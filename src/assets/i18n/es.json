@@ -20,7 +20,6 @@
     "BENEFIT_3_TITLE": "Menos Estrés, Más Armonía",
     "BENEFIT_3_TEXT": "Calculamos quién debe a quién para evitar conversaciones incómodas."
   },
-
   "HERO": {
     "TITLE": "La forma fácil y justa de dividir los gastos en casa.",
     "DESCRIPTION": "Olvídate de las hojas de cálculo y las discusiones. SplitEasy calcula quién debe qué para que la convivencia sea siempre transparente.",
@@ -55,18 +54,17 @@
       "STEP_4_TEXT": "Revisa todos los movimientos y el balance de forma transparente."
     }
   },
-    "MEMBER": {
-      "HEADER": "Si eres miembro del hogar",
-      "SIGNUP_TITLE": "Regístrate",
-      "SIGNUP_TEXT": "Crea tu cuenta con tu correo electrónico o red social favorita.",
-      "JOIN_TITLE": "Únete a un hogar",
-      "JOIN_TEXT": "Ingresa el ID del hogar proporcionado por tu representante.",
-      "INCOME_TITLE": "Declara tus ingresos",
-      "INCOME_TEXT": "Declara tus ingresos mensuales para calcular automáticamente tu contribución.",
-      "MONITOR_TITLE": "Monitorea tus aportes",
-      "MONITOR_TEXT": "Consulta tus aportes y mantente al día con tus responsabilidades financieras."
-    },
-
+  "MEMBER": {
+    "HEADER": "Si eres miembro del hogar",
+    "SIGNUP_TITLE": "Regístrate",
+    "SIGNUP_TEXT": "Crea tu cuenta con tu correo electrónico o red social favorita.",
+    "JOIN_TITLE": "Únete a un hogar",
+    "JOIN_TEXT": "Ingresa el ID del hogar proporcionado por tu representante.",
+    "INCOME_TITLE": "Declara tus ingresos",
+    "INCOME_TEXT": "Declara tus ingresos mensuales para calcular automáticamente tu contribución.",
+    "MONITOR_TITLE": "Monitorea tus aportes",
+    "MONITOR_TEXT": "Consulta tus aportes y mantente al día con tus responsabilidades financieras."
+  },
   "PRICES": {
     "TITLE": "Un Plan Para Cada Necesidad",
     "LEAD_TEXT": "Empieza gratis o elige Premium para desbloquear todo el potencial de SplitEasy.",
@@ -176,8 +174,8 @@
   },
   "LOGIN": {
     "TITLE": "Inicia Sesión",
-    "EMAIL_LABEL": "Correo Electrónico",
-    "EMAIL_PLACEHOLDER": "tu@correo.com",
+    "USERNAME_LABEL": "Usuario",
+    "USERNAME_PLACEHOLDER": "Introduce tu usuario",
     "PASSWORD_LABEL": "Contraseña",
     "PASSWORD_PLACEHOLDER": "Introduce tu contraseña",
     "FORGOT_PASSWORD": "¿Olvidaste tu contraseña?",
@@ -193,23 +191,23 @@
     "BACK_BUTTON_TITLE": "Volver al inicio"
   },
   "REGISTER": {
-    "TITLE": "Crea tu Cuenta",
-    "FIRST_NAME_LABEL": "Nombres",
-    "LAST_NAME_LABEL": "Apellidos",
-    "EMAIL_LABEL": "Correo Electrónico",
-    "PASSWORD_LABEL": "Contraseña",
-    "REPEAT_PASSWORD_LABEL": "Repetir Contraseña",
-    "ROLE_LABEL": "Soy un...",
-    "ROLE_PLACEHOLDER": "Selecciona un rol",
-    "ROLE_MEMBER": "Miembro del Hogar",
-    "ROLE_REPRESENTATIVE": "Representante del Hogar",
-    "BUTTON": "Registrarme",
-    "HAVE_ACCOUNT": "¿Ya tienes una cuenta? Inicia sesión",
+    "TITLE": "Crear tu cuenta",
     "BRANDING": {
-      "TITLE": "Únete a la Comunidad",
-      "SUBTITLE": "Empieza a organizar tus gastos de forma inteligente y colaborativa. El registro es rápido y sencillo."
-    }
+      "TITLE": "Bienvenido a SplitEasy",
+      "SUBTITLE": "Regístrate para dividir fácilmente los gastos del hogar."
     },
+    "USERNAME_LABEL": "Nombre de usuario",
+    "EMAIL_LABEL": "Correo electrónico",
+    "PASSWORD_LABEL": "Contraseña",
+    "REPEAT_PASSWORD_LABEL": "Repetir contraseña",
+    "INCOME_LABEL": "Ingresos mensuales",
+    "ROLE_LABEL": "Rol",
+    "ROLE_PLACEHOLDER": "Seleccione un rol",
+    "ROLE_MEMBER": "Miembro",
+    "ROLE_REPRESENTATIVE": "Representante",
+    "BUTTON": "Registrarse",
+    "HAVE_ACCOUNT": "¿Ya tienes una cuenta? Inicia sesión aquí"
+  },
   "RESET": {
     "TITLE": "Crea tu Nueva Contraseña",
     "DESCRIPTION": "Tu nueva contraseña debe ser segura y fácil de recordar. Una vez guardada, podrás iniciar sesión.",
@@ -234,7 +232,6 @@
       "TITLE": "Miembros del hogar"
     }
   },
-
   "CONTRIBUTIONS_STATUS": {
     "TITLE": "Estado de mis contribuciones",
     "INVOICE": "Factura",
@@ -246,13 +243,21 @@
     "PAID_AT": "Pagado en"
   },
   "BILLS": {
-    "TITLE": "Cuentas del hogar",
-    "REGISTER_BUTTON": "Registrar nueva cuenta",
+    "TITLE": "Gestión de Facturas",
+    "REGISTER_BUTTON": "Registrar Nueva Factura",
     "DESCRIPTION": "Descripción",
-    "AMOUNT": "Monto (S/)",
+    "AMOUNT": "Monto",
     "DATE": "Fecha",
-    "NEW_BILL_DIALOG": "Nueva cuenta",
-    "SAVE_BUTTON": "Guardar"
+    "CREATED_BY": "Creado por",
+    "ACTIONS": "Acciones",
+    "EDIT": "Editar",
+    "DELETE": "Eliminar",
+    "NO_BILLS": "No hay facturas registradas",
+    "NEW_BILL_DIALOG": "Nueva Factura",
+    "EDIT_BILL_DIALOG": "Editar Factura",
+    "SAVE_BUTTON": "Guardar",
+    "UPDATE_BUTTON": "Actualizar",
+    "CANCEL_BUTTON": "Cancelar"
   },
   "CONTACT_US": {
     "TITLE": "Contáctanos",
@@ -316,7 +321,6 @@
     "pay": "Pagar",
     "pageReport": "Mostrando {first} a {last} de {totalRecords} contribuciones"
   },
-
   "PROFILE": {
     "TITLE": "Gestionar Perfil",
     "SUBTITLE": "Actualiza tu información personal y foto de perfil.",
@@ -354,4 +358,3 @@
     "DELETE_ACCOUNT_BUTTON": "Eliminar mi Cuenta"
   }
 }
-

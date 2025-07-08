@@ -5,7 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { PrimeNgModule } from './prime-ng/prime-ng.module';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { provideHttpClient, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { provideHttpClient, HTTP_INTERCEPTORS, withInterceptors } from '@angular/common/http';
 import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeng/themes/aura';
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
@@ -37,16 +37,17 @@ export function HttpLoaderFactory(http: HttpClient) {
     }),
     RepresentativeModule
   ],
-  providers: [
-    provideAnimationsAsync(),
-    providePrimeNG({ theme: { preset: Aura } }),
-    provideHttpClient(),
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: AuthInterceptor,
-      multi: true
-    }
-  ],
+providers: [
+  provideAnimationsAsync(),
+  providePrimeNG({ theme: { preset: Aura } }),
+  provideHttpClient(),
+  {
+    provide: HTTP_INTERCEPTORS,
+    useClass: AuthInterceptor,
+    multi: true
+  }
+],
+
   bootstrap: [AppComponent]
 })
 export class AppModule { }

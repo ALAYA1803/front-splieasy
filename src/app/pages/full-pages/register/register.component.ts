@@ -2,6 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { SignUpRequest } from '../../../core/interfaces/auth';
+import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-register',
@@ -9,58 +11,75 @@ import { Router } from '@angular/router';
   templateUrl: './register.component.html',
   styleUrl: './register.component.css',
 })
-export class RegisterComponent implements OnInit {
-  registerForm!: FormGroup;
+export class RegisterComponent {
+
+  registerForm: FormGroup;
+  isSubmitting = false; // ✅ Agregado para evitar doble envío
 
   constructor(
     private fb: FormBuilder,
-    private http: HttpClient,
+    private authService: AuthService,
     private router: Router
-  ) {}
-
-  ngOnInit(): void {
+  ) {
     this.registerForm = this.fb.group({
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
+      username: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      role: ['', Validators.required],
       password: ['', [Validators.required, Validators.minLength(6)]],
-      repeatPassword: ['', Validators.required]
-    }, {
-      validator: this.passwordMatchValidator
-    });
+      repeatPassword: ['', Validators.required],
+      income: [0, [Validators.required, Validators.min(0)]],
+      role: ['', Validators.required]
+    }, { validators: [this.passwordMatchValidator()] });
   }
 
-  passwordMatchValidator(form: FormGroup) {
-    const password = form.get('password')?.value;
-    const repeatPassword = form.get('repeatPassword')?.value;
-    return password === repeatPassword ? null : { mismatch: true };
+  /**
+   * Validación para verificar que password y repeatPassword coincidan
+   */
+  private passwordMatchValidator() {
+    return (formGroup: FormGroup) => {
+      const password = formGroup.get('password')?.value;
+      const repeatPassword = formGroup.get('repeatPassword')?.value;
+
+      return password === repeatPassword ? null : { mismatch: true };
+    };
   }
 
-  register(): void {
-    if (this.registerForm.invalid) {
-      this.registerForm.markAllAsTouched();
+  /**
+   * Acción de registro
+   */
+  register() {
+    // ✅ Prevenir doble envío
+    if (this.registerForm.invalid || this.isSubmitting) {
+      if (this.registerForm.invalid) {
+        this.registerForm.markAllAsTouched();
+      }
       return;
     }
 
+    // ✅ Marcar como enviando
+    this.isSubmitting = true;
+
     const formValue = this.registerForm.value;
-    const userData = {
-      name: `${formValue.firstName} ${formValue.lastName}`,
+
+    const payload: SignUpRequest = {
+      username: formValue.username,
       email: formValue.email,
       password: formValue.password,
-      role: formValue.role.toUpperCase(),
-      income: 0
+      income: formValue.income,
+      roles: [formValue.role] // Importante: backend espera un array
     };
 
-    this.http.post('http://localhost:3000/users', userData).subscribe({
+    console.log('Enviando payload:', payload); // ✅ Debug
+
+    this.authService.signUp(payload).subscribe({
       next: (response) => {
-        console.log('Usuario registrado con éxito:', response);
-        alert('¡Registro exitoso! Ahora puedes iniciar sesión.');
+        console.log('Registro exitoso:', response);
+        this.isSubmitting = false; // ✅ Resetear estado
         this.router.navigate(['/autenticacion/login']);
       },
       error: (err) => {
-        console.error('Error en el registro:', err);
-        alert('Ocurrió un error durante el registro. Por favor, intenta de nuevo.');
+        console.error('Error en registro:', err);
+        this.isSubmitting = false; // ✅ Resetear estado en error
+        // Aquí puedes mostrar un mensaje de error si quieres
       }
     });
   }
