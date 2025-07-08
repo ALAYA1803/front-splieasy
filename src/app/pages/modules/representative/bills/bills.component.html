@@ -1,29 +1,61 @@
 <div class="p-4 max-w-screen-lg mx-auto">
   <p-card [header]="'BILLS.TITLE' | translate" class="mt-4">
+    <!-- Mensaje de error -->
+    <div *ngIf="errorMessage" class="alert alert-danger mb-3">
+      {{ errorMessage }}
+      <button class="btn btn-sm btn-outline-secondary ms-2" (click)="reloadData()">
+        <i class="pi pi-refresh"></i> Reintentar
+      </button>
+    </div>
+
     <button class="btn-custom mb-3" (click)="showForm()">
       <i class="pi pi-plus"></i> <span>{{ 'BILLS.REGISTER_BUTTON' | translate }}</span>
     </button>
 
-    <p-table [value]="bills" [loading]="loading" responsiveLayout="scroll">
+    <p-table [value]="bills" [loading]="loading" responsiveLayout="scroll" [paginator]="true" [rows]="10">
       <ng-template pTemplate="header">
         <tr>
           <th>{{ 'BILLS.DESCRIPTION' | translate }}</th>
           <th>{{ 'BILLS.AMOUNT' | translate }}</th>
           <th>{{ 'BILLS.DATE' | translate }}</th>
+          <th>{{ 'BILLS.CREATED_BY' | translate }}</th>
+          <th *ngIf="isRepresentante">{{ 'BILLS.ACTIONS' | translate }}</th>
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-bill>
         <tr>
           <td>{{ bill.descripcion }}</td>
-          <td>{{ bill.monto }}</td>
-          <td>{{ bill.fecha }}</td>
+          <td>{{ formatCurrency(bill.monto) }}</td>
+          <td>{{ bill.fecha | date:'dd/MM/yyyy' }}</td>
+          <td>{{ bill.createdByUser?.username || 'Usuario #' + bill.created_by }}</td>
+          <td *ngIf="isRepresentante">
+            <button
+              class="btn btn-sm btn-outline-primary me-2"
+              (click)="editBill(bill)"
+              [title]="'BILLS.EDIT' | translate">
+              <i class="pi pi-pencil"></i>
+            </button>
+            <button
+              class="btn btn-sm btn-outline-danger"
+              (click)="deleteBill(bill.id)"
+              [title]="'BILLS.DELETE' | translate">
+              <i class="pi pi-trash"></i>
+            </button>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="5" class="text-center">
+            {{ 'BILLS.NO_BILLS' | translate }}
+          </td>
         </tr>
       </ng-template>
     </p-table>
   </p-card>
 
   <p-dialog
-    [header]="'BILLS.NEW_BILL_DIALOG' | translate"
+    [header]="editingBillId ? ('BILLS.EDIT_BILL_DIALOG' | translate) : ('BILLS.NEW_BILL_DIALOG' | translate)"
     [(visible)]="formVisible"
     [modal]="true"
     [style]="{ width: '400px' }"
@@ -31,29 +63,207 @@
     <form [formGroup]="billForm" (ngSubmit)="submit()">
       <div class="p-fluid">
         <div class="field">
-          <label for="descripcion">{{ 'BILLS.DESCRIPTION' | translate }}</label>
-          <input id="descripcion" type="text" pInputText formControlName="descripcion" />
+          <label for="descripcion">{{ 'BILLS.DESCRIPTION' | translate }} *</label>
+          <input
+            id="descripcion"
+            type="text"
+            pInputText
+            formControlName="descripcion"
+            [class.is-invalid]="billForm.get('descripcion')?.invalid && billForm.get('descripcion')?.touched"
+          />
+          <div *ngIf="billForm.get('descripcion')?.invalid && billForm.get('descripcion')?.touched" class="invalid-feedback">
+            La descripción es requerida
+          </div>
         </div>
         <div class="field">
-          <label for="monto">{{ 'BILLS.AMOUNT' | translate }}</label>
-          <input id="monto" type="number" pInputText formControlName="monto" />
+          <label for="monto">{{ 'BILLS.AMOUNT' | translate }} *</label>
+          <input
+            id="monto"
+            type="number"
+            step="0.01"
+            min="0"
+            pInputText
+            formControlName="monto"
+            [class.is-invalid]="billForm.get('monto')?.invalid && billForm.get('monto')?.touched"
+          />
+          <div *ngIf="billForm.get('monto')?.invalid && billForm.get('monto')?.touched" class="invalid-feedback">
+            El monto es requerido y debe ser mayor a 0
+          </div>
         </div>
         <div class="field">
-          <label for="fecha">{{ 'BILLS.DATE' | translate }}</label>
-          <input id="fecha" type="date" pInputText formControlName="fecha" />
+          <label for="fecha">{{ 'BILLS.DATE' | translate }} *</label>
+          <input
+            id="fecha"
+            type="date"
+            pInputText
+            formControlName="fecha"
+            [class.is-invalid]="billForm.get('fecha')?.invalid && billForm.get('fecha')?.touched"
+          />
+          <div *ngIf="billForm.get('fecha')?.invalid && billForm.get('fecha')?.touched" class="invalid-feedback">
+            La fecha es requerida
+          </div>
         </div>
       </div>
     </form>
 
     <ng-template pTemplate="footer">
       <button
+        type="button"
+        class="btn btn-secondary me-2"
+        (click)="cancelForm()">
+        <i class="pi pi-times"></i>
+        <span>{{ 'BILLS.CANCEL_BUTTON' | translate }}</span>
+      </button>
+      <button
         type="submit"
         class="btn-custom"
         (click)="submit()"
-        [disabled]="billForm.invalid"> <i class="pi pi-check"></i>
-        <span>{{ 'BILLS.SAVE_BUTTON' | translate }}</span>
+        [disabled]="billForm.invalid">
+        <i class="pi pi-check"></i>
+        <span>{{ editingBillId ? ('BILLS.UPDATE_BUTTON' | translate) : ('BILLS.SAVE_BUTTON' | translate) }}</span>
       </button>
     </ng-template>
-
   </p-dialog>
 </div>
+
+<style>
+.btn-custom {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-custom:hover {
+  background-color: #0056b3;
+}
+
+.btn-custom:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
+}
+
+.alert {
+  padding: 12px;
+  margin-bottom: 16px;
+  border-radius: 4px;
+}
+
+.alert-danger {
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  color: #721c24;
+}
+
+.btn {
+  padding: 6px 12px;
+  border-radius: 4px;
+  border: 1px solid;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn-sm {
+  padding: 4px 8px;
+  font-size: 0.875rem;
+}
+
+.btn-outline-primary {
+  color: #007bff;
+  border-color: #007bff;
+  background-color: transparent;
+}
+
+.btn-outline-primary:hover {
+  background-color: #007bff;
+  color: white;
+}
+
+.btn-outline-danger {
+  color: #dc3545;
+  border-color: #dc3545;
+  background-color: transparent;
+}
+
+.btn-outline-danger:hover {
+  background-color: #dc3545;
+  color: white;
+}
+
+.btn-outline-secondary {
+  color: #6c757d;
+  border-color: #6c757d;
+  background-color: transparent;
+}
+
+.btn-outline-secondary:hover {
+  background-color: #6c757d;
+  color: white;
+}
+
+.btn-secondary {
+  background-color: #6c757d;
+  border-color: #6c757d;
+  color: white;
+}
+
+.btn-secondary:hover {
+  background-color: #545b62;
+  border-color: #4e555b;
+}
+
+.is-invalid {
+  border-color: #dc3545;
+}
+
+.invalid-feedback {
+  color: #dc3545;
+  font-size: 0.875rem;
+  margin-top: 4px;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.me-2 {
+  margin-right: 8px;
+}
+
+.ms-2 {
+  margin-left: 8px;
+}
+
+.mb-3 {
+  margin-bottom: 16px;
+}
+
+.field {
+  margin-bottom: 16px;
+}
+
+.field label {
+  display: block;
+  margin-bottom: 4px;
+  font-weight: 500;
+}
+
+.p-fluid input {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+}
+
+.p-fluid input:focus {
+  outline: none;
+  border-color: #80bdff;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+</style>

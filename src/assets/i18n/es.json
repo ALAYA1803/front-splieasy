@@ -20,7 +20,6 @@
     "BENEFIT_3_TITLE": "Menos Estrés, Más Armonía",
     "BENEFIT_3_TEXT": "Calculamos quién debe a quién para evitar conversaciones incómodas."
   },
-
   "HERO": {
     "TITLE": "La forma fácil y justa de dividir los gastos en casa.",
     "DESCRIPTION": "Olvídate de las hojas de cálculo y las discusiones. SplitEasy calcula quién debe qué para que la convivencia sea siempre transparente.",
@@ -55,18 +54,17 @@
       "STEP_4_TEXT": "Revisa todos los movimientos y el balance de forma transparente."
     }
   },
-    "MEMBER": {
-      "HEADER": "Si eres miembro del hogar",
-      "SIGNUP_TITLE": "Regístrate",
-      "SIGNUP_TEXT": "Crea tu cuenta con tu correo electrónico o red social favorita.",
-      "JOIN_TITLE": "Únete a un hogar",
-      "JOIN_TEXT": "Ingresa el ID del hogar proporcionado por tu representante.",
-      "INCOME_TITLE": "Declara tus ingresos",
-      "INCOME_TEXT": "Declara tus ingresos mensuales para calcular automáticamente tu contribución.",
-      "MONITOR_TITLE": "Monitorea tus aportes",
-      "MONITOR_TEXT": "Consulta tus aportes y mantente al día con tus responsabilidades financieras."
-    },
-
+  "MEMBER": {
+    "HEADER": "Si eres miembro del hogar",
+    "SIGNUP_TITLE": "Regístrate",
+    "SIGNUP_TEXT": "Crea tu cuenta con tu correo electrónico o red social favorita.",
+    "JOIN_TITLE": "Únete a un hogar",
+    "JOIN_TEXT": "Ingresa el ID del hogar proporcionado por tu representante.",
+    "INCOME_TITLE": "Declara tus ingresos",
+    "INCOME_TEXT": "Declara tus ingresos mensuales para calcular automáticamente tu contribución.",
+    "MONITOR_TITLE": "Monitorea tus aportes",
+    "MONITOR_TEXT": "Consulta tus aportes y mantente al día con tus responsabilidades financieras."
+  },
   "PRICES": {
     "TITLE": "Un Plan Para Cada Necesidad",
     "LEAD_TEXT": "Empieza gratis o elige Premium para desbloquear todo el potencial de SplitEasy.",
@@ -234,7 +232,6 @@
       "TITLE": "Miembros del hogar"
     }
   },
-
   "CONTRIBUTIONS_STATUS": {
     "TITLE": "Estado de mis contribuciones",
     "INVOICE": "Factura",
@@ -246,13 +243,21 @@
     "PAID_AT": "Pagado en"
   },
   "BILLS": {
-    "TITLE": "Cuentas del hogar",
-    "REGISTER_BUTTON": "Registrar nueva cuenta",
+    "TITLE": "Gestión de Facturas",
+    "REGISTER_BUTTON": "Registrar Nueva Factura",
     "DESCRIPTION": "Descripción",
-    "AMOUNT": "Monto (S/)",
+    "AMOUNT": "Monto",
     "DATE": "Fecha",
-    "NEW_BILL_DIALOG": "Nueva cuenta",
-    "SAVE_BUTTON": "Guardar"
+    "CREATED_BY": "Creado por",
+    "ACTIONS": "Acciones",
+    "EDIT": "Editar",
+    "DELETE": "Eliminar",
+    "NO_BILLS": "No hay facturas registradas",
+    "NEW_BILL_DIALOG": "Nueva Factura",
+    "EDIT_BILL_DIALOG": "Editar Factura",
+    "SAVE_BUTTON": "Guardar",
+    "UPDATE_BUTTON": "Actualizar",
+    "CANCEL_BUTTON": "Cancelar"
   },
   "CONTACT_US": {
     "TITLE": "Contáctanos",
@@ -316,7 +321,6 @@
     "pay": "Pagar",
     "pageReport": "Mostrando {first} a {last} de {totalRecords} contribuciones"
   },
-
   "PROFILE": {
     "TITLE": "Gestionar Perfil",
     "SUBTITLE": "Actualiza tu información personal y foto de perfil.",
@@ -354,4 +358,3 @@
     "DELETE_ACCOUNT_BUTTON": "Eliminar mi Cuenta"
   }
 }
-
