@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
@@ -11,20 +11,21 @@ import { DropdownModule } from 'primeng/dropdown';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
+import { environment } from '../../../../core/environments/environment';
+interface Setting {
+  id: number;
+  userId: number;
+  language: string;
+  darkMode: boolean;
+  notificationsEnabled: boolean;
+}
 
 @Component({
   selector: 'app-settings',
   standalone: true,
   imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    TranslateModule,
-    CardModule,
-    ButtonModule,
-    DropdownModule,
-    InputSwitchModule,
-    InputTextModule,
-    PasswordModule,
+    CommonModule, ReactiveFormsModule, TranslateModule, CardModule, ButtonModule,
+    DropdownModule, InputSwitchModule, InputTextModule, PasswordModule,
   ],
   templateUrl: './settings.component.html',
   styleUrls: ['./settings.component.css']
@@ -33,108 +34,96 @@ export class SettingsComponent implements OnInit, OnDestroy {
   profileForm!: FormGroup;
   passwordForm!: FormGroup;
   settingsForm!: FormGroup;
-  userId!: any;
-  settingId!: any;
+
+  userId!: number;
+  settingId: number | null = null;
+
   private destroy$ = new Subject<void>();
+  private readonly API_URL = environment.urlBackend;
 
   constructor(private http: HttpClient, private fb: FormBuilder) {}
 
+  private getAuthHeaders(): HttpHeaders {
+    const token = localStorage.getItem('accessToken');
+    return new HttpHeaders({ Authorization: `Bearer ${token}` });
+  }
+
   ngOnInit(): void {
+    const userString = localStorage.getItem('currentUser');
+    if (userString) {
+      this.userId = JSON.parse(userString).id;
+    } else {
+      console.error("No se pudo encontrar el usuario en localStorage.");
+      return;
+    }
+
     this.profileForm = this.fb.group({
-      name: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
+      name: [{ value: '', disabled: true }],
+      email: [{ value: '', disabled: true }],
     });
     this.passwordForm = this.fb.group({
-      currentPassword: ['', Validators.required],
-      newPassword: ['', [Validators.required, Validators.minLength(8)]],
-      confirmPassword: ['', Validators.required]
-    }, {
-      validator: this.passwordMatchValidator
+      currentPassword: [{ value: '', disabled: true }],
+      newPassword: [{ value: '', disabled: true }],
+      confirmPassword: [{ value: '', disabled: true }]
     });
 
     this.settingsForm = this.fb.group({
       language: ['es'],
-      dark_mode: [false],
-      notifications_enabled: [true]
+      darkMode: [false],
+      notificationsEnabled: [true]
     });
 
-    const user = JSON.parse(localStorage.getItem('currentUser')!);
-    if (user && user.id) {
-      this.userId = user.id;
-      this.loadUserData();
-      this.loadSettingsData();
-    } else {
-      console.error("No se pudo encontrar el usuario o su ID en localStorage.");
-    }
-  }
-  passwordMatchValidator(form: AbstractControl): ValidationErrors | null {
-    const newPassword = form.get('newPassword')?.value;
-    const confirmPassword = form.get('confirmPassword')?.value;
-    return newPassword === confirmPassword ? null : { mismatch: true };
-  }
-  loadUserData(): void {
-    this.http.get<any>(`https://backend-app-1-vd66.onrender.com/api/v1/users/${this.userId}`)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(userData => this.profileForm.patchValue(userData));
+    this.loadSettingsData();
   }
 
   loadSettingsData(): void {
-    this.http.get<any[]>(`https://backend-app-1-vd66.onrender.com/api/v1/settings?user_id=${this.userId}`)
+    this.http.get<Setting[]>(`${this.API_URL}/settings`, { headers: this.getAuthHeaders() })
       .pipe(takeUntil(this.destroy$))
-      .subscribe(settings => {
-        const existingSetting = settings[0];
-        if (existingSetting) {
-          this.settingId = existingSetting.id;
-          this.settingsForm.patchValue(existingSetting);
+      .subscribe(allSettings => {
+        // Filtramos en el frontend porque la API no lo hace
+        const userSetting = allSettings.find(s => s.userId === this.userId);
+        if (userSetting) {
+          this.settingId = userSetting.id;
+          this.settingsForm.patchValue({
+            language: userSetting.language,
+            darkMode: userSetting.darkMode,
+            notificationsEnabled: userSetting.notificationsEnabled,
+          });
         }
       });
-  }
-
-  saveProfile(): void {
-    if (this.profileForm.invalid) return;
-    this.http.patch(`https://backend-app-1-vd66.onrender.com/api/v1/users/${this.userId}`, this.profileForm.value)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(() => alert('Perfil actualizado con éxito'));
   }
 
   saveSettings(): void {
     if (this.settingsForm.invalid) return;
-    const settingsPayload = { ...this.settingsForm.value, user_id: this.userId };
-    const request = this.settingId
-      ? this.http.patch(`https://backend-app-1-vd66.onrender.com/api/v1/settings/${this.settingId}`, settingsPayload)
-      : this.http.post(`https://backend-app-1-vd66.onrender.com/api/v1/settings`, settingsPayload);
-    request.pipe(takeUntil(this.destroy$)).subscribe(() => alert('Configuración guardada'));
+
+    const settingsPayload = {
+      ...this.settingsForm.value,
+      userId: this.userId
+    };
+
+    let request;
+    if (this.settingId) {
+      request = this.http.put(`${this.API_URL}/settings/${this.settingId}`, settingsPayload, { headers: this.getAuthHeaders() });
+    } else {
+      request = this.http.post(`${this.API_URL}/settings`, settingsPayload, { headers: this.getAuthHeaders() });
+    }
+
+    request.pipe(takeUntil(this.destroy$)).subscribe(() => {
+      alert('Configuración guardada con éxito');
+      this.loadSettingsData();
+    });
+  }
+
+  saveProfile(): void {
+    alert('Esta función no está disponible actualmente.');
   }
 
   changePassword(): void {
-    if (this.passwordForm.invalid) {
-      return;
-    }
-    const { currentPassword, newPassword } = this.passwordForm.value;
-    this.http.get<any>(`https://backend-app-1-vd66.onrender.com/api/v1/users/${this.userId}`)
-      .subscribe(user => {
-        if (user && user.password === currentPassword) {
-          this.http.patch(`https://backend-app-1-vd66.onrender.com/api/v1/users/${this.userId}`, { password: newPassword })
-            .subscribe(() => {
-              alert('Contraseña actualizada con éxito');
-              this.passwordForm.reset();
-            });
-
-        } else {
-          alert('Error: La contraseña actual es incorrecta.');
-        }
-      });
+    alert('Esta función no está disponible actualmente.');
   }
 
   deleteAccount(): void {
-    const confirmation = prompt('Esta acción es irreversible. Para confirmar, escribe tu correo electrónico:');
-    if (confirmation && confirmation.toLowerCase() === this.profileForm.value.email.toLowerCase()) {
-      this.http.delete(`https://backend-app-1-vd66.onrender.com/api/v1/users/${this.userId}`)
-        .pipe(takeUntil(this.destroy$))
-        .subscribe(() => alert('Cuenta eliminada.'));
-    } else {
-      alert('La confirmación ha fallado. La cuenta no ha sido eliminada.');
-    }
+    alert('Esta función no está disponible actualmente.');
   }
 
   ngOnDestroy(): void {

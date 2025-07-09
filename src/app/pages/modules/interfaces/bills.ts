@@ -1,24 +1,24 @@
-// interfaces/bills.ts
 export interface Bill {
   id: number;
   householdId: number;
-  descripcion: string;
+  description: string;
   monto: number;
   createdBy: number;
-  fecha: string; // formato ISO date
+  fecha: string;
   createdAt?: string;
   updatedAt?: string;
 }
 
 export interface CreateBillRequest {
   householdId: number;
-  descripcion: string;
+  description: string;
   monto: number;
-  fecha: string; // formato ISO date
+  createdBy: number;
+  fecha: string;
 }
 
 export interface UpdateBillRequest {
-  descripcion: string;
+  description: string;
   monto: number;
   fecha: string;
 }
@@ -26,10 +26,10 @@ export interface UpdateBillRequest {
 export interface BillResponse {
   id: number;
   householdId: number;
-  descripcion: string;
+  description: string;
   monto: number;
   createdBy: number;
   fecha: string;
-  createdAt: string;
-  updatedAt: string;
+  createdAt?: string;
+  updatedAt?: string;
 }

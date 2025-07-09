@@ -291,22 +291,96 @@
     "PAID_AT": "Paid At"
   },
   "BILLS": {
-    "TITLE": "Bill Management",
-    "REGISTER_BUTTON": "Register New Bill",
+    "TITLE": "Household Bills",
+    "SUBTITLE": "Manage your household's bills",
+    "REGISTER_BUTTON": "Register Bill",
     "DESCRIPTION": "Description",
     "AMOUNT": "Amount",
     "DATE": "Date",
     "CREATED_BY": "Created by",
     "ACTIONS": "Actions",
-    "EDIT": "Edit",
-    "DELETE": "Delete",
-    "NO_BILLS": "No bills registered",
-    "NEW_BILL_DIALOG": "New Bill",
+    "EDIT": "Edit Bill",
+    "DELETE": "Delete Bill",
+    "NO_BILLS": "You haven't registered any bills yet.",
+    "PAGINATION_INFO": "Showing {{count}} bills",
+    "RETRY_BUTTON": "Retry",
+    "EMPTY_STATE_TITLE": "No bills",
     "EDIT_BILL_DIALOG": "Edit Bill",
-    "SAVE_BUTTON": "Save",
+    "NEW_BILL_DIALOG": "New Bill",
+    "FORM": {
+      "DESCRIPTION_PLACEHOLDER": "Enter the bill description",
+      "DESCRIPTION_REQUIRED": "Description is required",
+      "AMOUNT_PLACEHOLDER": "0.00",
+      "AMOUNT_REQUIRED": "Amount is required and must be greater than 0",
+      "DATE_REQUIRED": "Date is required"
+    },
+    "CANCEL_BUTTON": "Cancel",
     "UPDATE_BUTTON": "Update",
-    "CANCEL_BUTTON": "Cancel"
+    "SAVE_BUTTON": "Save"
   },
+  "CONTRIBUTIONS": {
+    "NEW_BUTTON": "New Contribution",
+    "TABLE": {
+      "HEADER": {
+        "DESCRIPTION": "Description",
+        "STRATEGY": "Strategy",
+        "DUE_DATE": "Due Date",
+        "TOTAL_AMOUNT": "Total Amount (PEN)",
+        "ACTIONS": "Actions"
+      },
+      "EMPTY_MESSAGE": "No contributions available"
+    },
+    "STRATEGIES": {
+      "EQUAL": "Equal",
+      "INCOME_BASED": "Income Based"
+    },
+    "TOOLTIPS": {
+      "VIEW_DETAILS": "View details",
+      "DELETE": "Delete"
+    },
+    "DETAILS": {
+      "TITLE": "Contribution Details",
+      "HEADER": {
+        "MEMBER": "Member",
+        "ROLE": "Role",
+        "AMOUNT": "Amount (PEN)",
+        "STATUS": "Status",
+        "PAYMENT_DATE": "Payment Date"
+      },
+      "NO_NAME": "No name",
+      "EMPTY_MESSAGE": "No payment records"
+    },
+    "ROLES": {
+      "REPRESENTATIVE": "Representative",
+      "MEMBER": "Member"
+    },
+    "DIALOG": {
+      "HEADER_CREATE": "Create Contribution"
+    },
+    "FORM": {
+      "BILL_LABEL": "Bill *",
+      "BILL_PLACEHOLDER": "Select a bill",
+      "BILL_REQUIRED": "Bill is required",
+      "DESCRIPTION_LABEL": "Description *",
+      "DESCRIPTION_PLACEHOLDER": "Contribution description",
+      "DESCRIPTION_REQUIRED": "Description is required",
+      "DUE_DATE_LABEL": "Due Date *",
+      "DUE_DATE_PLACEHOLDER": "Select a date",
+      "DUE_DATE_REQUIRED": "Due date is required",
+      "STRATEGY_LABEL": "Strategy *",
+      "STRATEGY_PLACEHOLDER": "Select a strategy",
+      "STRATEGY_REQUIRED": "Strategy is required",
+      "MEMBERS_LABEL": "Members *",
+      "MEMBERS_PLACEHOLDER": "Select members",
+      "MEMBERS_REQUIRED": "You must select at least one member",
+      "BILL_INFO_TITLE": "Bill Information",
+      "TOTAL_AMOUNT_LABEL": "Total Amount:",
+      "SELECTED_MEMBERS_LABEL": "Selected members:",
+      "CANCEL_BUTTON": "Cancel",
+      "SAVE_BUTTON": "Save"
+    }
+  },
+
   "CONTRIB": {
     "TITLE": "Household Contributions",
     "NEW_BUTTON": "New Contribution",
@@ -334,17 +408,40 @@
   },
   "SUMMARY": {
     "TITLE": "Household Summary",
-    "MEMBERS": "Members",
-    "BILLS": "Bills",
-    "CONTRIBUTIONS": "Contributions"
+    "SUBTITLE": "A quick look at recent activity.",
+    "MEMBERS": "Total Members",
+    "MEMBERS_ACTIVE": "Members in the household",
+    "BILLS": "Registered Bills",
+    "BILLS_MONTH": "Bills this month",
+    "CONTRIBUTIONS": "Created Contributions",
+    "CONTRIBUTIONS_MADE": "Contributions made"
   },
   "HOUSEHOLD": {
     "MEMBERS": {
-      "TITLE": "Household Members",
+      "TITLE": "Manage Members",
+      "SUBTITLE": "Add or remove members from your household.",
+      "ADD_BUTTON": "Add Member",
+      "EMPTY_TITLE": "No Members Yet",
+      "EMPTY_TEXT": "Looks like you're on your own. Invite someone to start sharing expenses!",
+      "ADD_FIRST_BUTTON": "Add the first member",
       "NAME": "Name",
-      "EMAIL": "Email",
-      "INCOME": "Monthly Income"
+      "INCOME": "Income",
+      "ACTIONS": "Actions"
     }
+  },
+  "DIALOG": {
+    "ADD_MEMBER": {
+      "HEADER": "Add New Member",
+      "DESCRIPTION": "Enter the email address of the user you want to add to the household. The user must already be registered on the platform.",
+      "EMAIL_LABEL": "User's Email",
+      "EMAIL_ERROR": "Please, enter a valid email.",
+      "CANCEL_BUTTON": "Cancel",
+      "SUBMIT_BUTTON_SAVING": "Adding...",
+      "SUBMIT_BUTTON_ADD": "Add Member"
+    }
+  },
+  "TOOLTIPS": {
+    "DELETE_MEMBER": "Delete Member"
   },
   "contributions": {
     "bill": "Bill",
@@ -356,5 +453,24 @@
     "actions": "Actions",
     "pay": "Pay",
     "pageReport": "Showing {first} to {last} of {totalRecords} contributions"
+  },
+  "SIDEBAR": {
+    "BRAND": {
+      "TAGLINE": "Divide and conquer"
+    },
+    "NAVIGATION": {
+      "HEADER": "Navigation"
+    },
+    "USER_CARD": {
+      "ARIA_LABEL": "Open user settings",
+      "DEFAULT_USERNAME": "User",
+      "DEFAULT_EMAIL": "user@example.com",
+      "DEFAULT_ROLE": "Member"
+    },
+    "LOGOUT": {
+      "BUTTON_TEXT": "Log Out",
+      "BUTTON_TEXT_LOGGING_OUT": "Logging out...",
+      "ARIA_LABEL": "Log out"
+    }
   }
 }

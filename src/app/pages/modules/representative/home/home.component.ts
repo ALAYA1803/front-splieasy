@@ -3,12 +3,14 @@ import { Component, OnInit } from '@angular/core';
 import { Household } from '../../interfaces/household';
 import { HouseholdService } from '../../services/household.service';
 import { environment } from '../../../../core/environments/environment';
+import { forkJoin, of } from 'rxjs';
+import { switchMap, map, tap, catchError } from 'rxjs/operators';
 
 @Component({
   selector: 'app-home',
   standalone: false,
   templateUrl: './home.component.html',
-  styleUrl: './home.component.css'
+  styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
 
@@ -16,6 +18,7 @@ export class HomeComponent implements OnInit {
   members: any[] = [];
   bills: any[] = [];
   contributions: any[] = [];
+  loading = true;
 
   constructor(
     private householdService: HouseholdService,
@@ -26,56 +29,76 @@ export class HomeComponent implements OnInit {
     const userId = Number(localStorage.getItem('userId'));
     if (!userId) {
       console.error('userId no encontrado en localStorage');
+      this.loading = false;
       return;
     }
+    this.loadDashboardData(userId);
+  }
 
-    this.householdService.getHouseholdByRepresentante(userId).subscribe({
-      next: (households) => {
-        console.log('Households encontrados:', households);
-        this.household = households[0] || null;
+  private loadDashboardData(userId: number): void {
+    this.loading = true;
+    const token = localStorage.getItem('accessToken')!;
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
 
-        if (this.household) {
-          const hid = this.household.id;
-          console.log('Household ID:', hid);
-
-          const headers = new HttpHeaders({
-            'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
-          });
-
-          // Obtener miembros y filtrar por household_id en el frontend
-          this.http.get<any[]>(`${environment.urlBackend}/household-members`, { headers })
-            .subscribe({
-              next: (allMembers) => {
-                this.members = allMembers.filter(member => member.householdId === hid);
-                console.log('Miembros filtrados:', this.members);
-              },
-              error: (err) => console.error('Error obteniendo miembros:', err)
-            });
-
-          // Obtener bills y filtrar por household_id en el frontend
-          this.http.get<any[]>(`${environment.urlBackend}/bills`, { headers })
-            .subscribe({
-              next: (allBills) => {
-                this.bills = allBills.filter(bill => bill.householdId === hid);
-                console.log('Bills filtradas:', this.bills);
-              },
-              error: (err) => console.error('Error obteniendo bills:', err)
-            });
-
-          // Obtener contributions y filtrar por household_id en el frontend
-          this.http.get<any[]>(`${environment.urlBackend}/contributions`, { headers })
-            .subscribe({
-              next: (allContributions) => {
-                this.contributions = allContributions.filter(contribution => contribution.householdId === hid);
-                console.log('Contributions filtradas:', this.contributions);
-              },
-              error: (err) => console.error('Error obteniendo contributions:', err)
-            });
-        } else {
-          console.log('No se encontró household para el usuario:', userId);
+    this.householdService.getHouseholdByRepresentante(userId).pipe(
+      tap(hs => console.log('Households encontrados:', hs)),
+      map(hs => hs[0]),
+      switchMap(hh => {
+        if (!hh) {
+          console.warn('No se encontró household para el usuario:', userId);
+          this.loading = false;
+          return of(null);
         }
-      },
-      error: err => console.error('Error obteniendo household:', err)
+        // Obtener detalles completos del household (con name y description)
+        return this.http.get<Household>(
+          `${environment.urlBackend}/households/${hh.id}`,
+          { headers }
+        ).pipe(
+          tap(full => console.log('Detalles de household:', full)),
+          catchError(err => {
+            console.error('Error obteniendo detalle del household:', err);
+            this.loading = false;
+            return of(null);
+          })
+        );
+      }),
+      switchMap(fullHousehold => {
+        if (!fullHousehold) {
+          return of(null);
+        }
+        this.household = fullHousehold;
+
+        // Traer miembros, facturas y contribuciones
+        return forkJoin({
+          allMembers: this.http.get<any[]>(
+            `${environment.urlBackend}/household-members`,
+            { headers }
+          ),
+          allBills: this.http.get<any[]>(
+            `${environment.urlBackend}/bills`,
+            { headers }
+          ),
+          allContributions: this.http.get<any[]>(
+            `${environment.urlBackend}/contributions`,
+            { headers }
+          )
+        }).pipe(
+          catchError(err => {
+            console.error('Error en forkJoin:', err);
+            this.loading = false;
+            return of(null);
+          })
+        );
+      })
+    ).subscribe(result => {
+      if (result && this.household) {
+        const hhId = this.household.id;
+        this.members = result.allMembers.filter(m => m.householdId === hhId);
+        this.bills = result.allBills.filter(b => b.householdId === hhId);
+        this.contributions = result.allContributions.filter(c => c.householdId === hhId);
+        console.log('Dashboard cargado:', { household: this.household, members: this.members, bills: this.bills, contributions: this.contributions });
+      }
+      this.loading = false;
     });
   }
 }

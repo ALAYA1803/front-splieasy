@@ -1,5 +1,4 @@
 <div class="sidebar-container">
-  <!-- Encabezado -->
   <div class="sidebar-header p-3">
     <div class="brand-container flex align-items-center">
       <img src="assets/images/logo.png" alt="SplitEasy Logo" class="logo-img">
@@ -7,27 +6,25 @@
         <span class="app-name">
           <span class="app-name-split">Split</span><span class="app-name-easy">Easy</span>
         </span>
-        <span class="app-tagline">Divide y vencerás</span>
+        <span class="app-tagline">{{ 'SIDEBAR.BRAND.TAGLINE' | translate }}</span>
       </div>
     </div>
   </div>
-
-  <!-- Menú de navegación -->
   <div class="sidebar-content">
     <div class="nav-section">
       <div class="nav-header p-3">
-        <span class="nav-title">Navegación</span>
+        <span class="nav-title">{{ 'SIDEBAR.NAVIGATION.HEADER' | translate }}</span>
       </div>
       <ul class="sidebar-nav list-none p-0 m-0">
         <li *ngFor="let item of items; trackBy: trackByRoute" class="nav-item">
           <a [routerLink]="item.route"
              routerLinkActive="active-route"
              class="nav-link p-3 flex align-items-center"
-             [attr.aria-label]="item.label">
+             [attr.aria-label]="item.label | translate">
             <div class="nav-icon-container">
               <i [class]="item.icon + ' nav-icon'"></i>
             </div>
-            <span class="nav-label ml-3">{{ item.label }}</span>
+            <span class="nav-label ml-3">{{ item.label | translate }}</span>
             <div class="nav-indicator"></div>
           </a>
         </li>
@@ -35,15 +32,13 @@
     </div>
     <div class="nav-separator"></div>
   </div>
-
-  <!-- Footer: Perfil + Logout -->
   <div class="sidebar-footer p-3">
     <div class="user-profile-card p-3 mb-3"
          role="button"
          tabindex="0"
          (click)="openSettings()"
          (keydown.enter)="openSettings()"
-         aria-label="Abrir configuración de usuario">
+         [attr.aria-label]="'SIDEBAR.USER_CARD.ARIA_LABEL' | translate">
       <div class="user-profile flex align-items-center">
         <div class="avatar-container">
           <p-avatar [label]="user?.username?.charAt(0)?.toUpperCase() || 'U'"
@@ -53,18 +48,16 @@
           <div class="avatar-status online"></div>
         </div>
         <div class="user-info ml-3 flex-1">
-          <div class="user-name font-bold text-sm">{{ user?.username || 'Usuario' }}</div>
-          <div class="user-email text-xs text-color-secondary">{{ user?.email || 'usuario@ejemplo.com' }}</div>
-          <div class="user-role text-xs">{{ user?.roles?.[0] || 'Miembro' }}</div>
+          <div class="user-name font-bold text-sm">{{ user?.username || ('SIDEBAR.USER_CARD.DEFAULT_USERNAME' | translate) }}</div>
+          <div class="user-email text-xs text-color-secondary">{{ user?.email || ('SIDEBAR.USER_CARD.DEFAULT_EMAIL' | translate) }}</div>
+          <div class="user-role text-xs">{{ user?.roles?.[0] || ('SIDEBAR.USER_CARD.DEFAULT_ROLE' | translate) }}</div>
         </div>
       </div>
     </div>
-
-    <!-- Botón de logout -->
     <button (click)="logout()"
             class="logout-button p-3 flex align-items-center justify-content-center w-full"
             [disabled]="loggingOut"
-            aria-label="Cerrar sesión">
+            [attr.aria-label]="'SIDEBAR.LOGOUT.ARIA_LABEL' | translate">
       <div class="logout-content flex align-items-center">
         <i class="pi"
            [ngClass]="{
@@ -74,7 +67,7 @@
              'logout-icon': true
            }"></i>
         <span class="logout-text ml-3">
-          {{ loggingOut ? 'Cerrando...' : 'Cerrar Sesión' }}
+          {{ (loggingOut ? 'SIDEBAR.LOGOUT.BUTTON_TEXT_LOGGING_OUT' : 'SIDEBAR.LOGOUT.BUTTON_TEXT') | translate }}
         </span>
       </div>
       <div class="logout-ripple"></div>

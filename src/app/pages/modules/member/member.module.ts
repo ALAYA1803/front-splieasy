@@ -23,7 +23,6 @@ import { TagModule } from 'primeng/tag';
     MemberRoutingModule,
     TranslateModule,
 
-    // Módulos de PrimeNG
     PrimeNgModule,
     TableModule,
     CardModule,

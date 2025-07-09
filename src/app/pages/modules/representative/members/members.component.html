@@ -44,7 +44,7 @@
         <tr *ngFor="let member of members">
           <td>
             <div class="user-cell">
-              <p-avatar [label]="member.username" shape="circle"></p-avatar>
+              <p-avatar [label]="member.username.charAt(0).toUpperCase()" shape="circle"></p-avatar>
               <div class="user-info">
                 <span class="user-name">{{ member.username }}</span>
                 <br>

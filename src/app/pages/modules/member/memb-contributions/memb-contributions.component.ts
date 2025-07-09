@@ -5,6 +5,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-memb-contributions',
@@ -23,44 +24,78 @@ export class MembContributionsComponent implements OnInit {
   userId!: number;
   contributions: any[] = [];
   isLoading = true;
+  // Define la URL base de tu API desplegada para fácil mantenimiento.
+  private apiUrl = 'https://backend-app-1-vd66.onrender.com/api/v1';
 
   constructor(private http: HttpClient) {}
 
   ngOnInit(): void {
-    const user = JSON.parse(localStorage.getItem('currentUser')!);
-    this.userId = +user.id;
-    this.fetchContributions();
+    // Es más seguro verificar si 'currentUser' existe antes de parsearlo.
+    const userString = localStorage.getItem('currentUser');
+    if (userString) {
+      const user = JSON.parse(userString);
+      this.userId = +user.id;
+      this.fetchContributions();
+    } else {
+      this.isLoading = false;
+      console.error("No se encontró el usuario en localStorage.");
+    }
   }
 
   fetchContributions(): void {
     this.isLoading = true;
-    this.http.get<any[]>(`https://backend-app-1-vd66.onrender.com/api/v1/member_contributions?member_id=${this.userId}`).subscribe(mcList => {
-      const contribIds = mcList.map(c => c.contribution_id);
-      this.http.get<any[]>(`https://backend-app-1-vd66.onrender.com/api/v1/contributions`).subscribe(allContribs => {
-        this.http.get<any[]>(`https://backend-app-1-vd66.onrender.com/api/v1/bills`).subscribe(bills => {
-          this.contributions = mcList.map(mc => {
-            const contrib = allContribs.find(c => c.id == mc.contribution_id);
-            const bill = bills.find(b => b.id == contrib?.bill_id);
-            return {
-              ...mc,
-              descripcion: contrib?.descripcion,
-              strategy: contrib?.strategy,
-              fechaLimite: contrib?.fecha_limite,
-              billDescripcion: bill?.descripcion,
-              fechaFactura: bill?.fecha,
-              montoFactura: bill?.monto
-            };
-          });
-          this.isLoading = false;
+
+    // Usamos forkJoin para ejecutar todas las llamadas a la API en paralelo.
+    forkJoin({
+      memberContributions: this.http.get<any[]>(`${this.apiUrl}/member-contributions`),
+      allContributions: this.http.get<any[]>(`${this.apiUrl}/contributions`),
+      bills: this.http.get<any[]>(`${this.apiUrl}/bills`)
+    }).subscribe({
+      next: ({ memberContributions, allContributions, bills }) => {
+        // Filtra las contribuciones que pertenecen al miembro actual en el frontend.
+        const userMemberContributions = memberContributions.filter(mc => mc.memberId === this.userId);
+
+        this.contributions = userMemberContributions.map(mc => {
+          const contrib = allContributions.find(c => c.id === mc.contributionId);
+          const bill = bills.find(b => b.id === contrib?.billId);
+
+          return {
+            ...mc,
+            descripcion: contrib?.description,
+            strategy: contrib?.strategy,
+            fechaLimite: contrib?.fechaLimite,
+            billDescripcion: bill?.description,
+            fechaFactura: bill?.fecha,
+            montoFactura: bill?.monto
+          };
         });
-      });
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.error("Error al obtener las contribuciones:", err);
+        this.isLoading = false;
+      }
     });
   }
 
   pagar(contribution: any): void {
-    const updated = { ...contribution, status: 'PAGADO', pagado_en: new Date().toISOString() };
-    this.http.patch(`https://backend-app-1-vd66.onrender.com/api/v1/member_contributions/${contribution.id}`, updated).subscribe(() => {
-      this.fetchContributions(); // refrescar lista
+    // Construye el payload exactamente como lo espera el backend (CreateMemberContributionCommand).
+    const updatedPayload = {
+      contributionId: contribution.contributionId,
+      memberId: contribution.memberId,
+      monto: contribution.monto,
+      status: 'PAGADO', // El backend espera el enum en mayúsculas.
+      pagadoEn: new Date().toISOString()
+    };
+
+    // El backend espera una solicitud PUT para la actualización.
+    this.http.put(`${this.apiUrl}/member-contributions/${contribution.id}`, updatedPayload).subscribe({
+      next: () => {
+        this.fetchContributions(); // Refrescar la lista después de pagar.
+      },
+      error: (err) => {
+        console.error("Error al procesar el pago:", err);
+      }
     });
   }
 }

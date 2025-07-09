@@ -243,21 +243,32 @@
     "PAID_AT": "Pagado en"
   },
   "BILLS": {
-    "TITLE": "Gestión de Facturas",
-    "REGISTER_BUTTON": "Registrar Nueva Factura",
+    "TITLE": "Facturas del Hogar",
+    "SUBTITLE": "Gestiona las facturas de tu hogar",
+    "REGISTER_BUTTON": "Registrar Factura",
     "DESCRIPTION": "Descripción",
     "AMOUNT": "Monto",
     "DATE": "Fecha",
     "CREATED_BY": "Creado por",
     "ACTIONS": "Acciones",
-    "EDIT": "Editar",
-    "DELETE": "Eliminar",
-    "NO_BILLS": "No hay facturas registradas",
-    "NEW_BILL_DIALOG": "Nueva Factura",
+    "EDIT": "Editar Factura",
+    "DELETE": "Eliminar Factura",
+    "NO_BILLS": "Aún no has registrado ninguna factura.",
+    "PAGINATION_INFO": "Mostrando {{count}} facturas",
+    "RETRY_BUTTON": "Reintentar",
+    "EMPTY_STATE_TITLE": "No hay facturas",
     "EDIT_BILL_DIALOG": "Editar Factura",
-    "SAVE_BUTTON": "Guardar",
+    "NEW_BILL_DIALOG": "Nueva Factura",
+    "FORM": {
+      "DESCRIPTION_PLACEHOLDER": "Ingresa la descripción de la factura",
+      "DESCRIPTION_REQUIRED": "La descripción es requerida",
+      "AMOUNT_PLACEHOLDER": "0.00",
+      "AMOUNT_REQUIRED": "El monto es requerido y debe ser mayor a 0",
+      "DATE_REQUIRED": "La fecha es requerida"
+    },
+    "CANCEL_BUTTON": "Cancelar",
     "UPDATE_BUTTON": "Actualizar",
-    "CANCEL_BUTTON": "Cancelar"
+    "SAVE_BUTTON": "Guardar"
   },
   "CONTACT_US": {
     "TITLE": "Contáctanos",
@@ -296,19 +307,104 @@
       "STRATEGY": "Seleccione una estrategia."
     }
   },
+  "CONTRIBUTIONS": {
+    "NEW_BUTTON": "Nueva Contribución",
+    "TABLE": {
+      "HEADER": {
+        "DESCRIPTION": "Descripción",
+        "STRATEGY": "Estrategia",
+        "DUE_DATE": "Fecha Límite",
+        "TOTAL_AMOUNT": "Monto Total (S/)",
+        "ACTIONS": "Acciones"
+      },
+      "EMPTY_MESSAGE": "No hay contribuciones disponibles"
+    },
+    "STRATEGIES": {
+      "EQUAL": "Igualitaria",
+      "INCOME_BASED": "Según Ingresos"
+    },
+    "TOOLTIPS": {
+      "VIEW_DETAILS": "Ver detalles",
+      "DELETE": "Eliminar"
+    },
+    "DETAILS": {
+      "TITLE": "Detalles de Contribución",
+      "HEADER": {
+        "MEMBER": "Miembro",
+        "ROLE": "Rol",
+        "AMOUNT": "Monto (S/)",
+        "STATUS": "Estado",
+        "PAYMENT_DATE": "Fecha Pago"
+      },
+      "NO_NAME": "Sin nombre",
+      "EMPTY_MESSAGE": "Sin registros de pagos"
+    },
+    "ROLES": {
+      "REPRESENTATIVE": "Representante",
+      "MEMBER": "Miembro"
+    },
+    "DIALOG": {
+      "HEADER_CREATE": "Crear contribución"
+    },
+    "FORM": {
+      "BILL_LABEL": "Factura *",
+      "BILL_PLACEHOLDER": "Selecciona una factura",
+      "BILL_REQUIRED": "La factura es requerida",
+      "DESCRIPTION_LABEL": "Descripción *",
+      "DESCRIPTION_PLACEHOLDER": "Descripción de la contribución",
+      "DESCRIPTION_REQUIRED": "La descripción es requerida",
+      "DUE_DATE_LABEL": "Fecha Límite *",
+      "DUE_DATE_PLACEHOLDER": "Selecciona una fecha",
+      "DUE_DATE_REQUIRED": "La fecha límite es requerida",
+      "STRATEGY_LABEL": "Estrategia *",
+      "STRATEGY_PLACEHOLDER": "Selecciona una estrategia",
+      "STRATEGY_REQUIRED": "La estrategia es requerida",
+      "MEMBERS_LABEL": "Miembros *",
+      "MEMBERS_PLACEHOLDER": "Selecciona miembros",
+      "MEMBERS_REQUIRED": "Debes seleccionar al menos un miembro",
+      "BILL_INFO_TITLE": "Información de la Factura",
+      "TOTAL_AMOUNT_LABEL": "Monto Total:",
+      "SELECTED_MEMBERS_LABEL": "Miembros seleccionados:",
+      "CANCEL_BUTTON": "Cancelar",
+      "SAVE_BUTTON": "Guardar"
+    }
+  },
   "SUMMARY": {
-    "TITLE": "Resumen del hogar",
+    "TITLE": "Resumen del Hogar",
+    "SUBTITLE": "Un vistazo rápido a la actividad de tu hogar.",
     "MEMBERS": "Miembros",
+    "MEMBERS_ACTIVE": "Miembros activos",
     "BILLS": "Cuentas",
-    "CONTRIBUTIONS": "Contribuciones"
+    "BILLS_MONTH": "Cuentas este mes",
+    "CONTRIBUTIONS": "Contribuciones",
+    "CONTRIBUTIONS_MADE": "Contribuciones realizadas"
   },
   "HOUSEHOLD": {
     "MEMBERS": {
-      "TITLE": "Miembros del hogar",
+      "TITLE": "Gestionar Miembros",
+      "SUBTITLE": "Añade o elimina miembros de tu hogar.",
+      "ADD_BUTTON": "Añadir Miembro",
+      "EMPTY_TITLE": "Aún no hay miembros",
+      "EMPTY_TEXT": "Parece que estás solo. ¡Invita a alguien para empezar a compartir gastos!",
+      "ADD_FIRST_BUTTON": "Añadir el primer miembro",
       "NAME": "Nombre",
-      "EMAIL": "Email",
-      "INCOME": "Ingreso mensual"
+      "INCOME": "Ingresos",
+      "ACTIONS": "Acciones"
     }
+  },
+  "DIALOG": {
+    "ADD_MEMBER": {
+      "HEADER": "Añadir Nuevo Miembro",
+      "DESCRIPTION": "Ingresa el correo electrónico del usuario que deseas añadir al hogar. El usuario ya debe estar registrado en la plataforma.",
+      "EMAIL_LABEL": "Email del usuario",
+      "EMAIL_ERROR": "Por favor, ingresa un email válido.",
+      "CANCEL_BUTTON": "Cancelar",
+      "SUBMIT_BUTTON_SAVING": "Añadiendo...",
+      "SUBMIT_BUTTON_ADD": "Añadir Miembro"
+    }
+  },
+  "TOOLTIPS": {
+    "DELETE_MEMBER": "Eliminar Miembro"
   },
   "contributions": {
     "bill": "Factura",
@@ -356,5 +452,24 @@
     "TITLE": "Zona de Peligro",
     "WARNING_TEXT": "La eliminación de tu cuenta es una acción permanente e irreversible. Todos tus datos serán borrados.",
     "DELETE_ACCOUNT_BUTTON": "Eliminar mi Cuenta"
+  },
+  "SIDEBAR": {
+    "BRAND": {
+      "TAGLINE": "Divide y vencerás"
+    },
+    "NAVIGATION": {
+      "HEADER": "Navegación"
+    },
+    "USER_CARD": {
+      "ARIA_LABEL": "Abrir configuración de usuario",
+      "DEFAULT_USERNAME": "Usuario",
+      "DEFAULT_EMAIL": "usuario@ejemplo.com",
+      "DEFAULT_ROLE": "Miembro"
+    },
+    "LOGOUT": {
+      "BUTTON_TEXT": "Cerrar Sesión",
+      "BUTTON_TEXT_LOGGING_OUT": "Cerrando...",
+      "ARIA_LABEL": "Cerrar sesión"
+    }
   }
 }

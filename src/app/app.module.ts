@@ -13,6 +13,7 @@ import { HttpClient } from '@angular/common/http';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { RepresentativeModule } from './pages/modules/representative/representative.module';
+import { HttpClientModule} from '@angular/common/http';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -26,6 +27,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     BrowserModule,
     AppRoutingModule,
     PrimeNgModule,
+    HttpClientModule,
     FormsModule,
     TranslateModule.forRoot({
       defaultLanguage: 'es',
@@ -41,11 +43,7 @@ providers: [
   provideAnimationsAsync(),
   providePrimeNG({ theme: { preset: Aura } }),
   provideHttpClient(),
-  {
-    provide: HTTP_INTERCEPTORS,
-    useClass: AuthInterceptor,
-    multi: true
-  }
+
 ],
 
   bootstrap: [AppComponent]

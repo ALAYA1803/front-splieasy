@@ -32,20 +32,24 @@
         <form [formGroup]="settingsForm" (ngSubmit)="saveSettings()">
           <div class="field">
             <label for="language">{{ 'SETTINGS.LANGUAGE.LABEL' | translate }}</label>
-            <p-dropdown [options]="[{ label: ('SETTINGS.LANGUAGE.OPTIONS.ES' | translate), value: 'es' }, { label: ('SETTINGS.LANGUAGE.OPTIONS.EN' | translate), value: 'en' }]" formControlName="language" appendTo="body"></p-dropdown>
+            <p-dropdown
+              [options]="[{ label: ('SETTINGS.LANGUAGE.OPTIONS.ES' | translate), value: 'es' }, { label: ('SETTINGS.LANGUAGE.OPTIONS.EN' | translate), value: 'en' }]"
+              formControlName="language"
+              appendTo="body">
+            </p-dropdown>
+          </div>
+
+          <div class="field-switch">
+            <p-inputSwitch formControlName="darkMode" inputId="darkMode"></p-inputSwitch>
+            <label for="darkMode">{{ 'SETTINGS.DARK_MODE' | translate }}</label>
           </div>
           <div class="field-switch">
-            <p-inputSwitch formControlName="dark_mode" inputId="dark_mode"></p-inputSwitch>
-            <label for="dark_mode">{{ 'SETTINGS.DARK_MODE' | translate }}</label>
-          </div>
-          <div class="field-switch">
-            <p-inputSwitch formControlName="notifications_enabled" inputId="notifications_enabled"></p-inputSwitch>
-            <label for="notifications_enabled">{{ 'SETTINGS.NOTIFICATIONS' | translate }}</label>
+            <p-inputSwitch formControlName="notificationsEnabled" inputId="notificationsEnabled"></p-inputSwitch>
+            <label for="notificationsEnabled">{{ 'SETTINGS.NOTIFICATIONS' | translate }}</label>
           </div>
           <p-button type="submit" [label]="'SETTINGS.SAVE_BUTTON' | translate" icon="pi pi-save"></p-button>
         </form>
       </div>
-    </div>
 
     <div class="settings-column">
       <div class="settings-card">
