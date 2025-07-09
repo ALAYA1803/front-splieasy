@@ -12,36 +12,47 @@ export class BillsService {
 
   constructor(private http: HttpClient) { }
 
-  // Función privada para obtener los headers. La usaremos en todos los métodos.
+  // ✅ Función privada para obtener los headers (igual que MemberContributionService)
   private getHeaders(): HttpHeaders {
     const token = localStorage.getItem('accessToken');
-    // Si no hay token, el backend rechazará la petición, lo cual es correcto.
     return new HttpHeaders({
       'Authorization': `Bearer ${token}`,
       'Content-Type': 'application/json'
     });
   }
 
+  // ✅ Crear bill (siguiendo el patrón del servicio que funciona)
   createBill(billData: CreateBillRequest): Observable<BillResponse> {
-    return this.http.post<BillResponse>(this.billsUrl, billData, { headers: this.getHeaders() });
+    const headers = this.getHeaders();
+    console.log('📤 BillsService enviando request:', billData);
+    return this.http.post<BillResponse>(this.billsUrl, billData, { headers });
   }
 
+  // ✅ Obtener todas las bills
   getAllBills(): Observable<BillResponse[]> {
-    return this.http.get<BillResponse[]>(this.billsUrl, { headers: this.getHeaders() });
+    const headers = this.getHeaders();
+    return this.http.get<BillResponse[]>(this.billsUrl, { headers });
   }
 
+  // ✅ Obtener bill por ID
   getBillById(billId: number): Observable<BillResponse> {
-    return this.http.get<BillResponse>(`${this.billsUrl}/${billId}`, { headers: this.getHeaders() });
+    const headers = this.getHeaders();
+    return this.http.get<BillResponse>(`${this.billsUrl}/${billId}`, { headers });
   }
 
+  // ✅ Actualizar bill
   updateBill(billId: number, billData: CreateBillRequest): Observable<BillResponse> {
-    return this.http.put<BillResponse>(`${this.billsUrl}/${billId}`, billData, { headers: this.getHeaders() });
+    const headers = this.getHeaders();
+    return this.http.put<BillResponse>(`${this.billsUrl}/${billId}`, billData, { headers });
   }
 
+  // ✅ Eliminar bill
   deleteBill(billId: number): Observable<void> {
-    return this.http.delete<void>(`${this.billsUrl}/${billId}`, { headers: this.getHeaders() });
+    const headers = this.getHeaders();
+    return this.http.delete<void>(`${this.billsUrl}/${billId}`, { headers });
   }
 
+  // ✅ Obtener bills por household
   getBillsByHousehold(householdId: number): Observable<BillResponse[]> {
     return this.getAllBills().pipe(
       map(bills => bills.filter(bill => bill.householdId === householdId))

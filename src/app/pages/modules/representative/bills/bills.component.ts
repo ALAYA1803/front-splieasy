@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BillResponse, CreateBillRequest } from '../../interfaces/bills';
@@ -7,6 +7,7 @@ import { BillsService } from '../../services/bills.service';
 import { HouseholdService } from '../../services/household.service';
 import { AuthService } from '../../../../core/services/auth.service';
 import { forkJoin } from 'rxjs';
+import { environment } from '../../../../core/environments/environment';
 
 @Component({
   selector: 'app-bills',
@@ -17,6 +18,7 @@ import { forkJoin } from 'rxjs';
 export class BillsComponent implements OnInit {
   bills: (BillResponse & { createdByName?: string })[] = [];
   householdId: number = 0;
+  householdName: string = '';
   loading = true;
   formVisible = false;
   billForm!: FormGroup;
@@ -25,12 +27,23 @@ export class BillsComponent implements OnInit {
   errorMessage = '';
   editingBillId: number | null = null;
 
+  private readonly API_URL = environment.urlBackend;
+
+  // MÉTODO AGREGADO: Headers de autorización (copiado de MembersComponent)
+  private getAuthHeaders(): HttpHeaders {
+    const token = localStorage.getItem('accessToken');
+    return new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
+  }
+
   constructor(
     private billsService: BillsService,
     private householdService: HouseholdService,
     private fb: FormBuilder,
-    private authService: AuthService
-  ) {}
+    private authService: AuthService,
+    private http: HttpClient // AGREGADO: HttpClient directo
+  ) { }
 
   ngOnInit() {
     const userString = localStorage.getItem('currentUser');
@@ -59,6 +72,7 @@ export class BillsComponent implements OnInit {
       next: (households) => {
         if (households && households.length > 0) {
           this.householdId = households[0].id;
+          this.householdName = households[0].name || 'Mi Hogar';
           this.loadBillsAndUsers();
         } else {
           this.errorMessage = 'Como representante, aún no has creado un hogar.';
@@ -104,8 +118,9 @@ export class BillsComponent implements OnInit {
 
     this.editingBillId = null;
     this.formVisible = true;
+
     this.billForm.reset({
-      descripcion: '',
+      description: '',
       monto: null,
       fecha: new Date().toISOString().substring(0, 10)
     });
@@ -121,6 +136,7 @@ export class BillsComponent implements OnInit {
     }
   }
 
+  // En BillsComponent, cambia este método:
   private createBill() {
     const request: CreateBillRequest = {
       householdId: this.householdId,
@@ -130,17 +146,28 @@ export class BillsComponent implements OnInit {
       createdBy: this.currentUser.id
     };
 
-    this.billsService.createBill(request).subscribe({
-      next: () => {
+    console.log('📤 Enviando request:', request);
+
+    this.http.post<BillResponse>(`${this.API_URL}/bills`, request, {
+      headers: this.getAuthHeaders()
+    }).subscribe({
+      next: (createdBill) => {
+        console.log('✅ Bill actualizado exitosamente:', createdBill);
         this.formVisible = false;
+        this.editingBillId = null;
         this.loadBillsAndUsers();
       },
-      error: (error) => console.error('Error creating bill:', error)
+      error: (error) => {
+        console.error('❌ Error updating bill:', error);
+        alert('Error al actualizar la factura: ' + (error.error?.message || 'Error desconocido'));
+      }
     });
   }
 
+  // MÉTODO CORREGIDO: updateBill() usando HttpClient directo con headers
   private updateBill() {
     if (!this.editingBillId) return;
+
     const request: CreateBillRequest = {
       householdId: this.householdId,
       createdBy: this.currentUser.id,
@@ -149,15 +176,21 @@ export class BillsComponent implements OnInit {
       fecha: this.billForm.value.fecha
     };
 
-    this.billsService.updateBill(this.editingBillId, request).subscribe({
+    console.log('📤 Actualizando bill:', request);
+
+    // USAR HttpClient directo con headers de autorización
+    this.http.put<BillResponse>(`${this.API_URL}/bills/${this.editingBillId}`, request, {
+      headers: this.getAuthHeaders()
+    }).subscribe({
       next: (updatedBill) => {
+        console.log('✅ Bill actualizado exitosamente:', updatedBill);
         this.formVisible = false;
         this.editingBillId = null;
         this.loadBillsAndUsers();
       },
       error: (error) => {
-        console.error('Error updating bill:', error);
-        alert('Error al actualizar la factura.');
+        console.error('❌ Error updating bill:', error);
+        alert('Error al actualizar la factura: ' + (error.error?.message || 'Error desconocido'));
       }
     });
   }
@@ -172,13 +205,23 @@ export class BillsComponent implements OnInit {
     });
   }
 
+  // MÉTODO CORREGIDO: deleteBill() usando HttpClient directo con headers
   deleteBill(billId: number) {
-    this.billsService.deleteBill(billId).subscribe({
-      next: () => {
-        this.bills = this.bills.filter(b => b.id !== billId);
-      },
-      error: (error) => console.error('Error deleting bill:', error)
-    });
+    if (confirm('¿Está seguro de que desea eliminar esta factura?')) {
+      // USAR HttpClient directo con headers de autorización
+      this.http.delete(`${this.API_URL}/bills/${billId}`, {
+        headers: this.getAuthHeaders()
+      }).subscribe({
+        next: () => {
+          this.bills = this.bills.filter(b => b.id !== billId);
+          console.log('✅ Bill eliminado exitosamente');
+        },
+        error: (error) => {
+          console.error('❌ Error deleting bill:', error);
+          alert('Error al eliminar la factura: ' + (error.error?.message || 'Error desconocido'));
+        }
+      });
+    }
   }
 
   cancelForm() {
@@ -198,5 +241,9 @@ export class BillsComponent implements OnInit {
     this.loading = true;
     this.errorMessage = '';
     this.loadUserHousehold();
+  }
+
+  getCurrentHouseholdInfo(): string {
+    return `${this.householdName} (ID: ${this.householdId})`;
   }
 }

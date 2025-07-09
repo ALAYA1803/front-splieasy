@@ -83,6 +83,21 @@
     header="{{ editingBillId ? ('BILLS.EDIT_BILL_DIALOG' | translate) : ('BILLS.NEW_BILL_DIALOG' | translate) }}"
     [(visible)]="formVisible" [modal]="true" [closable]="true" [dismissableMask]="true" [style]="{ width: '500px' }"
     (onHide)="cancelForm()">
+
+    <!-- Información del hogar y usuario - NUEVO -->
+    <div class="form-info" *ngIf="householdName">
+      <div class="info-card">
+        <div class="info-item">
+          <i class="pi pi-home"></i>
+          <span><strong>Hogar:</strong> {{ householdName }}</span>
+        </div>
+        <div class="info-item">
+          <i class="pi pi-user"></i>
+          <span><strong>Creado por:</strong> {{ currentUser.username }}</span>
+        </div>
+      </div>
+    </div>
+
     <form [formGroup]="billForm" (ngSubmit)="submit()">
       <div class="form-group">
         <label for="description">{{ 'BILLS.DESCRIPTION' | translate }} *</label>
