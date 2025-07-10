@@ -71,6 +71,7 @@ export class ContributionsComponent implements OnInit {
     });
   }
 
+  // SOLUCIÓN 1: Mejorar el filtrado en loadData() para evitar duplicados
   private loadData(): void {
     const currentUserData = localStorage.getItem('currentUser');
     if (!currentUserData) {
@@ -104,49 +105,55 @@ export class ContributionsComponent implements OnInit {
         console.log('Contributions:', contributions);
         console.log('MemberContributions:', memberContributions);
 
-        // Verificar estructura de bills
-        if (bills.length > 0) {
-          console.log('🧾 Estructura de bill:', bills[0]);
-          console.log('🧾 Propiedades disponibles en bills:', Object.keys(bills[0]));
+        // Crear lista de miembros únicos
+        const representative = users.find(u => u.id === this.currentUser.id);
+        const uniqueMemberIds = new Set<number>();
+
+        // Agregar miembros del hogar
+        hms.forEach(hm => {
+          uniqueMemberIds.add(hm.userId);
+        });
+
+        // Agregar representante si no está ya incluido
+        if (representative) {
+          uniqueMemberIds.add(representative.id);
         }
 
-        const representative = users.find(u => u.id === this.currentUser.id);
-        this.members = [
-          ...hms.map(hm => ({
-            ...hm,
-            user: users.find(u => u.id === hm.userId)
-          })),
-          ...(representative ? [{
-            userId: representative.id,
+        // Crear array de miembros únicos
+        this.members = Array.from(uniqueMemberIds).map(userId => {
+          const householdMember = hms.find(hm => hm.userId === userId);
+          const user = users.find(u => u.id === userId);
+
+          return {
+            userId: userId,
             householdId: this.householdId,
-            user: representative
-          }] : [])
-        ];
+            user: user,
+            isRepresentative: userId === this.currentUser.id
+          };
+        });
+
         this.miembros = this.members.map(m => ({
           id: m.userId,
           name: m.user?.username || 'Sin nombre',
-          role: m.user?.role || 'MIEMBRO'
+          role: m.isRepresentative ? 'REPRESENTANTE' : 'MIEMBRO'
         }));
 
-        console.log('🏠 Estructura de memberContributions:');
-        if (memberContributions.length > 0) {
-          console.log('Primer elemento:', memberContributions[0]);
-          console.log('Propiedades disponibles:', Object.keys(memberContributions[0]));
-        }
+        console.log('👥 Miembros únicos procesados:', this.members);
+        console.log('👥 Miembros para selector:', this.miembros);
 
+        // Procesar contribuciones con filtrado mejorado
         this.contributions = contributions
           .filter(c => {
-            // ✅ CORREGIDO: Verificar que la contribución pertenezca al hogar actual
             const belongsToCurrentHousehold = c.householdId === this.householdId;
             const hasBill = this.bills.some(b => b.id === c.billId);
 
             if (!belongsToCurrentHousehold) {
-              console.warn(`⚠️ Contribución ${c.id} no pertenece al hogar actual (householdId: ${c.householdId} vs ${this.householdId})`);
+              console.warn(`⚠️ Contribución ${c.id} no pertenece al hogar actual`);
               return false;
             }
 
             if (!hasBill) {
-              console.warn(`⚠️ Contribución ${c.id} no tiene factura asociada (billId: ${c.billId})`);
+              console.warn(`⚠️ Contribución ${c.id} no tiene factura asociada`);
               return false;
             }
 
@@ -155,34 +162,54 @@ export class ContributionsComponent implements OnInit {
           .map(c => {
             const bill = this.bills.find(b => b.id === c.billId);
 
-            // ✅ CORREGIDO: Filtrar solo las contribuciones de miembros del hogar actual
-            const details = memberContributions
+            // Filtrar memberContributions y eliminar duplicados
+            const memberContributionsForThisContribution = memberContributions.filter(
+              (mc: any) => mc.contributionId === c.id
+            );
+
+            // Eliminar duplicados basados en contributionId + memberId
+            const uniqueMemberContributions = memberContributionsForThisContribution.filter(
+              (mc: any, index: number, array: any[]) => {
+                return array.findIndex(item =>
+                  item.contributionId === mc.contributionId &&
+                  item.memberId === mc.memberId
+                ) === index;
+              }
+            );
+
+            console.log(`🔍 Contribución ${c.id}:`);
+            console.log(`   📋 MemberContributions originales: ${memberContributionsForThisContribution.length}`);
+            console.log(`   📋 MemberContributions únicos: ${uniqueMemberContributions.length}`);
+
+            // Filtrar solo miembros que pertenecen al hogar actual
+            const details = uniqueMemberContributions
               .filter((mc: any) => {
-                const belongsToContribution = mc.contributionId === c.id;
                 const memberBelongsToHousehold = this.members.some(m => m.userId === mc.memberId);
 
-                if (belongsToContribution && !memberBelongsToHousehold) {
+                if (!memberBelongsToHousehold) {
                   console.warn(`⚠️ MemberContribution ${mc.id} tiene un miembro que no pertenece al hogar actual (memberId: ${mc.memberId})`);
                 }
 
-                return belongsToContribution && memberBelongsToHousehold;
+                return memberBelongsToHousehold;
               })
               .map((mc: any) => {
+                const member = this.members.find(m => m.userId === mc.memberId);
                 return {
                   ...mc,
                   memberId: mc.memberId,
                   monto: mc.monto,
                   status: mc.status,
                   pagado_en: mc.pagadoEn,
-                  user: this.members.find(m => m.userId === mc.memberId)?.user
+                  user: member?.user
                 };
               });
 
             const sumaRealDeDetalles = details.reduce((sum, detail) => {
               const monto = detail.monto || 0;
-              console.log(`💰 Sumando monto ${monto} del miembro ${detail.memberId}`);
               return sum + monto;
             }, 0);
+
+            console.log(`💰 Contribución ${c.id}: ${details.length} detalles únicos, monto total: ${sumaRealDeDetalles}`);
 
             return {
               ...c,
@@ -192,12 +219,7 @@ export class ContributionsComponent implements OnInit {
             };
           });
 
-        console.log('📄 Contribuciones finales procesadas:');
-        this.contributions.forEach(c => {
-          console.log(`Contribución ${c.id}: ${c.details.length} detalles y monto total: ${c.montoTotal}`);
-        });
-
-        console.log('✅ Contribuciones cargadas:', this.contributions);
+        console.log('✅ Contribuciones finales procesadas:', this.contributions);
         this.loading = false;
       });
     });
@@ -397,6 +419,7 @@ export class ContributionsComponent implements OnInit {
     });
   }
 
+  // SOLUCIÓN 2: Verificar duplicados antes de crear MemberContributions
   private calculateDivisionForSelected(
     montoTotal: number,
     strategy: string,
@@ -410,20 +433,29 @@ export class ContributionsComponent implements OnInit {
     console.log('📊 Estrategia:', strategy);
     console.log('🆔 Contribution ID:', contributionId);
     console.log('👥 Miembros seleccionados:', selectedMembers);
-    console.log('🔢 Cantidad de miembros seleccionados:', selectedMembers.length);
 
-    // Verificar que selectedMembers no esté vacío
-    if (selectedMembers.length === 0) {
+    // Verificar que no haya duplicados en selectedMembers
+    const uniqueSelectedMembers = selectedMembers.filter((member, index, array) => {
+      return array.findIndex(m => m.userId === member.userId) === index;
+    });
+
+    if (uniqueSelectedMembers.length !== selectedMembers.length) {
+      console.warn('⚠️ Se encontraron miembros duplicados, se eliminaron automáticamente');
+      console.log('📊 Miembros originales:', selectedMembers.length);
+      console.log('📊 Miembros únicos:', uniqueSelectedMembers.length);
+    }
+
+    if (uniqueSelectedMembers.length === 0) {
       console.error('❌ No hay miembros seleccionados para calcular la división');
       return [];
     }
 
     if (strategy === 'EQUAL') {
-      const montoPorMiembro = montoTotal / selectedMembers.length;
+      const montoPorMiembro = montoTotal / uniqueSelectedMembers.length;
       console.log('💰 Monto por miembro (división igualitaria):', montoPorMiembro);
-      console.log('🔢 Dividiendo entre:', selectedMembers.length, 'miembros');
+      console.log('🔢 Dividiendo entre:', uniqueSelectedMembers.length, 'miembros únicos');
 
-      selectedMembers.forEach((member, index) => {
+      uniqueSelectedMembers.forEach((member, index) => {
         const memberContribution = {
           contributionId: contributionId,
           memberId: member.userId,
@@ -435,16 +467,16 @@ export class ContributionsComponent implements OnInit {
         memberContributions.push(memberContribution);
       });
     } else if (strategy === 'INCOME_BASED') {
-      const totalIngresos = selectedMembers.reduce((sum, member) => {
+      const totalIngresos = uniqueSelectedMembers.reduce((sum, member) => {
         const ingresos = member.user?.ingresos || 0;
         console.log(`💰 Ingresos del miembro ${member.userId} (${member.user?.username}): ${ingresos}`);
         return sum + ingresos;
       }, 0);
 
-      console.log('💰 Total ingresos de miembros seleccionados:', totalIngresos);
+      console.log('💰 Total ingresos de miembros seleccionados únicos:', totalIngresos);
 
       if (totalIngresos > 0) {
-        selectedMembers.forEach((member, index) => {
+        uniqueSelectedMembers.forEach((member, index) => {
           const ingresosMiembro = member.user?.ingresos || 0;
           const porcentaje = ingresosMiembro / totalIngresos;
           const montoMiembro = montoTotal * porcentaje;
@@ -457,12 +489,11 @@ export class ContributionsComponent implements OnInit {
             pagadoEn: null
           };
           console.log(`👤 ${index + 1}. Creando MemberContribution (income-based) para miembro ${member.userId} (${member.user?.username}):`, memberContribution);
-          console.log(`   📊 Ingresos: ${ingresosMiembro}, Porcentaje: ${(porcentaje * 100).toFixed(2)}%, Monto: ${montoMiembro}`);
           memberContributions.push(memberContribution);
         });
       } else {
-        console.warn('⚠️ No hay ingresos registrados en los miembros seleccionados, usando división igualitaria');
-        return this.calculateDivisionForSelected(montoTotal, 'EQUAL', contributionId, selectedMembers);
+        console.warn('⚠️ No hay ingresos registrados, usando división igualitaria');
+        return this.calculateDivisionForSelected(montoTotal, 'EQUAL', contributionId, uniqueSelectedMembers);
       }
     }
 
@@ -472,7 +503,6 @@ export class ContributionsComponent implements OnInit {
     console.log('💰 Monto total original:', montoTotal);
     console.log('💰 Monto total calculado:', totalCalculado);
     console.log('📋 Contribuciones generadas:', memberContributions.length);
-    console.log('📋 MemberContributions completas:', memberContributions);
 
     return memberContributions;
   }
