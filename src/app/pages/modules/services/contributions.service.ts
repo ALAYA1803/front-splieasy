@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../../core/environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Contribution, CreateContributionRequest, UpdateContributionRequest } from '../interfaces/contributions';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -10,8 +10,9 @@ import { Observable } from 'rxjs';
 export class ContributionsService {
   private contributionsUrl = `${environment.urlBackend}/contributions`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
+  // ✅ Función privada para obtener los headers (igual que BillsService)
   private getHeaders(): HttpHeaders {
     const token = localStorage.getItem('accessToken');
     return new HttpHeaders({
@@ -20,51 +21,41 @@ export class ContributionsService {
     });
   }
 
-  /**
-   * Obtiene todas las contribuciones
-   */
+  // ✅ Crear contribución (siguiendo el patrón del servicio que funciona)
+  createContribution(contributionData: CreateContributionRequest): Observable<Contribution> {
+    const headers = this.getHeaders();
+    console.log('📤 ContributionsService enviando request:', contributionData);
+    return this.http.post<Contribution>(this.contributionsUrl, contributionData, { headers });
+  }
+
+  // ✅ Obtener todas las contribuciones
   getAllContributions(): Observable<Contribution[]> {
     const headers = this.getHeaders();
     return this.http.get<Contribution[]>(this.contributionsUrl, { headers });
   }
 
-  /**
-   * Obtiene una contribución por ID
-   */
+  // ✅ Obtener contribución por ID
   getContributionById(id: number): Observable<Contribution> {
     const headers = this.getHeaders();
     return this.http.get<Contribution>(`${this.contributionsUrl}/${id}`, { headers });
   }
 
-  /**
-   * Crea una nueva contribución
-   */
-  createContribution(contribution: CreateContributionRequest): Observable<Contribution> {
+  // ✅ Actualizar contribución
+  updateContribution(id: number, contributionData: UpdateContributionRequest): Observable<Contribution> {
     const headers = this.getHeaders();
-    return this.http.post<Contribution>(this.contributionsUrl, contribution, { headers });
+    return this.http.put<Contribution>(`${this.contributionsUrl}/${id}`, contributionData, { headers });
   }
 
-  /**
-   * Actualiza una contribución existente
-   */
-  updateContribution(id: number, contribution: UpdateContributionRequest): Observable<Contribution> {
-    const headers = this.getHeaders();
-    return this.http.put<Contribution>(`${this.contributionsUrl}/${id}`, contribution, { headers });
-  }
-
-  /**
-   * Elimina una contribución por ID
-   */
+  // ✅ Eliminar contribución
   deleteContribution(id: number): Observable<void> {
     const headers = this.getHeaders();
     return this.http.delete<void>(`${this.contributionsUrl}/${id}`, { headers });
   }
 
-  /**
-   * Obtiene contribuciones filtradas por household ID (si tu backend lo soporta)
-   */
+  // ✅ Obtener contribuciones por household (siguiendo el patrón de BillsService)
   getContributionsByHouseholdId(householdId: number): Observable<Contribution[]> {
-    const headers = this.getHeaders();
-    return this.http.get<Contribution[]>(`${this.contributionsUrl}?householdId=${householdId}`, { headers });
+    return this.getAllContributions().pipe(
+      map(contributions => contributions.filter(contribution => contribution.householdId === householdId))
+    );
   }
 }
