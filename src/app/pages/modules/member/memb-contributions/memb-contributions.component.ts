@@ -25,7 +25,7 @@ export class MembContributionsComponent implements OnInit {
   contributions: any[] = [];
   isLoading = true;
   // Define la URL base de tu API desplegada para fácil mantenimiento.
-  private apiUrl = 'https://backend-app-1-vd66.onrender.com/api/v1';
+  private apiUrl = 'https://back-spliteasy.onrender.com/api/v1';
 
   constructor(private http: HttpClient) {}
 

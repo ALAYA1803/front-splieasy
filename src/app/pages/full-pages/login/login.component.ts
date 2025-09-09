@@ -18,7 +18,7 @@ export class LoginComponent {
 
   constructor(
     private authService: AuthService,
-    private sidebarService: SidebarService, // ✅ inyectar el servicio aquí
+    private sidebarService: SidebarService,
     private router: Router
   ) {}
 
@@ -40,10 +40,8 @@ export class LoginComponent {
           next: (user: User) => {
             console.log('Usuario obtenido:', user);
 
-            // ✅ Guardar en localStorage para el sidebar
             localStorage.setItem('currentUser', JSON.stringify(user));
 
-            // ✅ Generar menú basado en el rol
             this.sidebarService.generateMenu();
 
             const userRole = user.roles[0];

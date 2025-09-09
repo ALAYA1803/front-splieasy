@@ -32,7 +32,7 @@ export class MembSettingsComponent implements OnInit {
     const user = JSON.parse(localStorage.getItem('currentUser')!);
     this.userId = +user.id;
 
-    this.http.get<any[]>(`https://backend-app-1-vd66.onrender.com/api/v1/settings?user_id=${this.userId}`).subscribe(res => {
+    this.http.get<any[]>(`https://back-spliteasy.onrender.com/api/v1/settings?user_id=${this.userId}`).subscribe(res => {
       if (res.length > 0) {
         this.settings = { ...res[0] };
         this.settingsId = res[0].id;
@@ -41,7 +41,7 @@ export class MembSettingsComponent implements OnInit {
   }
 
   save(): void {
-    this.http.patch(`https://backend-app-1-vd66.onrender.com/api/v1/settings/${this.settingsId}`, this.settings).subscribe(() => {
+    this.http.patch(`https://back-spliteasy.onrender.com/api/v1/settings/${this.settingsId}`, this.settings).subscribe(() => {
       alert('Preferencias actualizadas correctamente.');
     });
   }
