@@ -17,7 +17,6 @@ import { SettingsComponent } from './settings/settings.component';
 
 @NgModule({
   declarations: [
-    HomeComponent,
     ContributionsComponent,
     BillsComponent
   ],
@@ -33,6 +32,7 @@ import { SettingsComponent } from './settings/settings.component';
     AvatarModule,
     DialogModule,
     TooltipModule,
+    HomeComponent,
     MembersComponent,
     SettingsComponent
   ]

@@ -130,6 +130,59 @@
   color: var(--text-secondary);
 }
 
+.onboarding-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  min-height: 70vh;
+}
+
+.onboarding-card {
+  max-width: 600px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.onboarding-card .card-title {
+  color: #3498db;
+}
+
+.field label {
+  display: block;
+  color: var(--text-secondary);
+  font-weight: 500;
+  margin-bottom: 0.75rem;
+}
+
+.form-actions {
+  margin-top: 2rem;
+  text-align: right;
+}
+
+:host ::ng-deep .p-inputtext,
+:host ::ng-deep .p-inputtextarea,
+:host ::ng-deep .p-dropdown {
+  background-color: var(--background-card) !important;
+  border: 1px solid var(--border-color) !important;
+  color: var(--text-primary) !important;
+  width: 100%;
+}
+
+:host ::ng-deep .p-dropdown .p-dropdown-label {
+  color: var(--text-primary) !important;
+}
+
+:host ::ng-deep .p-button {
+  background-color: var(--brand-primary) !important;
+  border-color: var(--brand-primary) !important;
+}
+
+:host ::ng-deep .p-button:hover {
+  background-color: #1e88e5 !important;
+  border-color: #1e88e5 !important;
+}
+
 @keyframes fadeInUp {
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }

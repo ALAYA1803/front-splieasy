@@ -471,5 +471,20 @@
       "BUTTON_TEXT_LOGGING_OUT": "Cerrando...",
       "ARIA_LABEL": "Cerrar sesión"
     }
+  },
+  "ONBOARDING": {
+    "TITLE": "¡Bienvenido a SplitEasy!",
+    "SUBTITLE": "Parece que eres nuevo por aquí. Para empezar, crea tu primer hogar.",
+    "FORM": {
+      "NAME_LABEL": "Nombre del Hogar",
+      "DESCRIPTION_LABEL": "Descripción",
+      "CURRENCY_LABEL": "Moneda",
+      "SUBMIT_BUTTON": "Crear Hogar"
+    }
+  },
+  "GENERAL": {
+    "LOADING": "Cargando..."
   }
+
+
 }

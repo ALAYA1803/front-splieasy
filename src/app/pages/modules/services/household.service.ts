@@ -20,7 +20,6 @@ export class HouseholdService {
     });
   }
 
-  // Obtener todos los households y filtrar por representante en el frontend
   getHouseholdByRepresentante(representanteId: number): Observable<Household[]> {
     const headers = this.getAuthHeaders();
     return this.http.get<Household[]>(this.householdUrl, { headers })
@@ -29,16 +28,19 @@ export class HouseholdService {
       );
   }
 
-  // Obtener household por ID (este ya funciona)
   getHouseholdById(id: number): Observable<Household> {
     const headers = this.getAuthHeaders();
     const url = `${this.householdUrl}/${id}`;
     return this.http.get<Household>(url, { headers });
   }
 
-  // Método adicional para obtener todos los households
   getAllHouseholds(): Observable<Household[]> {
     const headers = this.getAuthHeaders();
     return this.http.get<Household[]>(this.householdUrl, { headers });
+  }
+
+  createHousehold(household: { name: string, description: string, currency: string, representanteId: number }): Observable<Household> {
+    const headers = this.getAuthHeaders();
+    return this.http.post<Household>(this.householdUrl, household, { headers });
   }
 }

@@ -472,5 +472,18 @@
       "BUTTON_TEXT_LOGGING_OUT": "Logging out...",
       "ARIA_LABEL": "Log out"
     }
+  },
+  "ONBOARDING": {
+    "TITLE": "Welcome to SplitEasy!",
+    "SUBTITLE": "It looks like you're new around here. To get started, create your first household.",
+    "FORM": {
+      "NAME_LABEL": "Household Name",
+      "DESCRIPTION_LABEL": "Description",
+      "CURRENCY_LABEL": "Currency",
+      "SUBMIT_BUTTON": "Create Household"
+    }
+  },
+  "GENERAL": {
+    "LOADING": "Loading..."
   }
 }
