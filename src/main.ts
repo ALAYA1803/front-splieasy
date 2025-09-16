@@ -1,11 +1,13 @@
-import { platformBrowser } from '@angular/platform-browser';
+import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { AppModule } from './app/app.module';
-
 import { environment } from './app/core/environments/environment';
 
-console.log('🌍 Entorno cargado:', environment);
+if (!environment.production) {
+  console.log('🌍 Entorno cargado:', environment);
+}
 
-platformBrowser().bootstrapModule(AppModule, {
-  ngZoneEventCoalescing: true,
-})
+platformBrowserDynamic()
+  .bootstrapModule(AppModule, {
+    ngZoneEventCoalescing: true,
+  })
   .catch(err => console.error(err));

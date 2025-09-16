@@ -1,8 +1,10 @@
-<div *ngIf="loading" class="loading-container">
+<!-- Loading -->
+<div *ngIf="loading" class="loading-container" aria-live="polite" aria-busy="true">
   <p-progressSpinner></p-progressSpinner>
   <span>{{ 'GENERAL.LOADING' | translate }}</span>
 </div>
 
+<!-- Onboarding -->
 <div *ngIf="!loading && showOnboarding" class="onboarding-container">
   <div class="main-card onboarding-card">
     <div class="card-header">
@@ -16,21 +18,37 @@
           <label for="name">{{ 'ONBOARDING.FORM.NAME_LABEL' | translate }}</label>
           <input id="name" type="text" pInputText formControlName="name">
         </div>
+
         <div class="field mb-4">
           <label for="description">{{ 'ONBOARDING.FORM.DESCRIPTION_LABEL' | translate }}</label>
           <textarea id="description" pInputTextarea formControlName="description" [rows]="3"></textarea>
         </div>
+
         <div class="field mb-4">
           <label for="currency">{{ 'ONBOARDING.FORM.CURRENCY_LABEL' | translate }}</label>
-          <p-dropdown id="currency" [options]="currencies" formControlName="currency" appendTo="body"></p-dropdown>
+          <!-- Si tus options son strings (['PEN','USD','EUR']), esto funciona tal cual -->
+          <p-dropdown
+            id="currency"
+            [options]="currencies"
+            formControlName="currency"
+            appendTo="body">
+          </p-dropdown>
         </div>
       </div>
+
       <div class="form-actions">
-        <p-button type="submit" [label]="'ONBOARDING.FORM.SUBMIT_BUTTON' | translate" [disabled]="onboardingForm.invalid" styleClass="p-button-lg"></p-button>
+        <p-button
+          type="submit"
+          [label]="'ONBOARDING.FORM.SUBMIT_BUTTON' | translate"
+          [disabled]="onboardingForm.invalid || loading"
+          styleClass="p-button-lg">
+        </p-button>
       </div>
     </form>
   </div>
 </div>
+
+<!-- Dashboard -->
 <div *ngIf="!loading && !showOnboarding" class="dashboard-container">
   <div class="main-card">
     <div class="card-header">
@@ -38,17 +56,19 @@
       <span class="card-subtitle">{{ 'SUMMARY.SUBTITLE' | translate }}</span>
     </div>
 
-    <div class="household-info" *ngIf="household">
+    <!-- Evita NG8107 usando alias -->
+    <div class="household-info" *ngIf="household as h">
       <h2 class="household-name">
         <i class="pi pi-home"></i>
-        <span>{{ household?.name }}</span>
+        <span>{{ h.name }}</span>
       </h2>
       <p class="household-description">
-        {{ household?.description }}
+        {{ h.description }}
       </p>
     </div>
   </div>
 
+  <!-- Stats -->
   <div class="stats-grid">
     <div class="stat-card">
       <div class="stat-icon-wrapper members">

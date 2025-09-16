@@ -4,7 +4,7 @@ export interface Contribution {
   householdId: number;
   description: string;
   strategy: string;
-  fechaLimite: string; // formato: "YYYY-MM-DD"
+  fechaLimite: string;
 }
 
 export interface CreateContributionRequest {
@@ -12,7 +12,8 @@ export interface CreateContributionRequest {
   householdId: number;
   description: string;
   strategy: string;
-  fechaLimite: string; // formato: "YYYY-MM-DD"
+  fechaLimite: string;
+  memberIds?: number[];
 }
 
 export interface UpdateContributionRequest {
@@ -20,5 +21,5 @@ export interface UpdateContributionRequest {
   householdId: number;
   description: string;
   strategy: string;
-  fechaLimite: string; // formato: "YYYY-MM-DD"
+  fechaLimite: string;
 }

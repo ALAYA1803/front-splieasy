@@ -1,53 +1,43 @@
 import { Injectable } from '@angular/core';
 import {
-  HttpEvent,
-  HttpHandler,
-  HttpInterceptor,
-  HttpRequest
+  HttpEvent, HttpHandler, HttpInterceptor, HttpRequest
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../environments/environment';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const token = localStorage.getItem('accessToken');
+    const token =
+      localStorage.getItem('accessToken') ||
+      localStorage.getItem('access_token') ||
+      localStorage.getItem('token') ||
+      (() => {
+        try {
+          const cu = JSON.parse(localStorage.getItem('currentUser') || 'null');
+          return cu?.accessToken || cu?.token || null;
+        } catch { return null; }
+      })();
 
-    const publicApiRoutes = [
-      '/api/v1/authentication/sign-up',
-      '/api/v1/authentication/sign-in'
-    ];
+    const isAbsolute = /^https?:\/\//i.test(req.url);
+    const isBackendUrl =
+      (isAbsolute && req.url.startsWith(environment.urlBackend)) ||
+      (!isAbsolute && req.url.startsWith('/api/')); // por si usas paths relativos
 
-    // --- INICIO DE LA CORRECCIÓN ---
-    // Verificamos si la URL es una llamada a la API o un recurso local (como /assets)
-    const isApiRoute = req.url.startsWith('http');
+    const path = isAbsolute ? new URL(req.url).pathname : req.url;
+    const isPublic = ['/api/v1/authentication/sign-up', '/api/v1/authentication/sign-in'].includes(path);
 
-    // Solo intentamos extraer el path si es una ruta de la API
-    const path = isApiRoute ? new URL(req.url).pathname : req.url;
+    console.log(' Interceptando:', path);
+    console.log(' Es backend URL:', isBackendUrl, ' | Pública:', isPublic);
+    console.log(' Token disponible:', !!token);
 
-    // Una ruta es pública si es una ruta de la API y está en nuestra lista de rutas públicas.
-    const isPublicRoute = publicApiRoutes.includes(path);
-    // --- FIN DE LA CORRECCIÓN ---
-
-
-    // Tus logs siguen siendo útiles para depurar
-    console.log('🌐 Interceptando:', path);
-    console.log('🔐 Es ruta de API pública:', isPublicRoute);
-    console.log('🎫 Token disponible:', !!token);
-
-
-    // La lógica para añadir el token ahora solo aplica a rutas de API no públicas
-    if (isApiRoute && !isPublicRoute && token) {
-      const authReq = req.clone({
-        setHeaders: {
-          Authorization: `Bearer ${token}`
-        }
-      });
-      console.log('✅ Token agregado a la petición de API');
+    if (isBackendUrl && !isPublic && token) {
+      const authReq = req.clone({ setHeaders: { Authorization: `Bearer ${token}` } });
+      console.log(' Token agregado:', (authReq.headers.get('Authorization') || '').slice(0, 25) + '...');
       return next.handle(authReq);
     }
 
-    // Para las rutas públicas y las peticiones locales (traducciones), la petición pasa sin modificarse.
-    console.log('🚫 Petición local o pública, se envía sin token.');
+    console.log(' Sin token (no backend o pública)');
     return next.handle(req);
   }
 }

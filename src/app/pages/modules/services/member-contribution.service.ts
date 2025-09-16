@@ -1,56 +1,54 @@
 import { Injectable } from '@angular/core';
-import { environment } from '../../../core/environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { MemberContribution } from '../interfaces/member-contribution';
 import { Observable } from 'rxjs';
+import { environment } from '../../../core/environments/environment';
+import { MemberContribution } from '../interfaces/member-contribution';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class MemberContributionService {
-  private memberContributionUrl = `${environment.urlBackend}/member-contributions`;
+  private readonly base = environment.urlBackend;
+  private readonly url  = `${this.base}/member-contributions`;
 
   constructor(private http: HttpClient) {}
 
-  private getHeaders(): HttpHeaders {
-    const token = localStorage.getItem('accessToken');
-    return new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json'
-    });
+  private authHeaders(): HttpHeaders {
+    const token = localStorage.getItem('accessToken') || '';
+    const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+    return new HttpHeaders(headers);
   }
 
-  // ✅ Obtener todas las contribuciones
   getAll(): Observable<MemberContribution[]> {
-    const headers = this.getHeaders();
-    return this.http.get<MemberContribution[]>(this.memberContributionUrl, { headers });
+    return this.http.get<MemberContribution[]>(this.url, { headers: this.authHeaders() });
   }
 
-  // ✅ Obtener por ID compuesto (contributionId + memberId)
   getByIds(contributionId: number, memberId: number): Observable<MemberContribution> {
-    const headers = this.getHeaders();
-    const url = `${this.memberContributionUrl}?contributionId=${contributionId}&memberId=${memberId}`;
-    return this.http.get<MemberContribution>(url, { headers });
+    return this.http.get<MemberContribution>(
+      `${this.url}?contributionId=${contributionId}&memberId=${memberId}`,
+      { headers: this.authHeaders() }
+    );
   }
 
-  // ✅ Crear nueva contribución
-  create(contribution: MemberContribution): Observable<MemberContribution> {
-    const headers = this.getHeaders();
-    return this.http.post<MemberContribution>(this.memberContributionUrl, contribution, { headers });
+  create(body: MemberContribution): Observable<MemberContribution> {
+    return this.http.post<MemberContribution>(this.url, body, { headers: this.authHeaders() });
   }
 
-  // ✅ Actualizar contribución (usando ID compuesto)
-  update(contribution: MemberContribution): Observable<MemberContribution> {
-    const headers = this.getHeaders();
-    const url = `${this.memberContributionUrl}/${contribution.contributionId}/${contribution.memberId}`;
-    return this.http.put<MemberContribution>(url, contribution, { headers });
+  update(body: MemberContribution): Observable<MemberContribution> {
+    return this.http.put<MemberContribution>(
+      `${this.url}/${body.contributionId}/${body.memberId}`,
+      body,
+      { headers: this.authHeaders() }
+    );
   }
 
-  // ✅ Eliminar contribución (usando ID compuesto)
-  delete(contributionId: number, memberId: number): Observable<void> {
-    const headers = this.getHeaders();
-    const url = `${this.memberContributionUrl}/${contributionId}/${memberId}`;
-    return this.http.delete<void>(url, { headers });
+  deleteById(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.url}/${id}`, { headers: this.authHeaders() });
+  }
+
+  deleteByPair(contributionId: number, memberId: number): Observable<void> {
+    return this.http.delete<void>(
+      `${this.url}/${contributionId}/${memberId}`,
+      { headers: this.authHeaders() }
+    );
   }
 }
-

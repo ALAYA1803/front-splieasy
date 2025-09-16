@@ -24,7 +24,6 @@ export class MembContributionsComponent implements OnInit {
   userId!: number;
   contributions: any[] = [];
   isLoading = true;
-  // Define la URL base de tu API desplegada para fácil mantenimiento.
   private apiUrl = 'https://back-spliteasy.onrender.com/api/v1';
 
   constructor(private http: HttpClient) {}
@@ -45,14 +44,12 @@ export class MembContributionsComponent implements OnInit {
   fetchContributions(): void {
     this.isLoading = true;
 
-    // Usamos forkJoin para ejecutar todas las llamadas a la API en paralelo.
     forkJoin({
       memberContributions: this.http.get<any[]>(`${this.apiUrl}/member-contributions`),
       allContributions: this.http.get<any[]>(`${this.apiUrl}/contributions`),
       bills: this.http.get<any[]>(`${this.apiUrl}/bills`)
     }).subscribe({
       next: ({ memberContributions, allContributions, bills }) => {
-        // Filtra las contribuciones que pertenecen al miembro actual en el frontend.
         const userMemberContributions = memberContributions.filter(mc => mc.memberId === this.userId);
 
         this.contributions = userMemberContributions.map(mc => {
@@ -79,19 +76,17 @@ export class MembContributionsComponent implements OnInit {
   }
 
   pagar(contribution: any): void {
-    // Construye el payload exactamente como lo espera el backend (CreateMemberContributionCommand).
     const updatedPayload = {
       contributionId: contribution.contributionId,
       memberId: contribution.memberId,
       monto: contribution.monto,
-      status: 'PAGADO', // El backend espera el enum en mayúsculas.
+      status: 'PAGADO',
       pagadoEn: new Date().toISOString()
     };
 
-    // El backend espera una solicitud PUT para la actualización.
     this.http.put(`${this.apiUrl}/member-contributions/${contribution.id}`, updatedPayload).subscribe({
       next: () => {
-        this.fetchContributions(); // Refrescar la lista después de pagar.
+        this.fetchContributions();
       },
       error: (err) => {
         console.error("Error al procesar el pago:", err);

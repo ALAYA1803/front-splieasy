@@ -1,161 +1,141 @@
 import { Injectable } from '@angular/core';
-import { CreateHouseholdMemberRequest, HouseholdMember } from '../interfaces/household-member';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { Observable, of, throwError } from 'rxjs';
+import { catchError, map, switchMap, tap } from 'rxjs/operators';
+
 import { environment } from '../../../core/environments/environment';
-import { catchError, map, tap } from 'rxjs/operators';
+import { CreateHouseholdMemberRequest, HouseholdMember } from '../interfaces/household-member';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class HouseholdMemberService {
-  private memberUrl = `${environment.urlBackend}/household-members`;
+  private readonly base = environment.urlBackend;
+  private readonly memberUrl = `${this.base}/household-members`;
+  private readonly debug = !environment.production;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   private getAuthHeaders(): HttpHeaders {
     const token = localStorage.getItem('accessToken');
-    return new HttpHeaders({
-      Authorization: `Bearer ${token}`
+    const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+    return new HttpHeaders(headers);
+  }
+
+  private filterByHouseholdId(list: any[], householdId: number): HouseholdMember[] {
+    if (!Array.isArray(list)) return [];
+    return list.filter((m: any) => {
+      const camel = m?.householdId;
+      const snake = m?.household_id;
+      const nested = m?.household?.id;
+      return camel === householdId || snake === householdId || nested === householdId ||
+        String(camel) === String(householdId) || String(snake) === String(householdId) || String(nested) === String(householdId);
     });
   }
 
-  // MÉTODO PRINCIPAL MEJORADO: Filtrar por household_id
   getByHouseholdId(householdId: number): Observable<HouseholdMember[]> {
     const headers = this.getAuthHeaders();
-    console.log('🔍 Buscando miembros para householdId:', householdId);
 
-    return this.http.get<HouseholdMember[]>(this.memberUrl, { headers }).pipe(
-      tap(members => {
-        console.log('📦 Total miembros recibidos:', members.length);
-        console.log('📦 Estructura primer miembro:', members[0]);
+    const path1 = `${this.base}/households/${householdId}/members`;
+    const path2 = `${this.base}/household-members`;
+    const params2 = new HttpParams().set('householdId', String(householdId));
+    const path3 = this.memberUrl;
 
-        // Verificar qué campos están disponibles
-        if (members.length > 0) {
-          const firstMember = members[0] as any;
-          console.log('🔍 Campos disponibles:', Object.keys(firstMember));
-          console.log('🔍 householdId (camelCase):', firstMember.householdId);
-          console.log('🔍 household_id (snake_case):', firstMember.household_id);
-        }
+    if (this.debug) console.debug(' Buscando miembros de household:', householdId);
+
+    return this.http.get<HouseholdMember[]>(path1, { headers }).pipe(
+      tap(list => {
+        if (this.debug) console.debug(' Miembros por path1:', list?.length ?? 0);
       }),
-      map(members => {
-        // Filtrar usando múltiples estrategias
-        const filtered = members.filter(member => {
-          const memberAny = member as any;
-
-          // Estrategia 1: camelCase
-          const matchesCamelCase = member.householdId === householdId;
-
-          // Estrategia 2: snake_case
-          const matchesSnakeCase = memberAny.household_id === householdId;
-
-          // Estrategia 3: conversión de tipos
-          const matchesStringComparison =
-            String(member.householdId) === String(householdId) ||
-            String(memberAny.household_id) === String(householdId);
-
-          const matches = matchesCamelCase || matchesSnakeCase || matchesStringComparison;
-
-          if (matches) {
-            console.log('✅ Miembro encontrado:', member);
-          }
-
-          return matches;
-        });
-
-        console.log('🎯 Miembros filtrados:', filtered.length);
-        console.log('🎯 Lista final:', filtered);
-        return filtered;
+      catchError(err1 => {
+        if (this.debug) console.warn(' path1 falló:', err1?.status, err1?.message);
+        return this.http.get<HouseholdMember[]>(path2, { headers, params: params2 }).pipe(
+          tap(list => {
+            if (this.debug) console.debug(' Miembros por path2:', list?.length ?? 0);
+          }),
+          catchError(err2 => {
+            if (this.debug) console.warn('️ path2 falló:', err2?.status, err2?.message);
+            return this.http.get<any[]>(path3, { headers }).pipe(
+              map(list => {
+                const filtered = this.filterByHouseholdId(list, householdId);
+                if (this.debug) console.debug(' Miembros por path3 (filtrado):', filtered.length);
+                return filtered;
+              }),
+              catchError(err3 => {
+                console.error(' Todos los intentos fallaron al obtener miembros:', err3);
+                return of<HouseholdMember[]>([]);
+              })
+            );
+          })
+        );
       }),
-      catchError(error => {
-        console.error('❌ Error al obtener miembros:', error);
-        return throwError(() => error);
+      map(list => Array.isArray(list) ? list : []),
+      catchError(err => {
+        console.error(' Error inesperado en getByHouseholdId:', err);
+        return of<HouseholdMember[]>([]);
       })
     );
   }
 
-  // ✅ NUEVO: Verificar si un usuario ya es miembro del hogar
   checkIfUserIsMember(userId: number, householdId: number): Observable<boolean> {
     return this.getByHouseholdId(householdId).pipe(
-      map(members => members.some(member => member.userId === userId)),
-      catchError(error => {
-        console.error('❌ Error al verificar membresía:', error);
-        return throwError(() => error);
+      map(members => members.some(m => (m as any)?.userId === userId)),
+      catchError(err => {
+        console.error(' Error al verificar membresía:', err);
+        return of(false);
       })
     );
   }
 
-  // Crear un nuevo miembro del hogar
   createMemberLink(data: CreateHouseholdMemberRequest): Observable<HouseholdMember> {
     const headers = this.getAuthHeaders();
-    console.log('➕ Creando miembro:', data);
-    console.log('🌐 URL:', this.memberUrl);
-    console.log('🔑 Headers:', headers);
-    console.log('🔑 Authorization header:', headers.get('Authorization'));
+    if (this.debug) {
+      console.debug(' Creando miembro:', data);
+      console.debug('URL:', this.memberUrl);
+      console.debug('Auth?', !!headers.get('Authorization'));
+    }
 
     return this.http.post<HouseholdMember>(this.memberUrl, data, { headers }).pipe(
-      tap(response => {
-        console.log('✅ Miembro creado exitosamente:', response);
-      }),
+      tap(resp => this.debug && console.debug(' Miembro creado:', resp)),
       catchError(error => {
-        console.error('❌ Error al crear miembro:', error);
-        console.error('❌ Status:', error.status);
-        console.error('❌ Error body:', error.error);
+        console.error(' Error al crear miembro:', error);
 
-        // ✅ MANEJO DE ERRORES ESPECÍFICOS
-        let errorMessage = 'Error desconocido al crear el miembro';
-        switch (error.status) {
-          case 400:
-            errorMessage = 'Datos inválidos proporcionados';
-            break;
-          case 401:
-            errorMessage = 'No autorizado para realizar esta acción';
-            break;
-          case 409:
-            errorMessage = 'El usuario ya es miembro del hogar';
-            break;
-          case 404:
-            errorMessage = 'Usuario o hogar no encontrado';
-            break;
-          case 500:
-            errorMessage = 'Error interno del servidor';
-            break;
+        let userMessage = 'Error desconocido al crear el miembro';
+        switch (error?.status) {
+          case 400: userMessage = 'Datos inválidos proporcionados'; break;
+          case 401: userMessage = 'No autorizado para realizar esta acción'; break;
+          case 404: userMessage = 'Usuario u hogar no encontrado'; break;
+          case 409: userMessage = 'El usuario ya es miembro del hogar'; break;
+          case 500: userMessage = 'Error interno del servidor'; break;
         }
-
-        return throwError(() => ({
-          ...error,
-          userMessage: errorMessage
-        }));
+        return throwError(() => ({ ...error, userMessage }));
       })
     );
   }
 
-  // Eliminar un miembro del hogar
   deleteMemberLink(id: number): Observable<void> {
     const headers = this.getAuthHeaders();
-    console.log('🗑️ Eliminando miembro ID:', id);
+    if (this.debug) console.debug(' Eliminando miembro ID:', id);
 
     return this.http.delete<void>(`${this.memberUrl}/${id}`, { headers }).pipe(
-      tap(() => {
-        console.log('✅ Miembro eliminado');
-      }),
+      tap(() => this.debug && console.debug(' Miembro eliminado')),
       catchError(error => {
-        console.error('❌ Error al eliminar miembro:', error);
-        return throwError(() => error);
+        console.error(' Error al eliminar miembro:', error);
+        const userMessage = error?.status === 404
+          ? 'Miembro no encontrado'
+          : (error?.status === 401 ? 'No autorizado' : 'No se pudo eliminar el miembro');
+        return throwError(() => ({ ...error, userMessage }));
       })
     );
   }
 
-  // ✅ NUEVO: Obtener todos los miembros (sin filtrar)
   getAllMembers(): Observable<HouseholdMember[]> {
     const headers = this.getAuthHeaders();
     return this.http.get<HouseholdMember[]>(this.memberUrl, { headers }).pipe(
-      tap(members => {
-        console.log('📦 Todos los miembros:', members);
-      }),
+      tap(list => this.debug && console.debug('📋 Todos los miembros:', Array.isArray(list) ? list.length : 0)),
+      map(list => Array.isArray(list) ? list : []),
       catchError(error => {
-        console.error('❌ Error al obtener todos los miembros:', error);
-        return throwError(() => error);
+        console.error(' Error al obtener todos los miembros:', error);
+        return of<HouseholdMember[]>([]);
       })
     );
   }

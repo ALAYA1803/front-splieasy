@@ -5,7 +5,7 @@ import { Household } from '../../interfaces/household';
 import { HouseholdService } from '../../services/household.service';
 import { environment } from '../../../../core/environments/environment';
 import { forkJoin, of } from 'rxjs';
-import { switchMap, tap, catchError } from 'rxjs/operators';
+import { switchMap, tap, catchError, finalize } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { DropdownModule } from 'primeng/dropdown';
@@ -83,51 +83,93 @@ export class HomeComponent implements OnInit {
   }
 
   private loadDashboardData(userId: number, hh: Household): void {
-    const token = localStorage.getItem('accessToken')!;
-    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+    const token = localStorage.getItem('accessToken') || '';
+    const headers = token ? new HttpHeaders({ Authorization: `Bearer ${token}` }) : new HttpHeaders();
 
     this.http.get<Household>(`${environment.urlBackend}/households/${hh.id}`, { headers }).pipe(
       tap(full => console.log('Detalles de household:', full)),
       catchError(err => {
-        console.error('Error obteniendo detalle del household:', err);
-        return of(null);
+        console.warn('Error obteniendo detalle del household, usando fallback:', err);
+        return of(hh as Household);
       }),
-      switchMap(fullHousehold => {
+      switchMap((fullHousehold: Household | null) => {
         if (!fullHousehold) {
-          this.loading = false;
+          this.household = null;
           return of(null);
         }
         this.household = fullHousehold;
 
         return forkJoin({
-          allMembers: this.http.get<any[]>(`${environment.urlBackend}/household-members`, { headers }),
-          allBills: this.http.get<any[]>(`${environment.urlBackend}/bills`, { headers }),
-          allContributions: this.http.get<any[]>(`${environment.urlBackend}/contributions`, { headers }).pipe(
+          allMembers: this.http.get<any[]>(
+            `${environment.urlBackend}/household-members`, { headers }
+          ).pipe(
             catchError(err => {
-              console.warn('No se pudieron cargar las contribuciones, se devolverá un array vacío.', err);
-              return of([]);
+              console.warn('No se pudieron cargar miembros, se devuelve [].', err);
+              return of<any[]>([]);
+            })
+          ),
+          allBills: this.http.get<any[]>(
+            `${environment.urlBackend}/bills`, { headers }
+          ).pipe(
+            catchError(err => {
+              console.warn('No se pudieron cargar bills, se devuelve [].', err);
+              return of<any[]>([]);
+            })
+          ),
+          allContributions: this.http.get<any[]>(
+            `${environment.urlBackend}/contributions`, { headers }
+          ).pipe(
+            catchError(err => {
+              console.warn('No se pudieron cargar contribuciones, se devuelve [].', err);
+              return of<any[]>([]);
             })
           )
         });
+      }),
+      finalize(() => {
+        this.loading = false;
       })
-    ).subscribe(result => {
-      if (result && this.household) {
-        const hhId = this.household.id;
-        this.members = result.allMembers.filter(m => m.householdId === hhId);
-        this.bills = result.allBills.filter(b => b.householdId === hhId);
-        this.contributions = result.allContributions.filter(c => c.householdId === hhId);
-        console.log('Dashboard cargado:', { household: this.household, members: this.members, bills: this.bills, contributions: this.contributions });
-      }
-      this.loading = false;
-    });
+    )
+      .subscribe({
+        next: (result) => {
+          if (!result || !this.household) {
+            this.members = [];
+            this.bills = [];
+            this.contributions = [];
+            return;
+          }
+
+          const hhId = this.household.id;
+          const members = Array.isArray(result.allMembers) ? result.allMembers : [];
+          const bills = Array.isArray(result.allBills) ? result.allBills : [];
+          const contributions = Array.isArray(result.allContributions) ? result.allContributions : [];
+
+          this.members = members.filter(m => m.householdId === hhId);
+          this.bills = bills.filter(b => b.householdId === hhId);
+          this.contributions = contributions.filter(c => c.householdId === hhId);
+
+          console.log('Dashboard cargado:', {
+            household: this.household,
+            members: this.members,
+            bills: this.bills,
+            contributions: this.contributions
+          });
+        },
+        error: (err) => {
+          console.error('Error cargando dashboard:', err);
+          this.members = [];
+          this.bills = [];
+          this.contributions = [];
+        }
+      });
   }
 
   createHousehold(): void {
-    if (this.onboardingForm.invalid) {
-      return;
-    }
+    if (this.onboardingForm.invalid) return;
+
     this.loading = true;
     const userId = Number(localStorage.getItem('userId'));
+
     const newHousehold = {
       ...this.onboardingForm.value,
       representanteId: userId
