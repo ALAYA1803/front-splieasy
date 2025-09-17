@@ -84,16 +84,21 @@
     [(visible)]="formVisible" [modal]="true" [closable]="true" [dismissableMask]="true" [style]="{ width: '500px' }"
     (onHide)="cancelForm()">
 
-    <!-- Información del hogar y usuario - NUEVO -->
     <div class="form-info" *ngIf="householdName">
       <div class="info-card">
         <div class="info-item">
           <i class="pi pi-home"></i>
-          <span><strong>Hogar:</strong> {{ householdName }}</span>
+          <span>
+        <strong>{{ 'BILLS.INFO.HOUSEHOLD_LABEL' | translate }}:</strong>
+            {{ householdName }}
+      </span>
         </div>
         <div class="info-item">
           <i class="pi pi-user"></i>
-          <span><strong>Creado por:</strong> {{ currentUser.username }}</span>
+          <span>
+        <strong>{{ 'BILLS.INFO.CREATED_BY_LABEL' | translate }}:</strong>
+            {{ currentUser?.username }}
+      </span>
         </div>
       </div>
     </div>

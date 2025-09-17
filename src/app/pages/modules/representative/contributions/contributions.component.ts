@@ -14,6 +14,11 @@ import { HouseholdMemberService } from '../../services/household-member.service'
 import { BillsService } from '../../services/bills.service';
 import { MemberContributionService } from '../../services/member-contribution.service';
 
+import { environment } from '../../../../core/environments/environment';
+import { HttpClient } from '@angular/common/http';
+
+import { PaymentReceiptsService, PaymentReceipt } from '../../../../core/services/payment-receipts.service';
+
 interface Member {
   memberId: number;
   userId: number;
@@ -29,6 +34,8 @@ type LoadData = {
   memberContributions: any[];
 };
 
+type ReceiptStatus = 'PENDING' | 'APPROVED' | 'REJECTED';
+
 @Component({
   selector: 'app-contributions',
   standalone: false,
@@ -41,14 +48,20 @@ export class ContributionsComponent implements OnInit {
   contributions: any[] = [];
   bills: any[] = [];
   members: Member[] = [];
-  // Fuente del <p-multiSelect> — id = HouseholdMember.id
   miembros: Array<{ id: number; name: string; role: 'REPRESENTANTE' | 'MIEMBRO' }> = [];
   currentUser!: User;
 
   loading = true;
   mostrarDialogo = false;
 
+  reviewDialogVisible = false;
+  reviewForDetail: any | null = null;
+  reviewReceipts: PaymentReceipt[] = [];
+  reviewLoading = false;
+
   contributionForm!: FormGroup;
+
+  private apiUrl = environment.urlBackend;
 
   estrategias = [
     { label: 'Igualitaria', value: 'EQUAL' },
@@ -62,7 +75,9 @@ export class ContributionsComponent implements OnInit {
     private householdMemberService: HouseholdMemberService,
     private authService: AuthService,
     private billService: BillsService,
-    private memberContributionService: MemberContributionService
+    private memberContributionService: MemberContributionService,
+    private http: HttpClient,
+    private receiptsSvc: PaymentReceiptsService
   ) {}
 
   ngOnInit(): void {
@@ -97,7 +112,6 @@ export class ContributionsComponent implements OnInit {
     const cand = mc?.userId ?? mc?.user?.id;
     return this.toNumberId(cand);
   }
-  // ---------------------------------------------
 
   private initializeForm(): void {
     this.contributionForm = this.fb.group({
@@ -190,7 +204,7 @@ export class ContributionsComponent implements OnInit {
             role: m.isRepresentative ? 'REPRESENTANTE' : 'MIEMBRO'
           }));
 
-          this.contributions = (contribsArr || [])
+          const list = (contribsArr || [])
             .filter((c: any) => {
               const hid = c.householdId ?? c.household_id ?? c.household?.id;
               if (hid !== this.householdId) return false;
@@ -201,7 +215,7 @@ export class ContributionsComponent implements OnInit {
               const bid = c.billId ?? c.bill_id ?? c.bill?.id;
               const bill = this.bills.find((b: any) => b.id === bid);
 
-              const mcsAll = (payload.memberContributions || []).filter((mc: any) =>
+              const mcsAll = (memberContributions || []).filter((mc: any) =>
                 (mc.contributionId ?? mc.contribution?.id) === c.id
               );
 
@@ -213,9 +227,7 @@ export class ContributionsComponent implements OnInit {
               );
 
               const details = mcsUnique.map((mc: any) => {
-
                 const hmId = this.normalizeMemberIdFromMC(mc);
-
                 let uid  = this.normalizeUserIdFromMC(mc);
 
                 if (!uid && hmId && !this.members.find(m => m.memberId === hmId)) {
@@ -235,11 +247,16 @@ export class ContributionsComponent implements OnInit {
 
                 const displayRole = member?.isRepresentative ? 'REPRESENTANTE' : 'MIEMBRO';
 
+                const normalizedStatus = this.normalizeDetailStatus(mc?.status);
+
                 return {
                   ...mc,
                   monto: Number(mc.monto) || 0,
+                  status: normalizedStatus,
                   displayName,
-                  displayRole
+                  displayRole,
+                  receipts: [] as PaymentReceipt[],
+                  pendingReceiptsCount: 0
                 };
               });
 
@@ -253,6 +270,10 @@ export class ContributionsComponent implements OnInit {
               const db = new Date(b.fechaLimite ?? b.fecha_limite ?? b.deadline ?? 0).getTime();
               return da - db;
             });
+
+          this.contributions = list;
+
+          this.prefetchReceiptsForAllDetails();
         },
         error: (err) => {
           console.error(' Error cargando contribuciones:', err);
@@ -262,6 +283,114 @@ export class ContributionsComponent implements OnInit {
           this.contributions = [];
         }
       });
+  }
+
+  private normalizeDetailStatus(s: any): 'PAGADO' | 'PENDIENTE' | 'EN_REVISION' | 'RECHAZADO' {
+    const v = String(s || 'PENDIENTE').toUpperCase().trim();
+    if (v === 'PAID' || v === 'PAGADO') return 'PAGADO';
+    if (v === 'EN_REVISION' || v === 'PENDING_REVIEW' || v === 'EN-REVISION' || v === 'REVIEW') return 'EN_REVISION';
+    if (v === 'RECHAZADO' || v === 'REJECTED') return 'RECHAZADO';
+    return 'PENDIENTE';
+  }
+
+  private prefetchReceiptsForAllDetails(): void {
+    const mcIds = new Set<number>();
+    this.contributions.forEach(c => {
+      c.details?.forEach((d: any) => {
+        const id = Number(d.id ?? d.memberContributionId ?? d.member_contribution_id);
+        if (Number.isFinite(id)) mcIds.add(id);
+      });
+    });
+    if (mcIds.size === 0) return;
+
+    const calls = Array.from(mcIds).map(id =>
+      this.receiptsSvc.list(id).pipe(
+        catchError(() => of([] as PaymentReceipt[])),
+        map(list => ({ id, list }))
+      )
+    );
+
+    forkJoin(calls).subscribe({
+      next: pairs => {
+        const byMc = new Map<number, PaymentReceipt[]>();
+        pairs.forEach(p => byMc.set(p.id, p.list));
+
+        this.contributions = this.contributions.map(c => {
+          const details = (c.details || []).map((d: any) => {
+            const id = Number(d.id ?? d.memberContributionId ?? d.member_contribution_id);
+            const receipts = byMc.get(id) || [];
+            const pending = receipts.filter(r => r.status === 'PENDING').length;
+            return { ...d, receipts, pendingReceiptsCount: pending };
+          });
+          return { ...c, details };
+        });
+      },
+      error: err => console.error('Error prefetching receipts:', err)
+    });
+  }
+
+  openReviewDialog(detail: any): void {
+    const mcId = Number(detail.id ?? detail.memberContributionId ?? detail.member_contribution_id);
+    if (!Number.isFinite(mcId)) return;
+
+    this.reviewForDetail = detail;
+    this.reviewDialogVisible = true;
+    this.reviewLoading = true;
+
+    this.receiptsSvc.list(mcId)
+      .pipe(catchError(() => of([] as PaymentReceipt[])), finalize(() => (this.reviewLoading = false)))
+      .subscribe(list => {
+        this.reviewReceipts = list || [];
+      });
+  }
+
+  approveReceipt(r: PaymentReceipt): void {
+    if (!window.confirm('¿Aprobar esta boleta? Se marcará como PAGADO.')) return;
+
+    this.receiptsSvc.approve(r.id)
+      .pipe(catchError(() => of(null)))
+      .subscribe(ok => {
+        if (!ok) return;
+
+        this.reviewReceipts = this.reviewReceipts.map(x =>
+          x.id === r.id ? { ...x, status: 'APPROVED' } : x
+        );
+
+        if (this.reviewForDetail) {
+          this.reviewForDetail.status = 'PAGADO';
+          this.reviewForDetail.pendingReceiptsCount = Math.max(0, (this.reviewForDetail.pendingReceiptsCount || 1) - 1);
+        }
+
+        this.prefetchReceiptsForAllDetails();
+      });
+  }
+
+  rejectReceipt(r: PaymentReceipt): void {
+    const notes = window.prompt('Motivo del rechazo (opcional):', '') ?? '';
+
+    this.receiptsSvc.reject(r.id, notes)
+      .pipe(catchError(() => of(null)))
+      .subscribe(ok => {
+        if (!ok) return;
+
+        this.reviewReceipts = this.reviewReceipts.map(x =>
+          x.id === r.id ? { ...x, status: 'REJECTED', notes } : x
+        );
+
+        if (this.reviewForDetail && this.reviewForDetail.status === 'EN_REVISION') {
+          this.reviewForDetail.pendingReceiptsCount = Math.max(0, (this.reviewForDetail.pendingReceiptsCount || 1) - 1);
+        }
+
+        this.prefetchReceiptsForAllDetails();
+      });
+  }
+
+  receiptTagClass(s: ReceiptStatus): string {
+    switch (s) {
+      case 'APPROVED': return 'p-tag-success';
+      case 'REJECTED': return 'p-tag-danger';
+      default: return 'p-tag-warning';
+    }
   }
 
   onDeleteContribution(contribution: any): void {
@@ -345,7 +474,6 @@ export class ContributionsComponent implements OnInit {
       memberIds
     };
 
-    // --- Llamada API ---
     this.loading = true;
     this.contributionsService.createContribution(req)
       .pipe(

@@ -215,12 +215,32 @@
     "CONFIRM_PASSWORD_LABEL": "Confirmar Nueva Contraseña",
     "BUTTON": "Guardar y Continuar"
   },
+  "MEMBER_CONTRIBUTIONS": {
+    "TITLE": "Mis Contribuciones",
+    "SUBTITLE": "Aquí puedes ver y gestionar tus contribuciones pendientes o pagadas.",
+    "EMPTY": "No tienes contribuciones registradas.",
+    "UPLOAD_TITLE": "Subir comprobante",
+    "UPLOAD_DESC": "Sube el comprobante de pago para la contribución: {{desc}}"
+  },
+  "MEMBERR": {
+    "WELCOME_TITLE": "¡Bienvenido,",
+    "WELCOME_SUBTITLE": "Aquí puedes ver el estado de tus contribuciones y tu progreso en el hogar."
+  },
   "DASHBOARD": {
+    "ROLES": {
+      "ROLE_REPRESENTANTE": "Representante",
+      "ROLE_MIEMBRO": "Miembro"
+    },
+    "EMPTY": {
+      "NO_HOUSEHOLD_TITLE": "No perteneces a ningún hogar todavía.",
+      "NO_HOUSEHOLD_SUBTITLE": "Pídele al representante de un hogar que te invite."
+    },
     "HOME_CARD": {
       "TITLE": "Mi hogar",
       "NAME": "Nombre:",
       "CURRENCY": "Moneda:",
       "DESCRIPTION": "Descripción:"
+
     },
     "FINANCE_CARD": {
       "TITLE": "Mi situación financiera",
@@ -259,6 +279,10 @@
     "EMPTY_STATE_TITLE": "No hay facturas",
     "EDIT_BILL_DIALOG": "Editar Factura",
     "NEW_BILL_DIALOG": "Nueva Factura",
+    "INFO": {
+      "HOUSEHOLD_LABEL": "Hogar",
+      "CREATED_BY_LABEL": "Creado por"
+    },
     "FORM": {
       "DESCRIPTION_PLACEHOLDER": "Ingresa la descripción de la factura",
       "DESCRIPTION_REQUIRED": "La descripción es requerida",
@@ -308,62 +332,80 @@
     }
   },
   "CONTRIBUTIONS": {
-    "NEW_BUTTON": "Nueva Contribución",
+    "NEW_BUTTON": "Nueva contribución",
     "TABLE": {
       "HEADER": {
         "DESCRIPTION": "Descripción",
         "STRATEGY": "Estrategia",
-        "DUE_DATE": "Fecha Límite",
-        "TOTAL_AMOUNT": "Monto Total (S/)",
+        "DUE_DATE": "Fecha límite",
+        "TOTAL_AMOUNT": "Monto total",
         "ACTIONS": "Acciones"
       },
-      "EMPTY_MESSAGE": "No hay contribuciones disponibles"
+      "EMPTY_MESSAGE": "No hay contribuciones registradas."
     },
     "STRATEGIES": {
       "EQUAL": "Igualitaria",
-      "INCOME_BASED": "Según Ingresos"
+      "INCOME_BASED": "Según ingresos"
     },
     "TOOLTIPS": {
       "VIEW_DETAILS": "Ver detalles",
       "DELETE": "Eliminar"
     },
     "DETAILS": {
-      "TITLE": "Detalles de Contribución",
+      "TITLE": "Detalle por miembro",
       "HEADER": {
         "MEMBER": "Miembro",
         "ROLE": "Rol",
-        "AMOUNT": "Monto (S/)",
+        "AMOUNT": "Monto",
         "STATUS": "Estado",
-        "PAYMENT_DATE": "Fecha Pago"
+        "PAYMENT_DATE": "Fecha de pago",
+        "RECEIPTS": "Boletas"
       },
       "NO_NAME": "Sin nombre",
-      "EMPTY_MESSAGE": "Sin registros de pagos"
+      "REVIEW_RECEIPTS": "Revisar boletas",
+      "EMPTY_MESSAGE": "No hay detalles para esta contribución."
     },
     "ROLES": {
       "REPRESENTATIVE": "Representante",
       "MEMBER": "Miembro"
     },
+    "REVIEW_DIALOG": {
+      "TITLE": "Revisión de boletas",
+      "NO_DETAIL": "Selecciona un miembro para ver sus boletas.",
+      "MEMBER": "Miembro",
+      "AMOUNT": "Monto",
+      "STATUS": "Estado",
+      "FILE": "Archivo",
+      "UPLOADED_AT": "Subido el",
+      "ACTIONS": "Acciones",
+      "DOWNLOAD": "Descargar",
+      "PENDING": "Pendiente",
+      "APPROVED": "Aprobada",
+      "REJECTED": "Rechazada",
+      "APPROVE": "Aprobar",
+      "REJECT": "Rechazar",
+      "EMPTY": "No hay boletas para revisar."
+    },
     "DIALOG": {
       "HEADER_CREATE": "Crear contribución"
     },
     "FORM": {
-      "BILL_LABEL": "Factura *",
-      "BILL_PLACEHOLDER": "Selecciona una factura",
-      "BILL_REQUIRED": "La factura es requerida",
-      "DESCRIPTION_LABEL": "Descripción *",
-      "DESCRIPTION_PLACEHOLDER": "Descripción de la contribución",
-      "DESCRIPTION_REQUIRED": "La descripción es requerida",
-      "DUE_DATE_LABEL": "Fecha Límite *",
-      "DUE_DATE_PLACEHOLDER": "Selecciona una fecha",
-      "DUE_DATE_REQUIRED": "La fecha límite es requerida",
-      "STRATEGY_LABEL": "Estrategia *",
-      "STRATEGY_PLACEHOLDER": "Selecciona una estrategia",
-      "STRATEGY_REQUIRED": "La estrategia es requerida",
-      "MEMBERS_LABEL": "Miembros *",
-      "MEMBERS_PLACEHOLDER": "Selecciona miembros",
-      "MEMBERS_REQUIRED": "Debes seleccionar al menos un miembro",
-      "BILL_INFO_TITLE": "Información de la Factura",
-      "TOTAL_AMOUNT_LABEL": "Monto Total:",
+      "BILL_LABEL": "Comprobante (bill)",
+      "BILL_PLACEHOLDER": "Selecciona un comprobante",
+      "BILL_REQUIRED": "El comprobante es obligatorio.",
+      "DESCRIPTION_LABEL": "Descripción",
+      "DESCRIPTION_PLACEHOLDER": "Ej. Luz de septiembre",
+      "DESCRIPTION_REQUIRED": "La descripción es obligatoria.",
+      "DUE_DATE_LABEL": "Fecha límite",
+      "DUE_DATE_PLACEHOLDER": "Selecciona fecha",
+      "DUE_DATE_REQUIRED": "La fecha límite es obligatoria.",
+      "STRATEGY_LABEL": "Estrategia de reparto",
+      "STRATEGY_PLACEHOLDER": "Selecciona estrategia",
+      "STRATEGY_REQUIRED": "La estrategia es obligatoria.",
+      "MEMBERS_LABEL": "Miembros",
+      "MEMBERS_PLACEHOLDER": "Selecciona miembros (opcional)",
+      "BILL_INFO_TITLE": "Información del comprobante",
+      "TOTAL_AMOUNT_LABEL": "Monto total:",
       "SELECTED_MEMBERS_LABEL": "Miembros seleccionados:",
       "CANCEL_BUTTON": "Cancelar",
       "SAVE_BUTTON": "Guardar"
@@ -381,27 +423,26 @@
   },
   "HOUSEHOLD": {
     "MEMBERS": {
-      "TITLE": "Gestionar Miembros",
-      "SUBTITLE": "Añade o elimina miembros de tu hogar.",
-      "ADD_BUTTON": "Añadir Miembro",
+      "TITLE": "Miembros del hogar",
+      "SUBTITLE": "Gestiona las personas que comparten tu hogar",
+      "ADD_BUTTON": "Añadir miembro",
       "EMPTY_TITLE": "Aún no hay miembros",
-      "EMPTY_TEXT": "Parece que estás solo. ¡Invita a alguien para empezar a compartir gastos!",
+      "EMPTY_TEXT": "Agrega a las personas de tu hogar para empezar a dividir gastos.",
       "ADD_FIRST_BUTTON": "Añadir el primer miembro",
       "NAME": "Nombre",
       "INCOME": "Ingresos",
-      "ACTIONS": "Acciones"
+      "ACTIONS": "Acciones",
+      "DELETE_TOOLTIP": "Eliminar miembro"
     }
   },
-  "DIALOG": {
-    "ADD_MEMBER": {
-      "HEADER": "Añadir Nuevo Miembro",
-      "DESCRIPTION": "Ingresa el correo electrónico del usuario que deseas añadir al hogar. El usuario ya debe estar registrado en la plataforma.",
-      "EMAIL_LABEL": "Email del usuario",
-      "EMAIL_ERROR": "Por favor, ingresa un email válido.",
-      "CANCEL_BUTTON": "Cancelar",
-      "SUBMIT_BUTTON_SAVING": "Añadiendo...",
-      "SUBMIT_BUTTON_ADD": "Añadir Miembro"
-    }
+  "DIALOG2": {
+    "TITLE": "Añadir nuevo miembro",
+    "INTRO": "Ingresa el correo electrónico del usuario que deseas añadir al hogar. El usuario ya debe estar registrado en la plataforma.",
+    "EMAIL_LABEL": "Email del usuario",
+    "EMAIL_PLACEHOLDER": "ejemplo@correo.com",
+    "EMAIL_ERROR": "Por favor, ingresa un email válido.",
+    "SUBMIT": "Añadir miembro",
+    "SUBMIT_LOADING": "Añadiendo..."
   },
   "TOOLTIPS": {
     "DELETE_MEMBER": "Eliminar Miembro"
@@ -471,6 +512,7 @@
       "BUTTON_TEXT_LOGGING_OUT": "Cerrando...",
       "ARIA_LABEL": "Cerrar sesión"
     }
+
   },
   "ONBOARDING": {
     "TITLE": "¡Bienvenido a SplitEasy!",
@@ -484,6 +526,31 @@
   },
   "GENERAL": {
     "LOADING": "Cargando..."
+  },
+  "STATUS": {
+    "PAID": "Pagado",
+    "PENDING": "Pendiente",
+    "UNDER_REVIEW": "En Revisión",
+    "REJECTED": "Rechazado"
+  },
+  "STRATEGIES": {
+    "EQUAL": "División Igualitaria",
+    "INCOME_BASED": "Según Ingresos"
+  },
+  "SIDEBAR2": {
+    "HOME": "Inicio",
+    "MEMBERS": "Miembros",
+    "BILLS": "Cuentas",
+    "CONTRIBUTIONS": "Contribuciones",
+    "SETTINGS": "Ajustes",
+    "STATUS": "Estado"
+  },
+  "COMMON": {
+    "CANCEL": "Cancelar"
+  },
+  "common": {
+    "cancel": "Cancelar",
+    "send": "Enviar"
   }
 
 

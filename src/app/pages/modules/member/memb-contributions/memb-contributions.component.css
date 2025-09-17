@@ -2,14 +2,19 @@
   --brand-primary: #1565c0;
   --success-color: #2e7d32;
   --warning-color: #ff8f00;
+  --danger-color: #d32f2f;
+  --info-color: #1a73e8;
+
   --background-main: #1a1a1a;
   --background-card: #2d2d2d;
   --background-hover: #3a3a3a;
   --border-color: #404040;
-  --shadow-color: rgba(0, 0, 0, 0.3);
+  --shadow-color: rgba(0, 0, 0, 0.4);
+
   --text-primary: #f8f9fa;
   --text-secondary: #adb5bd;
 }
+
 .contributions-member-container {
   padding: 2rem;
   max-width: 1400px;
@@ -22,17 +27,23 @@
   border-radius: 16px;
   padding: 2rem;
   border: 1px solid var(--border-color);
-  box-shadow: 0 8px 20px var(--shadow-color);
+  box-shadow: 0 6px 20px var(--shadow-color);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px var(--shadow-color);
 }
 
 .card-header {
-  padding-bottom: 1.5rem;
+  padding-bottom: 1rem;
   margin-bottom: 1.5rem;
   border-bottom: 1px solid var(--border-color);
 }
 
 .card-title {
-  font-size: 2rem;
+  font-size: 1.8rem;
   font-weight: 700;
   color: var(--text-primary);
   margin: 0;
@@ -44,12 +55,70 @@
   margin-top: 0.25rem;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(15px); }
-  to { opacity: 1; transform: translateY(0); }
+.status-badge {
+  display: inline-block;
+  padding: 0.35rem 0.85rem;
+  border-radius: 1rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: #fff;
+  text-transform: uppercase;
+  transition: all 0.2s ease-in-out;
 }
+
+.status-badge.status-paid {
+  background-color: var(--success-color);
+}
+
+.status-badge.status-pending {
+  background-color: var(--warning-color);
+}
+
+.status-badge.status-review {
+  background-color: var(--info-color);
+}
+
+.status-badge.status-rejected {
+  background-color: var(--danger-color);
+}
+
+.status-badge:hover {
+  filter: brightness(1.15);
+}
+
+.actions-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.status-icon-paid {
+  color: var(--success-color);
+  font-size: 1.3rem;
+}
+
+.status-icon-review {
+  color: var(--info-color);
+  font-size: 1.3rem;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 :host ::ng-deep .p-datatable {
-  background-color: transparent;
+  background: transparent;
+  border-radius: 12px;
+  overflow: hidden;
 }
 
 :host ::ng-deep .p-datatable .p-datatable-thead > tr > th {
@@ -63,7 +132,7 @@
 }
 
 :host ::ng-deep .p-datatable .p-datatable-tbody > tr {
-  color: var(--text-secondary);
+  color: var(--text-primary);
   border-bottom: 1px solid var(--border-color);
   transition: background-color 0.2s ease;
 }
@@ -77,44 +146,24 @@
 }
 
 :host ::ng-deep .p-datatable .p-datatable-tbody > tr > td {
-  padding: 1.25rem;
+  padding: 1rem 1.25rem;
   vertical-align: middle;
 }
+
 :host ::ng-deep .p-paginator {
   background-color: transparent;
   color: var(--text-secondary);
   border-top: 1px solid var(--border-color);
   padding: 1rem;
 }
+
 :host ::ng-deep .p-paginator .p-paginator-element:not(.p-disabled):not(.p-highlight):hover {
   background: var(--background-hover);
+  border-radius: 6px;
 }
+
 :host ::ng-deep .p-paginator .p-dropdown {
   background: var(--background-main);
   border-color: var(--border-color);
-}
-.status-badge {
-  padding: 0.25rem 0.75rem;
-  border-radius: 12px;
-  font-weight: 600;
-  font-size: 0.8rem;
-  color: #fff;
-  text-transform: uppercase;
-}
-
-.status-badge.status-paid {
-  background-color: var(--success-color);
-}
-
-.status-badge.status-pending {
-  background-color: var(--warning-color);
-}
-
-.status-icon-paid {
-  font-size: 1.5rem;
-  color: var(--success-color);
-}
-
-.actions-cell {
-  text-align: center;
+  color: var(--text-primary);
 }

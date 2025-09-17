@@ -7,10 +7,10 @@
       </div>
     </div>
 
-    <p-table [value]="contributions" *ngIf="!isLoading"
-             [paginator]="true" [rows]="5" [responsiveLayout]="'scroll'"
+    <p-table [value]="contributions" [paginator]="true" [rows]="5" [responsiveLayout]="'scroll'"
              [showCurrentPageReport]="true"
-             [currentPageReportTemplate]="'contributions.pageReport' | translate">
+             [loading]="isLoading"
+             currentPageReportTemplate="{{ 'contributions.pageReport' | translate }}">
       <ng-template pTemplate="header">
         <tr>
           <th>{{ 'contributions.bill' | translate }}</th>
@@ -19,7 +19,7 @@
           <th>{{ 'contributions.strategy' | translate }}</th>
           <th>{{ 'contributions.dueDate' | translate }}</th>
           <th>{{ 'contributions.status' | translate }}</th>
-          <th>{{ 'contributions.actions' | translate }}</th>
+          <th style="width: 160px">{{ 'contributions.actions' | translate }}</th>
         </tr>
       </ng-template>
 
@@ -27,23 +27,58 @@
         <tr>
           <td>{{ c.billDescripcion }}</td>
           <td>{{ c.descripcion }}</td>
-          <td>{{ c.monto | currency:'S/.' }}</td>
+          <td>{{ c.monto | currency:'PEN':'symbol':'1.2-2' }}</td>
           <td>{{ c.strategy === 'EQUAL' ? ('STRATEGIES.EQUAL' | translate) : ('STRATEGIES.INCOME_BASED' | translate) }}</td>
           <td>{{ c.fechaLimite | date: 'dd/MM/yyyy' }}</td>
           <td>
             <span class="status-badge" [ngClass]="{
-              'status-paid': c.status === 'PAGADO',
-              'status-pending': c.status === 'PENDIENTE'
+              'status-paid': isPaid(c),
+              'status-pending': c.status === 'PENDIENTE',
+              'status-review': isUnderReview(c),
+              'status-rejected': c.status === 'RECHAZADO'
             }">
-              {{ c.status === 'PAGADO' ? ('STATUS.PAID' | translate) : ('STATUS.PENDING' | translate) }}
+              {{
+                isPaid(c) ? ('STATUS.PAID' | translate)
+                  : isUnderReview(c) ? ('STATUS.UNDER_REVIEW' | translate)
+                    : (c.status === 'RECHAZADO' ? ('STATUS.REJECTED' | translate) : ('STATUS.PENDING' | translate))
+              }}
             </span>
           </td>
           <td class="actions-cell">
-            <button *ngIf="c.status === 'PENDIENTE'" pButton type="button" [label]="'contributions.pay' | translate" class="p-button-sm" (click)="pagar(c)"></button>
-            <i *ngIf="c.status === 'PAGADO'" class="pi pi-check-circle status-icon-paid" pTooltip="Pagado" tooltipPosition="top"></i>
+            <button pButton type="button" class="p-button-sm"
+                    [label]="(isUnderReview(c) ? 'contributions.replaceReceipt' : 'contributions.pay') | translate"
+                    [disabled]="isPaid(c)" (click)="openUploadDialog(c)"></button>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="7" class="text-center text-gray-500 py-3">
+            {{ 'MEMBER_CONTRIBUTIONS.EMPTY' | translate }}
           </td>
         </tr>
       </ng-template>
     </p-table>
   </div>
+
+  <p-dialog [(visible)]="showUploadDialog" [modal]="true" [closable]="true" [style]="{ width: '420px' }"
+            [header]="'MEMBER_CONTRIBUTIONS.UPLOAD_TITLE' | translate">
+    <div *ngIf="selectedRow" class="p-fluid">
+      <p class="mb-3">
+        {{ 'MEMBER_CONTRIBUTIONS.UPLOAD_DESC' | translate:{ desc: selectedRow.descripcion } }}
+      </p>
+
+      <input type="file" (change)="onFileSelected($event)" accept="image/*,.pdf" class="mb-3" />
+
+      <div class="flex justify-content-end gap-2">
+        <button pButton type="button" class="p-button-secondary" [label]="'common.cancel' | translate"
+                (click)="showUploadDialog=false"></button>
+        <button pButton type="button" [label]="'common.send' | translate"
+                [disabled]="!selectedFile || isSubmitting"
+                [loading]="isSubmitting"
+                (click)="submitReceipt()"></button>
+      </div>
+    </div>
+  </p-dialog>
 </div>

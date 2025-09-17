@@ -177,6 +177,13 @@
     "BUTTON": "Verify & Continue",
     "BACK_TO_LOGIN": "Back to Sign In"
   },
+  "MEMBER_CONTRIBUTIONS": {
+    "TITLE": "My Contributions",
+    "SUBTITLE": "Here you can view and manage your pending or paid contributions.",
+    "EMPTY": "You don’t have any contributions yet.",
+    "UPLOAD_TITLE": "Upload Receipt",
+    "UPLOAD_DESC": "Upload the payment receipt for the contribution: {{desc}}"
+  },
   "LOGIN": {
     "TITLE": "Sign In",
     "USERNAME_LABEL": "Username",
@@ -227,7 +234,19 @@
     "CONFIRM_PASSWORD_LABEL": "Confirm New Password",
     "BUTTON": "Save & Continue"
   },
+  "MEMBERR": {
+    "WELCOME_TITLE": "Welcome",
+    "WELCOME_SUBTITLE": "Here you can check your contribution status and track your progress at home."
+  },
   "DASHBOARD": {
+    "EMPTY": {
+      "NO_HOUSEHOLD_TITLE": "You don’t belong to any household yet.",
+      "NO_HOUSEHOLD_SUBTITLE": "Ask a household representative to invite you."
+    },
+    "ROLES": {
+      "ROLE_REPRESENTANTE": "Representative",
+      "ROLE_MIEMBRO": "Member"
+    },
     "HOME_CARD": {
       "TITLE": "My Home",
       "NAME": "Name:",
@@ -299,6 +318,10 @@
     "DATE": "Date",
     "CREATED_BY": "Created by",
     "ACTIONS": "Actions",
+    "INFO": {
+      "HOUSEHOLD_LABEL": "Household",
+      "CREATED_BY_LABEL": "Created by"
+    },
     "EDIT": "Edit Bill",
     "DELETE": "Delete Bill",
     "NO_BILLS": "You haven't registered any bills yet.",
@@ -319,62 +342,80 @@
     "SAVE_BUTTON": "Save"
   },
   "CONTRIBUTIONS": {
-    "NEW_BUTTON": "New Contribution",
+    "NEW_BUTTON": "New contribution",
     "TABLE": {
       "HEADER": {
         "DESCRIPTION": "Description",
         "STRATEGY": "Strategy",
-        "DUE_DATE": "Due Date",
-        "TOTAL_AMOUNT": "Total Amount (PEN)",
+        "DUE_DATE": "Due date",
+        "TOTAL_AMOUNT": "Total amount",
         "ACTIONS": "Actions"
       },
-      "EMPTY_MESSAGE": "No contributions available"
+      "EMPTY_MESSAGE": "No contributions found."
     },
     "STRATEGIES": {
-      "EQUAL": "Equal",
-      "INCOME_BASED": "Income Based"
+      "EQUAL": "Equal split",
+      "INCOME_BASED": "Income-based"
     },
     "TOOLTIPS": {
       "VIEW_DETAILS": "View details",
       "DELETE": "Delete"
     },
     "DETAILS": {
-      "TITLE": "Contribution Details",
+      "TITLE": "Per-member details",
       "HEADER": {
         "MEMBER": "Member",
         "ROLE": "Role",
-        "AMOUNT": "Amount (PEN)",
+        "AMOUNT": "Amount",
         "STATUS": "Status",
-        "PAYMENT_DATE": "Payment Date"
+        "PAYMENT_DATE": "Payment date",
+        "RECEIPTS": "Receipts"
       },
       "NO_NAME": "No name",
-      "EMPTY_MESSAGE": "No payment records"
+      "REVIEW_RECEIPTS": "Review receipts",
+      "EMPTY_MESSAGE": "No details for this contribution."
     },
     "ROLES": {
       "REPRESENTATIVE": "Representative",
       "MEMBER": "Member"
     },
+    "REVIEW_DIALOG": {
+      "TITLE": "Receipt review",
+      "NO_DETAIL": "Select a member to view their receipts.",
+      "MEMBER": "Member",
+      "AMOUNT": "Amount",
+      "STATUS": "Status",
+      "FILE": "File",
+      "UPLOADED_AT": "Uploaded at",
+      "ACTIONS": "Actions",
+      "DOWNLOAD": "Download",
+      "PENDING": "Pending",
+      "APPROVED": "Approved",
+      "REJECTED": "Rejected",
+      "APPROVE": "Approve",
+      "REJECT": "Reject",
+      "EMPTY": "There are no receipts to review."
+    },
     "DIALOG": {
-      "HEADER_CREATE": "Create Contribution"
+      "HEADER_CREATE": "Create contribution"
     },
     "FORM": {
-      "BILL_LABEL": "Bill *",
+      "BILL_LABEL": "Bill",
       "BILL_PLACEHOLDER": "Select a bill",
-      "BILL_REQUIRED": "Bill is required",
-      "DESCRIPTION_LABEL": "Description *",
-      "DESCRIPTION_PLACEHOLDER": "Contribution description",
-      "DESCRIPTION_REQUIRED": "Description is required",
-      "DUE_DATE_LABEL": "Due Date *",
-      "DUE_DATE_PLACEHOLDER": "Select a date",
-      "DUE_DATE_REQUIRED": "Due date is required",
-      "STRATEGY_LABEL": "Strategy *",
-      "STRATEGY_PLACEHOLDER": "Select a strategy",
-      "STRATEGY_REQUIRED": "Strategy is required",
-      "MEMBERS_LABEL": "Members *",
-      "MEMBERS_PLACEHOLDER": "Select members",
-      "MEMBERS_REQUIRED": "You must select at least one member",
-      "BILL_INFO_TITLE": "Bill Information",
-      "TOTAL_AMOUNT_LABEL": "Total Amount:",
+      "BILL_REQUIRED": "Bill is required.",
+      "DESCRIPTION_LABEL": "Description",
+      "DESCRIPTION_PLACEHOLDER": "e.g., September electricity",
+      "DESCRIPTION_REQUIRED": "Description is required.",
+      "DUE_DATE_LABEL": "Due date",
+      "DUE_DATE_PLACEHOLDER": "Select date",
+      "DUE_DATE_REQUIRED": "Due date is required.",
+      "STRATEGY_LABEL": "Split strategy",
+      "STRATEGY_PLACEHOLDER": "Select strategy",
+      "STRATEGY_REQUIRED": "Strategy is required.",
+      "MEMBERS_LABEL": "Members",
+      "MEMBERS_PLACEHOLDER": "Select members (optional)",
+      "BILL_INFO_TITLE": "Bill information",
+      "TOTAL_AMOUNT_LABEL": "Total amount:",
       "SELECTED_MEMBERS_LABEL": "Selected members:",
       "CANCEL_BUTTON": "Cancel",
       "SAVE_BUTTON": "Save"
@@ -416,29 +457,31 @@
     "CONTRIBUTIONS": "Created Contributions",
     "CONTRIBUTIONS_MADE": "Contributions made"
   },
+  "COMMON": {
+    "CANCEL": "Cancel"
+  },
   "HOUSEHOLD": {
     "MEMBERS": {
-      "TITLE": "Manage Members",
-      "SUBTITLE": "Add or remove members from your household.",
-      "ADD_BUTTON": "Add Member",
-      "EMPTY_TITLE": "No Members Yet",
-      "EMPTY_TEXT": "Looks like you're on your own. Invite someone to start sharing expenses!",
+      "TITLE": "Household members",
+      "SUBTITLE": "Manage the people who share your household",
+      "ADD_BUTTON": "Add member",
+      "EMPTY_TITLE": "No members yet",
+      "EMPTY_TEXT": "Add people to your household to start splitting expenses.",
       "ADD_FIRST_BUTTON": "Add the first member",
       "NAME": "Name",
       "INCOME": "Income",
-      "ACTIONS": "Actions"
+      "ACTIONS": "Actions",
+      "DELETE_TOOLTIP": "Remove member"
     }
   },
-  "DIALOG": {
-    "ADD_MEMBER": {
-      "HEADER": "Add New Member",
-      "DESCRIPTION": "Enter the email address of the user you want to add to the household. The user must already be registered on the platform.",
-      "EMAIL_LABEL": "User's Email",
-      "EMAIL_ERROR": "Please, enter a valid email.",
-      "CANCEL_BUTTON": "Cancel",
-      "SUBMIT_BUTTON_SAVING": "Adding...",
-      "SUBMIT_BUTTON_ADD": "Add Member"
-    }
+  "DIALOG2": {
+    "TITLE": "Add new member",
+    "INTRO": "Enter the email of the user you want to add to the household. The user must already be registered.",
+    "EMAIL_LABEL": "User email",
+    "EMAIL_PLACEHOLDER": "example@mail.com",
+    "EMAIL_ERROR": "Please enter a valid email.",
+    "SUBMIT": "Add member",
+    "SUBMIT_LOADING": "Adding..."
   },
   "TOOLTIPS": {
     "DELETE_MEMBER": "Delete Member"
@@ -485,5 +528,27 @@
   },
   "GENERAL": {
     "LOADING": "Loading..."
+  },
+  "STATUS": {
+    "PAID": "Paid",
+    "PENDING": "Pending",
+    "UNDER_REVIEW": "Under Review",
+    "REJECTED": "Rejected"
+  },
+  "SIDEBAR2": {
+    "HOME": "Home",
+    "MEMBERS": "Members",
+    "BILLS": "Bills",
+    "CONTRIBUTIONS": "Contributions",
+    "SETTINGS": "Settings",
+    "STATUS": "Status"
+  },
+  "STRATEGIES": {
+    "EQUAL": "Equal Split",
+    "INCOME_BASED": "Income-Based"
+  },
+  "common": {
+    "cancel": "Cancel",
+    "send": "Send"
   }
 }

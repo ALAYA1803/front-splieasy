@@ -1,21 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { switchMap, forkJoin, of } from 'rxjs';
+import { switchMap, forkJoin, of, catchError, map } from 'rxjs';
 import { environment } from '../../../../core/environments/environment';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { AvatarModule } from 'primeng/avatar';
 import { TagModule } from 'primeng/tag';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
-
-// --- Interfaces para un tipado más fuerte ---
-interface User {
-  id: number;
-  username: string;
-  email: string;
-  income: number;
-  roles: string[];
-}
 
 interface Household {
   id: number;
@@ -25,10 +16,29 @@ interface Household {
   representanteId: number;
 }
 
-interface HouseholdMember {
+interface RawUser {
   id: number;
-  userId: number;
+  username?: string;
+  email?: string;
+  income?: number;
+  roles?: string[];
+}
+
+interface ViewUser {
+  id: number;
+  username: string;
+  email: string;
+  income: number;
+  roles: string[];
+}
+
+interface Contribution {
+  id: number;
   householdId: number;
+  description?: string;
+  strategy?: string;
+  fechaLimite?: string;
+  memberIds?: number[];
 }
 
 interface MemberContribution {
@@ -36,33 +46,37 @@ interface MemberContribution {
   contributionId: number;
   memberId: number;
   monto: number;
-  status: 'PENDIENTE' | 'PAGADO';
-  pagadoEn: string | null;
+  status?: 'PENDIENTE' | 'PAGADO' | 'PENDING' | 'PAID';
+  pagadoEn?: string | null;
 }
 
 @Component({
   selector: 'app-memb-home',
   standalone: true,
-  imports: [
-    CommonModule,
-    TranslateModule,
-    AvatarModule,
-    TagModule,
-    ProgressSpinnerModule
-  ],
+  imports: [CommonModule, TranslateModule, AvatarModule, TagModule, ProgressSpinnerModule],
   templateUrl: './memb-home.component.html',
   styleUrls: ['./memb-home.component.css']
 })
 export class MembHomeComponent implements OnInit {
-  currentUser!: User;
+  currentUser!: ViewUser;
+
   household: Household | null = null;
-  members: User[] = [];
+  members: ViewUser[] = [];
+
   contributions: MemberContribution[] = [];
+
+  activeContributions: MemberContribution[] = [];
+  paidContributions: MemberContribution[] = [];
+
   totalPendiente = 0;
   totalPagado = 0;
+  activeContribsCount = 0;
+
+  blockedHouseholdContribs = false;
+  blockedMemberContribs = false;
+
   loading = true;
 
-  // Se obtiene la URL del backend desde el archivo de environment.
   private readonly API_URL = environment.urlBackend;
 
   constructor(private http: HttpClient) {}
@@ -70,73 +84,170 @@ export class MembHomeComponent implements OnInit {
   ngOnInit(): void {
     const userString = localStorage.getItem('currentUser');
     if (userString) {
-      this.currentUser = JSON.parse(userString);
+      const u: RawUser = JSON.parse(userString);
+      this.currentUser = this.safeUser(u);
       this.loadDashboardData();
     } else {
       this.loading = false;
-      console.error("No se encontró usuario en la sesión.");
+      console.error('No se encontró usuario en la sesión.');
     }
   }
 
-  // Se elimina getAuthHeaders(), el AuthInterceptor se encargará de esto.
+  private normalizeStatus(s: MemberContribution['status']): 'PENDING' | 'PAID' {
+    return (s === 'PAGADO' || s === 'PAID') ? 'PAID' : 'PENDING';
+  }
+
+  private getAmount(c: MemberContribution): number {
+    return Number(c.monto ?? 0) || 0;
+  }
+
+  private safeUser(u: RawUser): ViewUser {
+    const username =
+      (u.username && u.username.trim()) ||
+      (u.email ? u.email.split('@')[0] : 'Usuario');
+
+    return {
+      id: u.id,
+      username,
+      email: u.email ?? '',
+      income: u.income ?? 0,
+      roles: Array.isArray(u.roles) && u.roles.length ? u.roles : ['ROLE_MIEMBRO']
+    };
+  }
+
+  private someMemberIsMe(members: any[]): boolean {
+    return members?.some(m =>
+      (typeof m?.userId === 'number' && m.userId === this.currentUser.id) ||
+      (typeof m?.id === 'number' && (m?.username || m?.email) && m.id === this.currentUser.id) ||
+      (typeof m?.user?.id === 'number' && m.user.id === this.currentUser.id)
+    );
+  }
+
+  private findMyHouseholdByScanning() {
+    return this.http.get<Household[]>(`${this.API_URL}/households`).pipe(
+      catchError(() => of([] as Household[])),
+      switchMap((hhs) => {
+        if (!hhs?.length) return of<Household | null>(null);
+
+        const probes = hhs.map(h =>
+          this.http.get<any[]>(`${this.API_URL}/households/${h.id}/members`).pipe(
+            catchError(() => of([] as any[])),
+            map(members => ({ h, isMine: this.someMemberIsMe(members) }))
+          )
+        );
+
+        return forkJoin(probes).pipe(
+          map(rows => rows.find(r => r.isMine)?.h ?? null)
+        );
+      })
+    );
+  }
+
+  private fetchHousehold(householdId: number) {
+    return this.http.get<Household>(`${this.API_URL}/households/${householdId}`).pipe(
+      catchError(() =>
+        of({ id: householdId, name: 'Mi hogar', description: '', currency: 'PEN', representanteId: 0 } as Household)
+      )
+    );
+  }
+
+  private fetchMembers(householdId: number) {
+    return this.http.get<any[]>(`${this.API_URL}/households/${householdId}/members`).pipe(
+      catchError(() => of([] as any[])),
+      switchMap(arr => {
+        if (!arr?.length) return of([] as ViewUser[]);
+
+        const looksLikeUsers = arr.some(m => m?.username || m?.email);
+        if (looksLikeUsers) {
+          return of(arr.map((u: RawUser) => this.safeUser(u)));
+        }
+
+        const ids = Array.from(new Set(arr.map(m => m?.userId).filter((x: any) => typeof x === 'number'))) as number[];
+        if (!ids.length) return of([] as ViewUser[]);
+
+        const calls = ids.map(uid =>
+          this.http.get<RawUser>(`${this.API_URL}/users/${uid}`).pipe(
+            catchError(() => of({ id: uid } as RawUser))
+          )
+        );
+
+        return forkJoin(calls).pipe(map(users => users.map(u => this.safeUser(u))));
+      })
+    );
+  }
+
+  private fetchMyMemberContributions(householdId: number) {
+    return this.http.get<MemberContribution[]>(
+      `${this.API_URL}/member-contributions`,
+      { params: { householdId: String(householdId), memberId: String(this.currentUser.id) } }
+    ).pipe(
+      catchError((err) => {
+        if (err?.status === 403) {
+          this.blockedMemberContribs = true;
+          console.warn('403 en /member-contributions?householdId&memberId. Sin permiso para ver montos por miembro.');
+        }
+        return of([] as MemberContribution[]);
+      })
+    );
+  }
+
+  private fetchHouseholdContributions(householdId: number) {
+    return this.http.get<Contribution[]>(`${this.API_URL}/households/${householdId}/contributions`).pipe(
+      catchError((err) => {
+        if (err?.status === 403) {
+          this.blockedHouseholdContribs = true;
+          return of([] as Contribution[]);
+        }
+        return of([] as Contribution[]);
+      })
+    );
+  }
 
   loadDashboardData(): void {
     this.loading = true;
+    this.blockedHouseholdContribs = false;
+    this.blockedMemberContribs = false;
 
-    // Ya no necesitas pasar los { headers } manualmente en cada petición.
-    this.http.get<HouseholdMember[]>(`${this.API_URL}/household-members`).pipe(
-      switchMap(allMemberships => {
-        const myMembership = allMemberships.find(m => m.userId === this.currentUser.id);
-
-        if (!myMembership) {
-          console.log("El usuario no pertenece a ningún hogar.");
+    this.findMyHouseholdByScanning().pipe(
+      switchMap((h) => {
+        if (!h) {
+          console.log('El usuario no pertenece a ningún hogar (o no se pudo determinar por permisos).');
           this.loading = false;
-          // Devolvemos un 'of(null)' para que el flujo continúe y no rompa la subscripción.
           return of(null);
         }
 
-        const householdId = myMembership.householdId;
+        const householdId = h.id;
 
-        // forkJoin para ejecutar las llamadas restantes en paralelo.
         return forkJoin({
-          household: this.http.get<Household>(`${this.API_URL}/households/${householdId}`),
-          allUsers: this.http.get<User[]>(`${this.API_URL}/users`),
-          allMemberContributions: this.http.get<MemberContribution[]>(`${this.API_URL}/member-contributions`),
-          allMemberships: of(allMemberships) // Pasamos la data ya obtenida.
+          household: this.fetchHousehold(householdId),
+          members: this.fetchMembers(householdId),
+          myMemberContribs: this.fetchMyMemberContributions(householdId)
         });
       })
     ).subscribe({
-      next: (result) => {
-        if (result) {
-          const { household, allUsers, allMemberContributions, allMemberships } = result;
+      next: (bundle) => {
+        if (!bundle) { this.loading = false; return; }
 
-          this.household = household;
+        const { household, members, myMemberContribs } = bundle;
 
-          // Obtenemos los IDs de los miembros que pertenecen a nuestro hogar.
-          const memberIdsOfMyHousehold = allMemberships
-            .filter(m => m.householdId === this.household!.id)
-            .map(m => m.userId);
+        this.household = { ...household, currency: household.currency || 'PEN' };
+        this.members = members;
 
-          // Filtramos la lista de usuarios para obtener solo los miembros de nuestro hogar.
-          this.members = allUsers.filter(u => memberIdsOfMyHousehold.includes(u.id));
+        const normalized = (myMemberContribs || []).map(c => ({
+          ...c,
+          status: this.normalizeStatus(c.status)
+        }));
+        this.activeContributions = normalized.filter(c => c.status === 'PENDING');
+        this.paidContributions   = normalized.filter(c => c.status === 'PAID');
+        this.contributions = this.activeContributions;
+        this.totalPendiente = this.activeContributions.reduce((sum, c) => sum + this.getAmount(c), 0);
+        this.totalPagado    = this.paidContributions.reduce((sum, c) => sum + this.getAmount(c), 0);
+        this.activeContribsCount = this.activeContributions.length;
 
-          // Filtramos las contribuciones que le pertenecen al usuario actual.
-          this.contributions = allMemberContributions.filter(c => c.memberId === this.currentUser.id);
-
-          // Calculamos los totales.
-          this.totalPendiente = this.contributions
-            .filter(c => c.status === 'PENDIENTE')
-            .reduce((sum, c) => sum + (Number(c.monto) || 0), 0);
-
-          this.totalPagado = this.contributions
-            .filter(c => c.status === 'PAGADO')
-            .reduce((sum, c) => sum + (Number(c.monto) || 0), 0);
-        }
-        // Si el resultado es null (porque no hay membresía), el loading se detiene aquí.
         this.loading = false;
       },
       error: (err) => {
-        console.error("Error al cargar el dashboard", err);
+        console.error('Error al cargar el dashboard', err);
         this.loading = false;
       }
     });

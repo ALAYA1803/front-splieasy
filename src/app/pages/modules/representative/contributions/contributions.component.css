@@ -1,113 +1,232 @@
 :host {
   --brand-primary: #1565c0;
   --brand-secondary: #ff6f00;
-  --danger-color: #d32f2f;
-  --background-main: #1a1a1a;
-  --background-card: #2d2d2d;
-  --background-hover: #3a3a3a;
-  --border-color: #404040;
-  --shadow-color: rgba(0, 0, 0, 0.3);
-  --text-primary: #f8f9fa;
-  --text-secondary: #adb5bd;
+
+  --bg-main: #1a1a1a;
+  --bg-card: #242424;
+  --bg-hover: #313131;
+  --bg-nested: #202020;
+
+  --border: #3a3a3a;
+  --shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+
+  --text-primary: #f2f3f5;
+  --text-secondary: #aeb4bb;
+  --text-muted: #8b929a;
+
+  --success: #43a047;
+  --warning: #ffb300;
+  --danger: #d32f2f;
+
+  --radius-lg: 14px;
+  --radius-md: 10px;
+  --radius-sm: 8px;
+
+  --gap-1: .5rem;
+  --gap-2: .75rem;
+  --gap-3: 1rem;
+  --gap-4: 1.25rem;
 }
 
 :host ::ng-deep .p-datatable {
-  background: var(--background-main);
-  border-radius: 16px;
-  border: 1px solid var(--border-color);
-  box-shadow: 0 8px 20px var(--shadow-color);
+  background: var(--bg-main);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
   color: var(--text-primary);
+  overflow: hidden;
+}
+
+:host ::ng-deep .p-datatable .p-datatable-header {
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0));
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--border);
+  padding: var(--gap-3) var(--gap-4);
+  font-weight: 600;
+  letter-spacing: .2px;
 }
 
 :host ::ng-deep .p-datatable .p-datatable-thead > tr > th {
-  background: transparent;
-  border-bottom: 2px solid var(--border-color);
+  background: var(--bg-main);
+  border-bottom: 1px solid var(--border);
   color: var(--text-secondary);
-  font-size: 0.8rem;
+  font-size: .85rem;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  padding: 1rem 1.5rem;
-}
-
-:host ::ng-deep .p-datatable .p-datatable-tbody > tr > td {
-  padding: 1rem 1.5rem;
-  border-bottom: 1px solid var(--border-color);
-  color: var(--text-primary);
-  background: var(--background-main);
+  letter-spacing: .5px;
+  padding: var(--gap-3) var(--gap-4);
+  white-space: nowrap;
 }
 
 :host ::ng-deep .p-datatable .p-datatable-tbody > tr {
-  transition: background-color 0.2s ease;
-  background: var(--background-main);
+  background: var(--bg-main);
+  transition: background-color .18s ease, transform .08s ease;
+  will-change: background-color;
 }
 
 :host ::ng-deep .p-datatable .p-datatable-tbody > tr:hover {
-  background-color: var(--background-hover) !important;
+  background: var(--bg-hover);
+}
+
+:host ::ng-deep .p-datatable .p-datatable-tbody > tr > td {
+  padding: var(--gap-3) var(--gap-4);
+  border-bottom: 1px solid var(--border);
+  color: var(--text-primary);
+  vertical-align: middle;
 }
 
 :host ::ng-deep .p-datatable .p-datatable-tbody > tr:last-child > td {
   border-bottom: none;
 }
 
-:host ::ng-deep .p-datatable .p-datatable-tbody .nested-td {
-  background: var(--background-card);
-  border-radius: 8px;
-  padding: 1rem 0.5rem;
-}
-
-:host ::ng-deep .p-datatable-nested {
-  background: var(--background-main);
-  border-radius: 8px;
-  border: 1px solid var(--border-color);
-  margin-top: 1rem;
-}
-
-:host ::ng-deep .p-datatable-nested .p-datatable-thead > tr > th,
-:host ::ng-deep .p-datatable-nested .p-datatable-tbody > tr > td {
-  background: transparent;
-  color: var(--text-secondary);
-  border-bottom: 1px solid var(--border-color);
-  padding: 0.5rem 1rem;
-}
-
-:host ::ng-deep .p-datatable-nested .p-datatable-tbody > tr > td {
-  color: var(--text-primary);
-  background: var(--background-main);
-}
-
-:host ::ng-deep .p-datatable-nested .p-datatable-tbody > tr {
-  background: var(--background-main);
-  transition: background-color 0.2s ease;
-}
-
-:host ::ng-deep .p-datatable-nested .p-datatable-tbody > tr:hover {
-  background-color: var(--background-hover) !important;
-}
-
 :host ::ng-deep .toggler {
   color: var(--brand-primary);
   font-size: 1.1rem;
   cursor: pointer;
-  margin-right: 0.5rem;
+  margin-right: .35rem;
   vertical-align: middle;
+  transition: transform .15s ease, color .15s ease;
+}
+:host ::ng-deep .toggler:hover { color: #1e79e8; }
+:host ::ng-deep .toggler:active { transform: scale(.92); }
+
+:host ::ng-deep .p-datatable-nested {
+  background: var(--bg-nested);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  margin: var(--gap-3) 0 0;
+  overflow: hidden;
 }
 
-:host ::ng-deep .status-pagado {
-  color: #43a047;
-  font-weight: 600;
-}
-:host ::ng-deep .status-pendiente {
-  color: #ffb300;
-  font-weight: 600;
-}
-:host ::ng-deep .status-vencido {
-  color: #d32f2f;
-  font-weight: 600;
+:host ::ng-deep .p-datatable-nested .p-datatable-thead > tr > th {
+  background: var(--bg-nested);
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--border);
+  padding: .6rem .9rem;
+  font-size: .8rem;
+  letter-spacing: .3px;
 }
 
-:host ::ng-deep .empty-message {
+:host ::ng-deep .p-datatable-nested .p-datatable-tbody > tr > td {
+  background: var(--bg-nested);
+  color: var(--text-primary);
+  border-bottom: 1px solid var(--border);
+  padding: .6rem 1rem;
+}
+:host ::ng-deep .p-datatable-nested .p-datatable-tbody > tr:hover {
+  background: var(--bg-hover) !important;
+}
+
+:host ::ng-deep .p-tag {
+  border-radius: 999px;
+  padding: .15rem .55rem;
+  font-size: .75rem;
+  letter-spacing: .2px;
+  border: 1px solid transparent;
+}
+:host ::ng-deep .p-tag-success {
+  background: rgba(67, 160, 71, 0.12);
+  color: var(--success);
+  border-color: rgba(67,160,71,.35);
+}
+:host ::ng-deep .p-tag-warning {
+  background: rgba(255, 179, 0, 0.12);
+  color: var(--warning);
+  border-color: rgba(255,179,0,.35);
+}
+:host ::ng-deep .p-tag-danger {
+  background: rgba(211, 47, 47, 0.12);
+  color: var(--danger);
+  border-color: rgba(211,47,47,.35);
+}
+
+
+:host ::ng-deep .p-badge-warning {
+  background: var(--warning);
+  color: #111;
+}
+:host ::ng-deep .p-badge-secondary {
+  background: #60656b;
+  color: #fff;
+}
+
+:host ::ng-deep .p-button {
+  border-radius: 10px;
+  font-weight: 600;
+  letter-spacing: .2px;
+}
+:host ::ng-deep .p-button.p-button-text {
+  color: var(--text-secondary);
+}
+:host ::ng-deep .p-button.p-button-text:hover {
+  background: rgba(255,255,255,.04);
+  color: var(--text-primary);
+}
+:host ::ng-deep .p-button.p-button-success {
+  background: var(--success);
+  border-color: var(--success);
+}
+:host ::ng-deep .p-button.p-button-danger {
+  background: var(--danger);
+  border-color: var(--danger);
+}
+
+:host ::ng-deep .p-dialog {
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+:host ::ng-deep .p-dialog .p-dialog-header {
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border-bottom: 1px solid var(--border);
+  padding: var(--gap-3) var(--gap-4);
+}
+:host ::ng-deep .p-dialog .p-dialog-content {
+  background: var(--bg-main);
+  color: var(--text-primary);
+  padding: var(--gap-4);
+}
+:host ::ng-deep .p-dialog .p-dialog-footer {
+  background: var(--bg-card);
+  border-top: 1px solid var(--border);
+  padding: var(--gap-3) var(--gap-4);
+}
+
+:host ::ng-deep .p-inputtext,
+:host ::ng-deep .p-dropdown,
+:host ::ng-deep .p-multiselect,
+:host ::ng-deep .p-calendar .p-inputtext {
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+:host ::ng-deep .p-inputtext::placeholder { color: var(--text-muted); }
+:host ::ng-deep .p-inputtext:focus,
+:host ::ng-deep .p-dropdown.p-focus,
+:host ::ng-deep .p-multiselect.p-focus,
+:host ::ng-deep .p-calendar .p-inputtext:focus {
+  box-shadow: 0 0 0 2px rgba(21,101,192,.25);
+  border-color: #1e79e8;
+}
+
+:host ::ng-deep .empty-message,
+:host ::ng-deep .p-datatable .p-datatable-emptymessage > td {
   color: var(--text-secondary);
   text-align: center;
-  padding: 1.5rem 0;
+  padding: 1.25rem 0 !important;
+}
+
+.text-center { text-align: center; }
+.flex { display: flex; }
+.align-items-center { align-items: center; }
+.gap-2 { gap: var(--gap-2); }
+
+@media (max-width: 768px) {
+  :host ::ng-deep .p-datatable .p-datatable-thead > tr > th,
+  :host ::ng-deep .p-datatable .p-datatable-tbody > tr > td {
+    padding: .75rem 1rem;
+  }
+  :host ::ng-deep .p-dialog { width: 92vw !important; }
 }

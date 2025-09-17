@@ -53,11 +53,15 @@
             </div>
           </td>
           <td class="text-right">
-            <span class="income-value">S/. {{ member.income | number:'1.2-2' }}</span>
+            <span class="income-value">{{ member.income | currency:'PEN':'symbol-narrow':'1.2-2' }}</span>
           </td>
           <td class="text-center">
             <div class="actions-cell">
-              <button class="btn-icon btn-icon-danger" pTooltip="Eliminar Miembro" tooltipPosition="top" (click)="deleteMember(member)">
+              <button
+                class="btn-icon btn-icon-danger"
+                [pTooltip]="'HOUSEHOLD.MEMBERS.DELETE_TOOLTIP' | translate"
+                tooltipPosition="top"
+                (click)="deleteMember(member)">
                 <i class="pi pi-trash"></i>
               </button>
             </div>
@@ -69,21 +73,41 @@
   </div>
 </div>
 
-<p-dialog header="Añadir Nuevo Miembro" [(visible)]="showAddMemberForm" [modal]="true" [style]="{width: '450px'}" [draggable]="false">
+<p-dialog
+  [header]="'DIALOG2.TITLE' | translate"
+  [(visible)]="showAddMemberForm"
+  [modal]="true"
+  [style]="{width: '450px'}"
+  [draggable]="false"
+>
   <form [formGroup]="addMemberForm" (ngSubmit)="addMember()">
-    <p class="mb-3">Ingresa el correo electrónico del usuario que deseas añadir al hogar. El usuario ya debe estar registrado en la plataforma.</p>
+    <p class="mb-3">{{ 'DIALOG2.INTRO' | translate }}</p>
+
     <div class="field">
-      <label for="email">Email del usuario</label>
-      <input id="email" type="email" pInputText formControlName="email" class="w-full" placeholder="ejemplo@correo.com" />
+      <label for="email">{{ 'DIALOG2.EMAIL_LABEL' | translate }}</label>
+      <input
+        id="email"
+        type="email"
+        pInputText
+        formControlName="email"
+        class="w-full"
+        [placeholder]="'DIALOG2.EMAIL_PLACEHOLDER' | translate"
+      />
       <small *ngIf="addMemberForm.get('email')?.invalid && addMemberForm.get('email')?.touched" class="p-error">
-        Por favor, ingresa un email válido.
+        {{ 'DIALOG2.EMAIL_ERROR' | translate }}
       </small>
     </div>
+
     <div class="form-actions">
-      <button type="button" class="btn-secondary" (click)="showAddMemberForm=false">Cancelar</button>
+      <button type="button" class="btn-secondary" (click)="showAddMemberForm=false">
+        {{ 'COMMON.CANCEL' | translate }}
+      </button>
       <button type="submit" class="btn-primary" [disabled]="addMemberForm.invalid || isSaving">
         <i *ngIf="isSaving" class="pi pi-spin pi-spinner mr-2"></i>
-        <span>{{ isSaving ? 'Añadiendo...' : 'Añadir Miembro' }}</span>
+        <span>
+          {{ isSaving ? ('DIALOG2.SUBMIT_LOADING' | translate)
+          : ('DIALOG2.SUBMIT' | translate) }}
+        </span>
       </button>
     </div>
   </form>

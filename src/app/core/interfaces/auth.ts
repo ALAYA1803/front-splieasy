@@ -8,7 +8,7 @@ export interface User {
   username: string;
   email: string;
   income: number;
-  roles: string[]; // 👈 EXACTAMENTE ASÍ
+  roles: string[];
 }
 
 export interface SignUpRequest {
@@ -16,7 +16,7 @@ export interface SignUpRequest {
   email: string;
   password: string;
   income: number;
-  roles: string[]; // al registrar, sí mandas string[]
+  roles: string[];
 }
 
 export interface SignInRequest {

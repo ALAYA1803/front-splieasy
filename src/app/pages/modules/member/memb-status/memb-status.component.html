@@ -1,6 +1,10 @@
 <div class="p-4 max-w-screen-lg mx-auto">
   <p-card [header]="'CONTRIBUTIONS_STATUS.TITLE' | translate">
-    <p-table [value]="statusList" [paginator]="true" [rows]="5" [responsiveLayout]="'scroll'">
+    <p-table [value]="statusList"
+             [paginator]="true"
+             [rows]="5"
+             [responsiveLayout]="'scroll'"
+             [loading]="isLoading">
       <ng-template pTemplate="header">
         <tr>
           <th>{{ 'CONTRIBUTIONS_STATUS.INVOICE' | translate }}</th>
@@ -12,23 +16,43 @@
           <th>{{ 'CONTRIBUTIONS_STATUS.PAID_AT' | translate }}</th>
         </tr>
       </ng-template>
+
       <ng-template pTemplate="body" let-s>
         <tr>
-          <td>{{ s.descripcionFactura }}</td>
-          <td>{{ s.descripcionContrib }}</td>
-          <td>{{ s.strategy }}</td>
-          <td>{{ s.monto | currency }}</td>
-          <td>{{ s.fechaLimite | date: 'longDate' }}</td>
+          <td>{{ s.descripcionFactura || '—' }}</td>
+          <td>{{ s.descripcionContrib || '—' }}</td>
+          <td>
+            {{
+              s.strategy === 'EQUAL'
+                ? ('STRATEGIES.EQUAL' | translate)
+                : ('STRATEGIES.INCOME_BASED' | translate)
+            }}
+          </td>
+          <td>{{ s.monto | currency:'PEN':'symbol':'1.2-2' }}</td>
+          <td>{{ s.fechaLimite ? (s.fechaLimite | date: 'dd/MM/yyyy') : '—' }}</td>
           <td>
             <span class="badge"
                   [ngClass]="{
-                'bg-success': s.status === 'PAGADO',
-                'bg-warning': s.status === 'PENDIENTE'
+                'bg-success': isPaid(s),
+                'bg-warning': isPending(s),
+                'bg-info': isUnderReview(s)
               }">
-              {{ s.status }}
+              {{
+                isPaid(s) ? ('STATUS.PAID' | translate)
+                  : isUnderReview(s) ? ('STATUS.UNDER_REVIEW' | translate)
+                    : ('STATUS.PENDING' | translate)
+              }}
             </span>
           </td>
-          <td>{{ s.pagadoEn ? (s.pagadoEn | date: 'short') : '-' }}</td>
+          <td>{{ s.pagadoEn ? (s.pagadoEn | date: 'dd/MM/yyyy HH:mm') : '—' }}</td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="7" class="text-center py-3 text-gray-500">
+            {{ 'CONTRIBUTIONS_STATUS.EMPTY' | translate }}
+          </td>
         </tr>
       </ng-template>
     </p-table>

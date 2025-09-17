@@ -44,7 +44,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
   }
 
   openSettings(): void {
-    const role = this.user?.roles?.[0]; // Ajustado para usar 'roles'
+    const role = this.user?.roles?.[0];
 
     if (!role) {
       console.error('No se pudo determinar el rol del usuario para navegar a ajustes.');
