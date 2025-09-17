@@ -425,7 +425,17 @@ export class ContributionsComponent implements OnInit {
     });
     this.mostrarDialogo = true;
   }
-
+  downloadReceipt(r: PaymentReceipt): void {
+    if (!r?.url) return;
+    this.http.get(r.url, { responseType: 'blob' as const }).subscribe(blob => {
+      const a = document.createElement('a');
+      const url = URL.createObjectURL(blob);
+      a.href = url;
+      a.download = r.filename || 'receipt';
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+  }
   cerrarDialogo(): void {
     this.mostrarDialogo = false;
   }

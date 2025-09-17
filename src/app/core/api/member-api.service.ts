@@ -53,7 +53,6 @@ export class MemberApiService {
       );
   }
 
-  /** Info de un hogar por id */
   getHousehold(householdId: number): Observable<HouseholdDto> {
     return this.http.get<HouseholdDto>(`${this.base}/households/${householdId}`);
   }

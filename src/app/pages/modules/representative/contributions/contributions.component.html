@@ -189,9 +189,12 @@
         <tr>
           <td>{{ i + 1 }}</td>
           <td>
-            <a [href]="r.publicUrl" target="_blank" rel="noopener noreferrer">
-              {{ r.originalFilename || ('CONTRIBUTIONS.REVIEW_DIALOG.DOWNLOAD' | translate) }}
-            </a>
+            <p-button
+              icon="pi pi-download"
+              class="p-button-rounded p-button-text p-button-sm"
+              [pTooltip]="'CONTRIBUTIONS.REVIEW_DIALOG.DOWNLOAD' | translate"
+              (onClick)="downloadReceipt(r)">
+            </p-button>
           </td>
           <td>{{ r.uploadedAt ? (r.uploadedAt | date:'dd/MM/yyyy HH:mm') : '-' }}</td>
           <td>
