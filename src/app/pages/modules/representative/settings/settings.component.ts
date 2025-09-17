@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, AbstractControl, ValidationErrors } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
@@ -12,13 +12,6 @@ import { InputSwitchModule } from 'primeng/inputswitch';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { environment } from '../../../../core/environments/environment';
-interface Setting {
-  id: number;
-  userId: number;
-  language: string;
-  darkMode: boolean;
-  notificationsEnabled: boolean;
-}
 
 @Component({
   selector: 'app-settings',
@@ -33,10 +26,8 @@ interface Setting {
 export class SettingsComponent implements OnInit, OnDestroy {
   profileForm!: FormGroup;
   passwordForm!: FormGroup;
-  settingsForm!: FormGroup;
 
-  userId!: number;
-  settingId: number | null = null;
+  settingsForm!: FormGroup;
 
   private destroy$ = new Subject<void>();
   private readonly API_URL = environment.urlBackend;
@@ -49,82 +40,125 @@ export class SettingsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    const userString = localStorage.getItem('currentUser');
-    if (userString) {
-      this.userId = JSON.parse(userString).id;
-    } else {
-      console.error("No se pudo encontrar el usuario en localStorage.");
-      return;
-    }
-
     this.profileForm = this.fb.group({
-      name: [{ value: '', disabled: true }],
-      email: [{ value: '', disabled: true }],
+      name: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]],
+      email: ['', [Validators.required, Validators.email, Validators.maxLength(100)]],
     });
+
     this.passwordForm = this.fb.group({
-      currentPassword: [{ value: '', disabled: true }],
-      newPassword: [{ value: '', disabled: true }],
-      confirmPassword: [{ value: '', disabled: true }]
-    });
+      currentPassword: ['', [Validators.required]],
+      newPassword: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(100)]],
+      confirmPassword: ['', [Validators.required]],
+    }, { validators: this.passwordsMatchValidator });
 
     this.settingsForm = this.fb.group({
-      language: ['es'],
-      darkMode: [false],
-      notificationsEnabled: [true]
+      language: [{ value: 'es', disabled: true }],
+      darkMode: [{ value: false, disabled: true }],
+      notificationsEnabled: [{ value: true, disabled: true }]
     });
 
-    this.loadSettingsData();
+    this.loadMyProfile();
   }
 
-  loadSettingsData(): void {
-    this.http.get<Setting[]>(`${this.API_URL}/settings`, { headers: this.getAuthHeaders() })
+  private passwordsMatchValidator(group: AbstractControl): ValidationErrors | null {
+    const np = group.get('newPassword')?.value;
+    const cp = group.get('confirmPassword')?.value;
+    if (!np || !cp) return null;
+    return np === cp ? null : { mismatch: true };
+  }
+
+  private loadMyProfile(): void {
+    this.http.get<{ id: number; username: string; email: string }>(
+      `${this.API_URL}/account/me`,
+      { headers: this.getAuthHeaders() }
+    )
       .pipe(takeUntil(this.destroy$))
-      .subscribe(allSettings => {
-        // Filtramos en el frontend porque la API no lo hace
-        const userSetting = allSettings.find(s => s.userId === this.userId);
-        if (userSetting) {
-          this.settingId = userSetting.id;
-          this.settingsForm.patchValue({
-            language: userSetting.language,
-            darkMode: userSetting.darkMode,
-            notificationsEnabled: userSetting.notificationsEnabled,
+      .subscribe({
+        next: me => {
+          this.profileForm.patchValue({
+            name: me.username,
+            email: me.email
           });
+        },
+        error: err => {
+          console.error('No se pudo cargar el perfil:', err);
         }
       });
   }
 
-  saveSettings(): void {
-    if (this.settingsForm.invalid) return;
+  saveProfile(): void {
+    if (this.profileForm.invalid) return;
 
-    const settingsPayload = {
-      ...this.settingsForm.value,
-      userId: this.userId
+    const payload = {
+      username: this.profileForm.value.name,
+      email: this.profileForm.value.email
     };
 
-    let request;
-    if (this.settingId) {
-      request = this.http.put(`${this.API_URL}/settings/${this.settingId}`, settingsPayload, { headers: this.getAuthHeaders() });
-    } else {
-      request = this.http.post(`${this.API_URL}/settings`, settingsPayload, { headers: this.getAuthHeaders() });
-    }
-
-    request.pipe(takeUntil(this.destroy$)).subscribe(() => {
-      alert('Configuración guardada con éxito');
-      this.loadSettingsData();
-    });
-  }
-
-  saveProfile(): void {
-    alert('Esta función no está disponible actualmente.');
+    this.http.put(
+      `${this.API_URL}/account/profile`,
+      payload,
+      { headers: this.getAuthHeaders(), responseType: 'text' as 'json' }
+    )
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => {
+          alert('Perfil actualizado correctamente.');
+          this.loadMyProfile();
+        },
+        error: (err: any) => {
+          const msg = typeof err?.error === 'string' ? err.error : 'No se pudo actualizar el perfil.';
+          alert(msg);
+        }
+      });
   }
 
   changePassword(): void {
-    alert('Esta función no está disponible actualmente.');
+    if (this.passwordForm.invalid) {
+      alert('Verifica que las contraseñas coincidan y cumplan los requisitos.');
+      return;
+    }
+    const { currentPassword, newPassword } = this.passwordForm.value;
+
+    this.http.put(
+      `${this.API_URL}/account/password`,
+      { currentPassword, newPassword },
+      { headers: this.getAuthHeaders(), responseType: 'text' as 'json' }
+    )
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => {
+          alert('Contraseña cambiada correctamente.');
+          this.passwordForm.reset();
+        },
+        error: (err: any) => {
+          const msg = typeof err?.error === 'string' ? err.error : 'No se pudo cambiar la contraseña.';
+          alert(msg);
+        }
+      });
   }
 
   deleteAccount(): void {
-    alert('Esta función no está disponible actualmente.');
+    if (!confirm('¿Seguro que deseas eliminar tu cuenta? Esta acción es irreversible.')) return;
+
+    this.http.delete(
+      `${this.API_URL}/account`,
+      { headers: this.getAuthHeaders(), responseType: 'text' as 'json' }
+    )
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => {
+          alert('Cuenta eliminada.');
+          localStorage.removeItem('accessToken');
+          localStorage.removeItem('currentUser');
+          window.location.href = '/autenticacion/login';
+        },
+        error: (err: any) => {
+          const msg = typeof err?.error === 'string' ? err.error : 'No se pudo eliminar la cuenta.';
+          alert(msg);
+        }
+      });
   }
+
 
   ngOnDestroy(): void {
     this.destroy$.next();

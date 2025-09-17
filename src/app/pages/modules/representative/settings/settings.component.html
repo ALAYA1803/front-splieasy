@@ -20,36 +20,15 @@
             <label for="email">{{ 'PROFILE.EMAIL_LABEL' | translate }}</label>
             <input pInputText id="email" type="email" formControlName="email">
           </div>
-          <p-button type="submit" [label]="'PROFILE.SAVE_BUTTON' | translate" icon="pi pi-check" [disabled]="profileForm.invalid"></p-button>
+          <p-button
+            type="submit"
+            [label]="'PROFILE.SAVE_BUTTON' | translate"
+            icon="pi pi-check"
+            [disabled]="profileForm.invalid">
+          </p-button>
         </form>
       </div>
-
-      <div class="settings-card">
-        <div class="card-header">
-          <i class="pi pi-cog card-icon"></i>
-          <h2 class="card-title">{{ 'SETTINGS.TITLE' | translate }}</h2>
-        </div>
-        <form [formGroup]="settingsForm" (ngSubmit)="saveSettings()">
-          <div class="field">
-            <label for="language">{{ 'SETTINGS.LANGUAGE.LABEL' | translate }}</label>
-            <p-dropdown
-              [options]="[{ label: ('SETTINGS.LANGUAGE.OPTIONS.ES' | translate), value: 'es' }, { label: ('SETTINGS.LANGUAGE.OPTIONS.EN' | translate), value: 'en' }]"
-              formControlName="language"
-              appendTo="body">
-            </p-dropdown>
-          </div>
-
-          <div class="field-switch">
-            <p-inputSwitch formControlName="darkMode" inputId="darkMode"></p-inputSwitch>
-            <label for="darkMode">{{ 'SETTINGS.DARK_MODE' | translate }}</label>
-          </div>
-          <div class="field-switch">
-            <p-inputSwitch formControlName="notificationsEnabled" inputId="notificationsEnabled"></p-inputSwitch>
-            <label for="notificationsEnabled">{{ 'SETTINGS.NOTIFICATIONS' | translate }}</label>
-          </div>
-          <p-button type="submit" [label]="'SETTINGS.SAVE_BUTTON' | translate" icon="pi pi-save"></p-button>
-        </form>
-      </div>
+    </div>
 
     <div class="settings-column">
       <div class="settings-card">
@@ -76,7 +55,13 @@
               Las contraseñas no coinciden.
             </small>
           </div>
-          <p-button type="submit" [label]="'SECURITY.SAVE_BUTTON' | translate" icon="pi pi-key" styleClass="p-button-warning" [disabled]="passwordForm.invalid"></p-button>
+          <p-button
+            type="submit"
+            [label]="'SECURITY.SAVE_BUTTON' | translate"
+            icon="pi pi-key"
+            styleClass="p-button-warning"
+            [disabled]="passwordForm.invalid">
+          </p-button>
         </form>
       </div>
 
@@ -86,7 +71,12 @@
           <h2 class="card-title">{{ 'DANGER_ZONE.TITLE' | translate }}</h2>
         </div>
         <p class="danger-text">{{ 'DANGER_ZONE.WARNING_TEXT' | translate }}</p>
-        <p-button [label]="'DANGER_ZONE.DELETE_ACCOUNT_BUTTON' | translate" icon="pi pi-trash" styleClass="p-button-danger" (click)="deleteAccount()"></p-button>
+        <p-button
+          [label]="'DANGER_ZONE.DELETE_ACCOUNT_BUTTON' | translate"
+          icon="pi pi-trash"
+          styleClass="p-button-danger"
+          (click)="deleteAccount()">
+        </p-button>
       </div>
     </div>
   </div>

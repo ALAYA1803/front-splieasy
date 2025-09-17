@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { environment } from '../../../core/environments/environment';
 
 @Component({
   selector: 'app-reset-password',
@@ -11,54 +12,58 @@ import { Router } from '@angular/router';
 })
 export class ResetPasswordComponent implements OnInit {
   resetPasswordForm!: FormGroup;
-  userId: string | null = null;
   isSubmitting = false;
   message = '';
+  private token: string | null = null;
+  private readonly API_URL = environment.urlBackend;
 
   constructor(
     private fb: FormBuilder,
     private http: HttpClient,
+    private route: ActivatedRoute,
     private router: Router
-  ) {
-    const navigation = this.router.getCurrentNavigation();
-    this.userId = navigation?.extras?.state?.['userId'];
-  }
+  ) {}
 
   ngOnInit(): void {
-    if (!this.userId) {
-      this.router.navigate(['/autenticacion/login']);
+    this.token = this.route.snapshot.queryParamMap.get('token');
+    if (!this.token) {
+      // Si no hay token, redirigimos a "olvidé mi contraseña"
+      this.router.navigate(['/autenticacion/forgot-password']);
       return;
     }
 
     this.resetPasswordForm = this.fb.group({
-      password: ['', [Validators.required, Validators.minLength(6)]],
+      password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(100)]],
       repeatPassword: ['', Validators.required],
-    }, {
-      validator: this.passwordMatchValidator
-    });
+    }, { validators: this.passwordMatchValidator });
   }
 
-  passwordMatchValidator(form: FormGroup) {
-    const password = form.get('password')?.value;
-    const repeatPassword = form.get('repeatPassword')?.value;
-    return password === repeatPassword ? null : { mismatch: true };
-  }
+  private passwordMatchValidator = (form: FormGroup) => {
+    const p1 = form.get('password')?.value;
+    const p2 = form.get('repeatPassword')?.value;
+    return p1 === p2 ? null : { mismatch: true };
+  };
 
   updatePassword(): void {
-    if (this.resetPasswordForm.invalid) {
-      return;
-    }
+    if (this.resetPasswordForm.invalid || !this.token) return;
+
     this.isSubmitting = true;
     this.message = '';
     const newPassword = this.resetPasswordForm.value.password;
-    this.http.patch(`http://localhost:3000/users/${this.userId}`, { password: newPassword }).subscribe({
-      next: () => {
-        alert('Contraseña actualizada con éxito. Ahora puedes iniciar sesión.');
+
+    this.http.post<{ message: string }>(
+      `${this.API_URL}/authentication/reset-password`,
+      { token: this.token, newPassword }
+    ).subscribe({
+      next: (res) => {
+        this.isSubmitting = false;
+        alert(res?.message || 'Contraseña actualizada con éxito. Ahora puedes iniciar sesión.');
         this.router.navigate(['/autenticacion/login']);
       },
       error: (err) => {
         this.isSubmitting = false;
-        this.message = 'Ocurrió un error al actualizar la contraseña. Intenta de nuevo.';
+        const serverMsg = err?.error?.message || err?.error || 'Token inválido o expirado.';
+        this.message = serverMsg;
         console.error('Error al actualizar la contraseña', err);
       }
     });

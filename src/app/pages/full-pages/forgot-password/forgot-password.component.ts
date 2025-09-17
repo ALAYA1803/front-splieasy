@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { environment } from '../../../core/environments/environment';
 
 @Component({
   selector: 'app-forgot-password',
@@ -13,6 +14,9 @@ export class ForgotPasswordComponent implements OnInit {
   forgotPasswordForm!: FormGroup;
   isSubmitting = false;
   errorMessage = '';
+  successMessage = '';
+
+  private readonly API_URL = environment.urlBackend;
 
   constructor(
     private fb: FormBuilder,
@@ -25,28 +29,34 @@ export class ForgotPasswordComponent implements OnInit {
       email: ['', [Validators.required, Validators.email]],
     });
   }
+
   verifyEmailAndNavigate(): void {
-    if (this.forgotPasswordForm.invalid) {
-      return;
-    }
+    if (this.forgotPasswordForm.invalid) return;
 
     this.isSubmitting = true;
     this.errorMessage = '';
+    this.successMessage = '';
+
     const email = this.forgotPasswordForm.value.email;
-    this.http.get<any[]>(`http://localhost:3000/users?email=${email}`).subscribe({
-      next: (users) => {
+
+    this.http.post<{ message: string; resetToken?: string }>(
+      `${this.API_URL}/authentication/forgot-password`,
+      { email }
+    ).subscribe({
+      next: (res) => {
         this.isSubmitting = false;
-        if (users.length > 0) {
-          const user = users[0];
-          this.router.navigate(['/autenticacion/reset-password'], { state: { userId: user.id } });
+        this.successMessage = res.message || 'Si el email existe, enviaremos instrucciones.';
+        if (res.resetToken) {
+          this.router.navigate(['/autenticacion/reset-password'], {
+            queryParams: { token: res.resetToken },
+          });
         } else {
-          this.errorMessage = 'No se encontró ninguna cuenta con ese correo electrónico.';
         }
       },
       error: (err) => {
         this.isSubmitting = false;
         this.errorMessage = 'Ocurrió un error. Por favor, intenta de nuevo.';
-        console.error('Error al verificar el correo', err);
+        console.error('Error al solicitar reset:', err);
       },
     });
   }
