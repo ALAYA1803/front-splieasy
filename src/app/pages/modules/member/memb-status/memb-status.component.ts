@@ -75,8 +75,6 @@ export class MembStatusComponent implements OnInit {
     this.http.get<MemberContribution[]>(`${this.api}/member-contributions`, { params }).pipe(
       switchMap((mcs) => {
         if (!mcs?.length) return of({ rows: [] as Row[], mcs: [] as MemberContribution[] });
-
-        // Traer contributions por ID
         const contribIds = Array.from(new Set(mcs.map(m => m.contributionId)));
         const contribCalls = contribIds.map(id =>
           this.http.get<Contribution>(`${this.api}/contributions/${id}`).pipe(
@@ -88,8 +86,6 @@ export class MembStatusComponent implements OnInit {
           switchMap((contribs) => {
             const byContrib = new Map<number, Contribution>();
             contribs.forEach(c => byContrib.set(c.id, c));
-
-            // Traer bills por ID deducido desde contributions
             const billIds = Array.from(
               new Set(contribs.map(c => c.billId).filter(Boolean) as number[])
             );
@@ -154,7 +150,6 @@ export class MembStatusComponent implements OnInit {
     });
   }
 
-  // Helpers de plantilla
   isPaid(s: Row) { return s.status === 'PAGADO'; }
   isPending(s: Row) { return s.status === 'PENDIENTE'; }
   isUnderReview(s: Row) { return s.status === 'EN_REVISION'; }

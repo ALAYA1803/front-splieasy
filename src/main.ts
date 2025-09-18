@@ -3,7 +3,7 @@ import { AppModule } from './app/app.module';
 import { environment } from './app/core/environments/environment';
 
 if (!environment.production) {
-  console.log('🌍 Entorno cargado:', environment);
+  console.log(' Entorno cargado:', environment);
 }
 
 platformBrowserDynamic()

@@ -4,7 +4,6 @@ export interface HouseholdMember {
   householdId: number;
 }
 
-// Interface para crear (sin id)
 export interface CreateHouseholdMemberRequest {
   userId: number;
   householdId: number;

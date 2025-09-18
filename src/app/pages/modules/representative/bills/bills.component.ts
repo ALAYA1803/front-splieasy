@@ -134,7 +134,6 @@ export class BillsComponent implements OnInit {
     }
   }
 
-  // En BillsComponent, cambia este método:
   private createBill() {
     const request: CreateBillRequest = {
       householdId: this.householdId,
@@ -144,7 +143,7 @@ export class BillsComponent implements OnInit {
       createdBy: this.currentUser.id
     };
 
-    console.log('📤 Enviando request:', request);
+    console.log(' Enviando request:', request);
 
     this.http.post<BillResponse>(`${this.API_URL}/bills`, request, {
       headers: this.getAuthHeaders()

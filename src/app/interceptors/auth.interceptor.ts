@@ -6,7 +6,6 @@ import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
 function getToken(): string | null {
-  // Fallbacks por si tu login guarda con otra clave o dentro de currentUser
   const direct =
     localStorage.getItem('accessToken') ||
     localStorage.getItem('access_token') ||
@@ -35,7 +34,7 @@ export class AuthInterceptor implements HttpInterceptor {
     return next.handle(authReq).pipe(
       catchError((err: HttpErrorResponse) => {
         if (err.status === 401) {
-          console.warn('⚠️ 401 capturado por interceptor', err.url);
+          console.warn(' 401 capturado por interceptor', err.url);
         }
         return throwError(() => err);
       })

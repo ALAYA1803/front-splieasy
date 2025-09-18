@@ -20,7 +20,6 @@ export class SidebarService implements OnDestroy {
     private authService: AuthService,
     private translate: TranslateService
   ) {
-    // Regenera etiquetas al cambiar idioma
     this.langSub = this.translate.onLangChange.subscribe(() => {
       if (this.lastRole) {
         const items = this.buildItems(this.lastRole);

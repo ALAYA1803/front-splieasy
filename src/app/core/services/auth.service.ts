@@ -63,13 +63,10 @@ export class AuthService {
     return this.http.get<User[]>(`${this.usersUrl}`, { headers });
   }
 
-  // 📛 Obtiene el rol actual del usuario
   getCurrentRole(): string {
     return localStorage.getItem('userRole') || '';
   }
 
-
-  // 🧹 Limpia el localStorage (útil para logout)
   clearSession() {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('userId');

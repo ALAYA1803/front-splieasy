@@ -27,7 +27,6 @@ export class ResetPasswordComponent implements OnInit {
   ngOnInit(): void {
     this.token = this.route.snapshot.queryParamMap.get('token');
     if (!this.token) {
-      // Si no hay token, redirigimos a "olvidé mi contraseña"
       this.router.navigate(['/autenticacion/forgot-password']);
       return;
     }

@@ -93,11 +93,11 @@ export class ContributionsService {
     const path3 = this.contributionsUrl;
     this.debug && console.debug(' Cargando contribuciones de household:', householdId);
     return this.http.get<Contribution[]>(path1, { headers }).pipe(
-      tap(list => this.debug && console.debug('✅ path1 ok:', list?.length ?? 0)),
+      tap(list => this.debug && console.debug(' path1 ok:', list?.length ?? 0)),
       catchError(err1 => {
         this.debug && console.warn('️ path1 falló:', err1?.status);
         return this.http.get<Contribution[]>(path2, { headers, params: params2 }).pipe(
-          tap(list => this.debug && console.debug('✅ path2 ok:', list?.length ?? 0)),
+          tap(list => this.debug && console.debug(' path2 ok:', list?.length ?? 0)),
           catchError(err2 => {
             this.debug && console.warn(' path2 falló:', err2?.status);
             return this.http.get<any[]>(path3, { headers }).pipe(
