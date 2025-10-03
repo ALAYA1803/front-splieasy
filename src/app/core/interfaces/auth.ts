@@ -17,11 +17,13 @@ export interface SignUpRequest {
   password: string;
   income: number;
   roles: string[];
+  captchaToken: string; // Añade esta línea
 }
 
 export interface SignInRequest {
   username: string;
   password: string;
+  captchaToken: string; // Añade esta línea
 }
 
 export interface AuthResponse {

@@ -63,6 +63,12 @@
         <div class="options-group">
           <a [routerLink]="['/autenticacion/forgot-password']" class="forgot-password-link">{{ 'LOGIN.FORGOT_PASSWORD' | translate }}</a>
         </div>
+        <re-captcha
+          (resolved)="onCaptchaResolved($event)"
+          siteKey="6Lfqx9wrAAAAAITS3xCtu2B1CXbyM03jc1jAnVTe">
+        </re-captcha>
+
+
         <div class="text-danger my-3 text-center" *ngIf="error">{{ error }}</div>
 
         <button type="submit" class="btn btn-login w-100">{{ 'LOGIN.BUTTON' | translate }}</button>

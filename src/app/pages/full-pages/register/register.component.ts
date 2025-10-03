@@ -15,6 +15,8 @@ export class RegisterComponent {
 
   registerForm: FormGroup;
   isSubmitting = false;
+  captchaToken: string = '';  // Token de reCAPTCHA
+  error = '';
 
   constructor(
     private fb: FormBuilder,
@@ -47,10 +49,13 @@ export class RegisterComponent {
    * Acción de registro
    */
   register() {
-    if (this.registerForm.invalid || this.isSubmitting) {
+    if (this.registerForm.invalid || this.isSubmitting|| !this.captchaToken) {
       if (this.registerForm.invalid) {
         this.registerForm.markAllAsTouched();
       }
+    if (!this.captchaToken) {
+      this.error = 'Por favor, verifica que no eres un robot.';
+    }
       return;
     }
 
@@ -63,7 +68,8 @@ export class RegisterComponent {
       email: formValue.email,
       password: formValue.password,
       income: formValue.income,
-      roles: [formValue.role]
+      roles: [formValue.role],
+      captchaToken: this.captchaToken // Incluir el token del reCAPTCHA
     };
 
     console.log('Enviando payload:', payload);
@@ -79,5 +85,15 @@ export class RegisterComponent {
         this.isSubmitting = false;
       }
     });
+  }
+/**
+   * Captura el token de reCAPTCHA
+   */
+  onCaptchaResolved(token: string | null) {
+    if (token) {
+      this.captchaToken = token;  // Asigna el token si no es null
+    } else {
+      this.captchaToken = '';  // Si es null, vacía el token
+    }
   }
 }
