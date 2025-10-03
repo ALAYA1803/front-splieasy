@@ -14,7 +14,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {TranslatePipe} from '@ngx-translate/core';
 import { TranslateModule } from '@ngx-translate/core';
 import { LanguageSwitcherComponent } from '../../core/components/language-switcher/language-switcher.component';
-import { RecaptchaModule } from 'ng-recaptcha';  // IMPORTA AQUÍ RecaptchaModule
+import { RecaptchaModule, RecaptchaFormsModule, RECAPTCHA_SETTINGS } from 'ng-recaptcha-angular19';  // IMPORTA AQUÍ RecaptchaModule
 
 @NgModule({
   declarations: [
