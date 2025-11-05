@@ -385,3 +385,57 @@
   width: 100%;
   height: 100%;
 }
+
+/* Fix: en modo oscuro asegurar que hover y active sean independientes y no dejen 'residuos' */
+:host-context(body.dark-theme) .nav-link {
+  background: transparent !important;
+  color: #cfe8ff !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+
+:host-context(body.dark-theme) .nav-link:hover {
+  background: rgba(255,255,255,0.04) !important; /* efecto sutil al pasar */
+  color: #ffffff !important;
+  transform: translateX(6px) !important;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.35) !important;
+  border-color: rgba(255,255,255,0.06) !important;
+}
+
+/* Reseteo explícito para evitar que un link previamente presionado conserve fondo oscuro */
+:host-context(body.dark-theme) .nav-link:not(:hover):not(.active-route) {
+  background: transparent !important;
+  box-shadow: none !important;
+  color: #cfe8ff !important;
+  transform: none !important;
+}
+
+/* Estado activo (seleccionado) bien definido en modo oscuro */
+:host-context(body.dark-theme) .nav-link.active-route {
+  background: linear-gradient(135deg, rgba(52,152,219,0.22), rgba(52,152,219,0.08)) !important;
+  color: #3498db !important;
+  font-weight: 600 !important;
+  border-color: rgba(52,152,219,0.28) !important;
+  box-shadow: 0 6px 18px rgba(52,152,219,0.14) !important;
+  transform: none !important;
+}
+
+/* Asegurar que indicadores y iconos usen el color correcto */
+:host-context(body.dark-theme) .nav-link.active-route .nav-icon,
+:host-context(body.dark-theme) .nav-link.active-route .nav-indicator {
+  color: #3498db !important;
+  opacity: 1 !important;
+}
+
+/* Focus accesible pero sin dejar fondo permanente */
+:host-context(body.dark-theme) .nav-link:focus {
+  outline: 3px solid rgba(52,152,219,0.12) !important;
+  outline-offset: 2px !important;
+}
+
+/* Si hay animaciones JS que añadan estilos inline, forzamos este reset al renderizar */
+:host-context(body.dark-theme) .nav-item .nav-link[style] {
+  background: transparent !important;
+}
+
+/* End of dark-mode sidebar fixes */

@@ -1,4 +1,3 @@
-
 :host {
   --background-color: #202020;
   --background-secondary-color: #2d2d2d;
@@ -32,8 +31,91 @@
 
 .header-profile {
   flex-shrink: 0;
+  display: flex !important; /* colocar elementos en línea */
+  align-items: center !important; /* centrar verticalmente */
+  gap: 0.6rem !important; /* espacio entre language-switcher y botón */
+  flex-wrap: nowrap !important; /* NO permitir que se envuelvan */
+  white-space: nowrap; /* evitar saltos de línea */
 }
 
+/* Asegurar que el language switcher se muestre inline y no ocupe todo el ancho */
+.header-profile app-language-switcher,
+.header-profile .lang-wrap,
+.header-profile > * {
+  display: inline-flex !important;
+  align-items: center;
+}
+
+/* Si el language-switcher intenta ocupar todo el ancho, limitar su ancho máximo */
+.header-profile app-language-switcher {
+  max-width: 220px;
+}
+
+/* Ajustes visuales del botón en este contenedor */
+.header-profile .btn-theme-toggle {
+  margin: 0; /* ya gestionado por gap */
+  padding: 0.45rem 0.6rem;
+  border-radius: 8px;
+  flex: 0 0 auto !important; /* no crecer ni encoger */
+}
+
+.lang-wrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Reglas forzadas para asegurar que el language-switcher no empuje el botón a la siguiente línea */
+.header-profile {
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  gap: 0.6rem !important;
+}
+
+.header-profile .lang-wrap {
+  display: inline-flex !important;
+  flex: 0 0 auto !important; /* no crecer ni encoger */
+  align-items: center !important;
+}
+
+/* Forzar que el componente language-switcher no ocupe 100% */
+.header-profile app-language-switcher,
+.header-profile .language-switcher {
+  display: inline-flex !important;
+  flex: 0 0 auto !important;
+  max-width: 260px !important;
+}
+
+/* Evitar que el botón de language-switcher haga wrap internas */
+.header-profile .language-switcher .switcher-button {
+  white-space: nowrap !important;
+}
+
+/* Forzar tamaño del toggle de tema para que no salte debajo */
+.header-profile .btn-theme-toggle {
+  display: inline-flex !important;
+  flex: 0 0 auto !important;
+  align-items: center !important;
+}
+
+/* Si sigue ocurriendo, esto empuja los items en línea usando inline-block */
+.header-profile > * {
+  display: inline-flex !important;
+  vertical-align: middle !important;
+}
+
+/* Forzar que el icono del theme toggle dentro del header sea claro cuando NO hay dark-theme */
+:host-context(body:not(.dark-theme)) .header-container .btn-theme-toggle .bi {
+  color: #ffffff !important; /* icono claro en el header */
+  opacity: 1 !important;
+  filter: none !important;
+}
+
+/* Small hover tweak to keep contrast */
+:host-context(body:not(.dark-theme)) .btn-theme-toggle:hover .bi {
+  color: #ffffff !important;
+}
 
 @media (max-width: 576px) {
   .header-container {
@@ -42,5 +124,14 @@
 
   .header-title {
     font-size: var(--font-size-title-mobile);
+  }
+}
+
+@media (max-width: 420px) {
+  .header-profile {
+    gap: 0.35rem;
+  }
+  .header-profile app-language-switcher {
+    max-width: 160px;
   }
 }

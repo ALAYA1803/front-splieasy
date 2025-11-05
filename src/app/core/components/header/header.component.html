@@ -5,7 +5,13 @@
   </h1>
 
   <div class="header-profile">
-    <app-language-switcher></app-language-switcher>
+    <div class="lang-wrap">
+      <app-language-switcher></app-language-switcher>
+      <!-- Botón para alternar tema (mismo markup que en nav-bar) ahora dentro de .lang-wrap -->
+      <button type="button" class="btn btn-theme-toggle ms-2" (click)="toggleDarkMode()" [attr.aria-pressed]="isDarkMode" title="Alternar modo claro/oscuro">
+        <i class="bi" [class.bi-sun]="isDarkMode" [class.bi-moon]="!isDarkMode" [style.color]="isDarkMode ? '#ffffff' : '#ffffff'"></i>
+      </button>
+    </div>
   </div>
 
 </header>

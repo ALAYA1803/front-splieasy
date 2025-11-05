@@ -250,3 +250,518 @@ body {
   display: flex;
   column-gap: 16px;
 }
+
+/* Tema oscuro global: se aplica añadiendo la clase `dark-theme` al <body> */
+/* Ahora usamos selectores con body.dark-theme para asegurar que las reglas afecten a la página entera */
+body.dark-theme {
+  --first-color: #90caf9; /* tonos más claros para contraste */
+  --second-color: #64b5f6;
+  --third-color: #0b0b0b;
+
+  background-color: #0b0b0b !important;
+  color: #e6eef8 !important;
+}
+
+/* Redefinir variables usadas en componentes para modo oscuro: esto fuerza los fondos oscuros incluso si el componente establece variables en :host */
+body.dark-theme, body.dark-theme * {
+  --background-card: #0f1724 !important;
+  --background-main: #071023 !important;
+  --background-hover: #0b2233 !important;
+  --bg-main: #071023 !important;
+  --bg-hover: #0b1a2a !important;
+  --bg-nested: #061222 !important;
+  --background: #071023 !important;
+  --border-color: rgba(255,255,255,0.06) !important;
+  --text-primary: #e6eef8 !important;
+  --text-secondary: #9aa6b3 !important;
+  --shadow-color: rgba(0, 0, 0, 0.6) !important;
+}
+
+/* Ajustes específicos para componentes cuando está activo el tema oscuro */
+body.dark-theme, body.dark-theme .app-container {
+  background-color: #0b0b0b !important;
+  color: #e6eef8 !important;
+}
+
+/* Forzamos color de texto y fondos en los selectores más comunes para cubrir la mayoría de la página */
+body.dark-theme * {
+  /* No forzamos todo por defecto para evitar romper elementos que usan imágenes; solo colores si están presentes */
+}
+
+body.dark-theme p,
+body.dark-theme li,
+body.dark-theme span,
+body.dark-theme a,
+body.dark-theme label,
+body.dark-theme input,
+body.dark-theme textarea,
+body.dark-theme button,
+body.dark-theme h1,
+body.dark-theme h2,
+body.dark-theme h3,
+body.dark-theme h4,
+body.dark-theme h5,
+body.dark-theme h6 {
+  color: #e6eef8 !important;
+}
+
+body.dark-theme .background,
+body.dark-theme .container,
+body.dark-theme .app-container {
+  background-color: transparent !important;
+}
+
+/* Navbar y enlaces */
+body.dark-theme .navbar {
+  background-color: #111827 !important;
+  color: #e6eef8 !important;
+  border: 1px solid rgba(255,255,255,0.06) !important;
+}
+
+body.dark-theme .nav-link {
+  color: #cfe8ff !important;
+}
+
+body.dark-theme .nav-link:hover,
+body.dark-theme .nav-link.active {
+  color: var(--second-color) !important;
+}
+
+body.dark-theme .text-easy {
+  color: #e6eef8 !important;
+}
+
+/* Botones y elementos interactivos */
+body.dark-theme .btn-login,
+body.dark-theme .login-button,
+body.dark-theme .signin-button,
+body.dark-theme .btn-outline-light {
+  background-color: var(--first-color) !important;
+  color: #0b0b0b !important;
+}
+
+/* Reglas adicionales para forzar fondos oscuros en elementos que usan colores claros por defecto */
+body.dark-theme .container,
+body.dark-theme .container-fluid,
+body.dark-theme .card,
+body.dark-theme .card-body,
+body.dark-theme .card-header,
+body.dark-theme .card-footer,
+body.dark-theme .precio-card,
+body.dark-theme .app-container,
+body.dark-theme .background,
+body.dark-theme .login-section,
+body.dark-theme .offcanvas,
+body.dark-theme .offcanvas-body,
+body.dark-theme .offcanvas-header,
+body.dark-theme .offcanvas-backdrop,
+body.dark-theme .modal-content,
+body.dark-theme section,
+body.dark-theme .section {
+  background-color: transparent !important;
+}
+
+/* Forzamos fondos oscuros para cajas y elementos con fondo blanco por defecto */
+body.dark-theme .navbar,
+body.dark-theme .signin-button,
+body.dark-theme .btn-login,
+body.dark-theme .login-button {
+  background-color: #0f1724 !important; /* tono oscuro consistente */
+  color: #e6eef8 !important;
+}
+
+/* Si hay elementos específicamente con background-color: white; los sobreescribimos */
+body.dark-theme [style*="background-color: white"],
+body.dark-theme [style*="background: white"],
+body.dark-theme [class*="bg-white"] {
+  background-color: #0f1724 !important;
+  color: #e6eef8 !important;
+}
+
+/* Asegurar que los formularios y tarjetas tengan fondo oscuro */
+body.dark-theme input,
+body.dark-theme textarea,
+body.dark-theme select,
+body.dark-theme .form-control,
+body.dark-theme .card,
+body.dark-theme .card-body {
+  background-color: #071023 !important;
+  color: #e6eef8 !important;
+  border-color: rgba(255,255,255,0.06) !important;
+}
+
+/* Ajustar offcanvas y menús laterales */
+body.dark-theme .offcanvas,
+body.dark-theme .offcanvas-body {
+  background-color: #071023 !important;
+  color: #e6eef8 !important;
+}
+
+/* Si hay secciones con fondo gris claro (plomo), forzarlas a oscuro */
+body.dark-theme .section-hero,
+body.dark-theme .section-about,
+body.dark-theme .section-prices,
+body.dark-theme .section-services {
+  background-color: transparent !important;
+}
+
+/* Imágenes de fondo: mantener imagen pero oscurecer overlay */
+body.dark-theme .hero-section::before,
+body.dark-theme .background::before {
+  background-color: rgba(3,7,18,0.75) !important;
+}
+
+/* Botón de alternar tema */
+.btn-theme-toggle {
+  border: 1px solid rgba(0,0,0,0.08);
+  background: transparent;
+  color: var(--first-color);
+  padding: 0.5rem 0.65rem;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-theme-toggle .bi {
+  font-size: 1.05rem;
+}
+
+/* Asegurar que el icono del botón de tema sea oscuro en modo claro */
+body:not(.dark-theme) .btn-theme-toggle .bi {
+  color: rgba(0,0,0,0.75) !important; /* icono oscuro y legible en modo claro */
+}
+
+/* Forzar icono oscuro en modo claro incluso dentro de navbar/offcanvas */
+body:not(.dark-theme) .navbar .btn-theme-toggle .bi,
+body:not(.dark-theme) .offcanvas .btn-theme-toggle .bi,
+body:not(.dark-theme) .site-navbar .btn-theme-toggle .bi,
+body:not(.dark-theme) .container-xxl .btn-theme-toggle .bi {
+  color: rgba(0,0,0,0.85) !important; /* icono oscuro y legible */
+  filter: none !important;
+  opacity: 1 !important;
+}
+
+/* Asegurar buen contraste al hover */
+body:not(.dark-theme) .btn-theme-toggle:hover .bi {
+  color: rgba(0,0,0,0.95) !important;
+}
+
+/* Pequeña transición para suavizar cambios */
+body,
+body * {
+  transition: background-color 0.18s ease, color 0.18s ease;
+}
+
+/* Hover global para el botón de alternar tema */
+.btn-theme-toggle {
+  transition: background-color 0.18s ease, color 0.18s ease, box-shadow 0.18s ease, transform 0.12s ease;
+}
+
+/* Modo claro: hover del botón (fondo claro y icono oscuro) */
+body:not(.dark-theme) .btn-theme-toggle:hover {
+  background: rgba(0,0,0,0.04) !important;
+  border-color: rgba(0,0,0,0.08) !important;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.06) !important;
+  transform: translateY(-1px);
+}
+body:not(.dark-theme) .btn-theme-toggle:hover .bi {
+  color: rgba(0,0,0,0.95) !important;
+}
+
+/* Modo oscuro: hover del botón (fondo más claro y brillo del icono) */
+body.dark-theme .btn-theme-toggle:hover {
+  background: rgba(255,255,255,0.04) !important;
+  border-color: rgba(255,255,255,0.12) !important;
+  box-shadow: 0 8px 22px rgba(0,0,0,0.45) inset, 0 6px 20px rgba(21,101,192,0.12) !important;
+  transform: translateY(-1px);
+}
+body.dark-theme .btn-theme-toggle:hover .bi {
+  color: #f8fafc !important;
+  filter: none !important;
+}
+
+/* Asegurar foco accesible también (teclado) */
+.btn-theme-toggle:focus-visible {
+  outline: 3px solid rgba(21,101,192,0.16);
+  outline-offset: 2px;
+}
+
+/* Catch-all para estilos inline que usan background-color o background */
+body.dark-theme [style*="background-color:"] ,
+body.dark-theme [style*="background:"] {
+  background-color: #0f1724 !important;
+  color: #e6eef8 !important;
+}
+
+/* Clases Bootstrap o utilidades comunes */
+body.dark-theme .bg-light,
+body.dark-theme .bg-white,
+body.dark-theme .bg-secondary,
+body.dark-theme .bg-transparent {
+  background-color: #0f1724 !important;
+  color: #e6eef8 !important;
+}
+
+/* Si algo sigue usando color literal 'gray' o '#f1f1f1', capturarlo */
+body.dark-theme [style*="#f"],
+body.dark-theme [style*="gray"],
+body.dark-theme [style*="#eee"],
+body.dark-theme [style*="#f8f9fa"] {
+  background-color: #0f1724 !important;
+  color: #e6eef8 !important;
+}
+
+/* Overrides específicos para componentes que tienen fondos claros definidos en sus estilos locales */
+body.dark-theme .service-section,
+body.dark-theme .service-section * {
+  background-color: #071023 !important;
+  color: #e6eef8 !important;
+}
+
+body.dark-theme .review-section,
+body.dark-theme .review-section * {
+  background-color: #071023 !important;
+  color: #e6eef8 !important;
+}
+
+body.dark-theme .price-section,
+body.dark-theme .price-section *,
+body.dark-theme .precio-card {
+  background-color: #071023 !important;
+  color: #e6eef8 !important;
+}
+
+body.dark-theme .members-container,
+body.dark-theme .table-card,
+body.dark-theme .members-table tbody tr,
+body.dark-theme .members-table tbody tr:hover {
+  background-color: #071023 !important;
+  color: #e6eef8 !important;
+}
+
+/* Asegurar que los gradientes que usan vars claras se oscurezcan */
+body.dark-theme .skeleton-row,
+body.dark-theme .skeleton-row::before,
+body.dark-theme .skeleton-row::after {
+  background: linear-gradient(90deg, var(--background-card) 25%, var(--background-hover) 50%, var(--background-card) 75%) !important;
+}
+
+/* Modo claro (por defecto): asegurar que los tonos "plomo" sean blancos/claros */
+body:not(.dark-theme) {
+  /* Variables claras para que los componentes que usan vars se ajusten automáticamente */
+  --background-card: #f8f9fa; /* tarjetas y secciones ligeramente off-white */
+  --background-main: #ffffff; /* fondo principal blanco puro */
+  --background-hover: #ffffff; /* hover más cercano al blanco */
+  --bg-main: #ffffff;
+  --bg-hover: #f8f9fa;
+  --bg-nested: #f8fafc;
+  --background: #ffffff;
+  --border-color: #dee2e6;
+  --text-primary: #212529;
+  --text-secondary: #6c757d;
+  --shadow-color: rgba(0,0,0,0.06);
+
+  background-color: #ffffff !important;
+  color: #212529 !important;
+}
+
+/* Forzar que secciones y cards que estaban en gris plomo pasen a blanco en modo claro */
+body:not(.dark-theme) .service-section,
+body:not(.dark-theme) .price-section,
+body:not(.dark-theme) .review-section,
+body:not(.dark-theme) .section-hero,
+body:not(.dark-theme) .section-about,
+body:not(.dark-theme) .section-prices,
+body:not(.dark-theme) .section-services,
+body:not(.dark-theme) .members-container,
+body:not(.dark-theme) .login-section {
+  background-color: var(--background-main) !important;
+  color: var(--text-primary) !important;
+}
+
+/* Overrides puntuales para secciones que usan clases distintas (corrección específica) */
+body:not(.dark-theme) .features-section,
+body:not(.dark-theme) .how-it-works-section,
+body:not(.dark-theme) .reviews-section,
+body:not(.dark-theme) .contactus-section,
+body:not(.dark-theme) .about-section,
+body:not(.dark-theme) .service-section {
+  background-color: var(--background-main) !important;
+  color: var(--text-primary) !important;
+}
+
+/* Si alguna sección define tarjetas con fondo blanco, mantenerlas off-white/white segun variable */
+body:not(.dark-theme) .feature-card,
+body:not(.dark-theme) .testimonial-card,
+body:not(.dark-theme) .price-card,
+body:not(.dark-theme) .table-card {
+  background-color: var(--background-card) !important;
+  color: var(--text-primary) !important;
+  border-color: var(--border-color) !important;
+}
+
+/* Formularios, offcanvas y modales en modo claro */
+body:not(.dark-theme) input,
+body:not(.dark-theme) textarea,
+body:not(.dark-theme) select,
+body:not(.dark-theme) .form-control,
+body:not(.dark-theme) .offcanvas,
+body:not(.dark-theme) .offcanvas-body,
+body:not(.dark-theme) .modal-content {
+  background-color: var(--background-card) !important;
+  color: var(--text-primary) !important;
+  border-color: var(--border-color) !important;
+}
+
+/* Capturar inline styles que contengan colores grises específicos y convertirlos a blanco en modo claro */
+body:not(.dark-theme) [style*="#2d2d2d"],
+body:not(.dark-theme) [style*="#202020"],
+body:not(.dark-theme) [style*="#e0e0e0"],
+body:not(.dark-theme) [style*="#f8f9fa"] {
+  background-color: #ffffff !important;
+  color: #212529 !important;
+}
+
+/* Utilidades Bootstrap en modo claro: asegurar fondo claro */
+body:not(.dark-theme) .bg-light,
+body:not(.dark-theme) .bg-white,
+body:not(.dark-theme) .bg-secondary {
+  background-color: #ffffff !important;
+  color: #212529 !important;
+}
+
+/* Asegurar contrastes para títulos y subtítulos en modo claro */
+body:not(.dark-theme) .section-title,
+body:not(.dark-theme) .section-lead,
+body:not(.dark-theme) .feature-title,
+body:not(.dark-theme) .plan-title,
+body:not(.dark-theme) .user-name {
+  color: var(--text-primary) !important;
+}
+
+/* Overrides específicos para el layout: forzar fondo claro cuando no está activo dark-theme */
+body:not(.dark-theme) .layout-wrapper {
+  background-color: var(--background-main) !important;
+  color: var(--text-primary) !important;
+}
+
+body:not(.dark-theme) .layout-sidebar {
+  background-color: var(--background-sidebar) !important;
+  border-right: 1px solid var(--border-color) !important;
+  color: var(--text-primary) !important;
+}
+
+body:not(.dark-theme) .layout-header {
+  background-color: var(--background-header) !important;
+  border-bottom: 1px solid var(--border-color) !important;
+  color: var(--text-primary) !important;
+}
+
+body:not(.dark-theme) .layout-content,
+body:not(.dark-theme) .content-container,
+body:not(.dark-theme) .layout-footer {
+  background-color: var(--background-main) !important;
+  color: var(--text-primary) !important;
+}
+
+/* Forzar que sidebar toggle hover no quede oscuro en modo claro */
+body:not(.dark-theme) .sidebar-toggle-button:hover,
+body:not(.dark-theme) .mobile-menu-button:hover {
+  background-color: transparent !important;
+}
+
+/* Asegurar variables y fondos claros para TODO el proyecto cuando no está activo dark-theme */
+body:not(.dark-theme), body:not(.dark-theme) * {
+  /* Variables claras globales con !important para sobreescribir :host en componentes */
+  --background-card: #f8f9fa !important; /* tarjetas off-white */
+  --background-main: #ffffff !important; /* fondo principal blanco */
+  --background-hover: #ffffff !important;
+   --bg-main: #ffffff !important;
+   --bg-hover: #f8f9fa !important;
+   --bg-nested: #f8fafc !important;
+   --background: #ffffff !important;
+   --border-color: #dee2e6 !important;
+   --text-primary: #212529 !important;
+   --text-secondary: #6c757d !important;
+   --shadow-color: rgba(0,0,0,0.06) !important;
+}
+
+/* Forzar que la regla global .navbar use las variables (evita recuadros grises) */
+.navbar {
+  background-color: var(--background-main, #ffffff) !important;
+  height: 80px;
+  margin: 20px;
+  border-radius: 16px;
+  padding: 0.5rem;
+}
+
+/* Refuerzo: forzar fondos claros en selectores comunes por si siguen con valores hardcoded */
+body:not(.dark-theme) .layout-wrapper,
+body:not(.dark-theme) .layout-sidebar,
+body:not(.dark-theme) .layout-header,
+body:not(.dark-theme) .layout-content,
+body:not(.dark-theme) .layout-footer,
+body:not(.dark-theme) .service-section,
+body:not(.dark-theme) .price-section,
+body:not(.dark-theme) .review-section,
+body:not(.dark-theme) .feature-card,
+body:not(.dark-theme) .price-card,
+body:not(.dark-theme) .card,
+body:not(.dark-theme) .table-card,
+body:not(.dark-theme) .members-container,
+body:not(.dark-theme) .skeleton-row,
+body:not(.dark-theme) .hero-section {
+  background-color: var(--background-card) !important;
+  color: var(--text-primary) !important;
+  border-color: var(--border-color) !important;
+}
+
+/* Capturar inline styles con colores oscuros específicos y convertirlos a claro en modo claro */
+body:not(.dark-theme) [style*="#2d2d2d"],
+body:not(.dark-theme) [style*="#202020"],
+body:not(.dark-theme) [style*="#111827"] {
+  background-color: var(--background-card) !important;
+  color: var(--text-primary) !important;
+}
+
+/* Regla agresiva para asegurar que los hijos principales del área de contenido sean claros en modo claro.
+   Excluimos .hero-section para no tapar la imagen de portada. */
+body:not(.dark-theme) .content-container > :not(.hero-section),
+body:not(.dark-theme) .layout-content > :not(.hero-section) {
+  background-color: var(--background-card) !important;
+  color: var(--text-primary) !important;
+}
+
+/* También forzamos secciones directas dentro del wrapper principal */
+body:not(.dark-theme) .layout-wrapper > :not(.hero-section),
+body:not(.dark-theme) .layout-wrapper .content-container > :not(.hero-section) {
+  background-color: var(--background-card) !important;
+  color: var(--text-primary) !important;
+}
+
+/* Forzar fondos claros directamente en los componentes custom (cubre encapsulación/emplacement) */
+body:not(.dark-theme) app-service-section,
+body:not(.dark-theme) app-service-section *,
+body:not(.dark-theme) app-howdoesitwork-section,
+body:not(.dark-theme) app-howdoesitwork-section *,
+body:not(.dark-theme) app-review-section,
+body:not(.dark-theme) app-review-section *,
+body:not(.dark-theme) app-contactus-section,
+body:not(.dark-theme) app-contactus-section *,
+body:not(.dark-theme) app-about-section,
+body:not(.dark-theme) app-about-section * {
+  background-color: var(--background-main) !important;
+  color: var(--text-primary) !important;
+}
+
+/* Forzar tarjetas dentro de esos componentes a usar el fondo de tarjeta */
+body:not(.dark-theme) app-service-section .feature-card,
+body:not(.dark-theme) app-howdoesitwork-section .feature-card,
+body:not(.dark-theme) app-review-section .testimonial-card,
+body:not(.dark-theme) app-contactus-section .contact-form,
+body:not(.dark-theme) app-about-section .about-card {
+  background-color: var(--background-card) !important;
+  color: var(--text-primary) !important;
+  border-color: var(--border-color) !important;
+}

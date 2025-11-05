@@ -25,29 +25,45 @@
 .billing-toggle {
   display: flex;
   justify-content: center;
-  background-color: #e0e0e0;
-  border-radius: 50px;
-  padding: 0.4rem;
+  align-items: center;
+  background-color: #eef0f2; /* fondo claro para modo claro */
+  border-radius: 999px; /* cápsula grande */
+  padding: 6px; /* espacio interior para 'alojar' los botones */
+  gap: 6px; /* separación sutil entre botones */
   width: fit-content;
   margin: 0 auto 4rem auto;
+  border: 1px solid rgba(0,0,0,0.06);
 }
 
 .toggle-btn {
-  border: none;
-  padding: 0.6rem 1.25rem;
-  border-radius: 50px;
-  font-weight: 600;
+  background: transparent; /* dejar que la cápsula sea el fondo */
+  color: var(--text-dark);
+  border: none; /* el botón activo tendrá borde propio */
+  padding: 0.6rem 1.4rem;
+  border-radius: 999px; /* píldora interior */
+  font-weight: 700;
   cursor: pointer;
-  background-color: transparent;
-  color: var(--text-muted);
-  transition: all 0.3s ease;
-  position: relative;
+  min-width: 130px;
+  text-align: center;
+  box-shadow: none;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease, color 0.18s ease;
 }
 
 .toggle-btn.active {
-  background-color: #fff;
-  color: var(--brand-primary);
-  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+  background: linear-gradient(180deg, #2a9df4, #1b83e0);
+  color: #ffffff;
+  border: 2px solid #ffffff; /* borde blanco para destacar */
+  box-shadow: 0 12px 36px rgba(42,157,244,0.22);
+  transform: translateY(-2px);
+}
+
+/* Hover / foco para interacción */
+.toggle-btn:hover,
+.toggle-btn:focus-visible {
+  background: rgba(0,0,0,0.04);
+  color: inherit;
+  outline: none;
+  box-shadow: 0 8px 26px rgba(0,0,0,0.12);
 }
 
 .save-badge {
@@ -160,3 +176,217 @@
   background-color: #115293;
   border-color: #115293;
 }
+
+/* Dark theme overrides and improved hover/focus accessibility for price section */
+body.dark-theme .price-section {
+  /* ajustar variables para mejor contraste en oscuro */
+  --text-dark: #f1f3f5;
+  --text-muted: #cfcfcf;
+  --background-light: #1a1a1a;
+  --border-color: rgba(255,255,255,0.08);
+  background-color: #121212; /* fondo de la sección en modo oscuro */
+}
+
+body.dark-theme .price-section .section-title,
+body.dark-theme .price-section .plan-title {
+  color: var(--text-dark);
+}
+body.dark-theme .price-section .section-lead {
+  color: var(--text-muted);
+}
+
+body.dark-theme .price-section .billing-toggle {
+  background-color: rgba(255,255,255,0.06); /* un poco más claro para destacar los botones */
+}
+
+body.dark-theme .price-section .toggle-btn {
+  background-color: rgba(255,255,255,0.03); /* más contraste con el fondo */
+  color: var(--text-dark); /* texto claro para mejor legibilidad */
+  border: 1px solid rgba(255,255,255,0.12); /* borde más opaco para diferenciar */
+  padding: 0.55rem 1.25rem;
+  min-width: 120px;
+}
+body.dark-theme .price-section .toggle-btn:hover,
+body.dark-theme .price-section .toggle-btn:focus-visible {
+  background-color: rgba(255,255,255,0.06);
+  color: var(--text-dark);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+  transform: translateY(-2px);
+}
+body.dark-theme .price-section .toggle-btn.active {
+  background-color: var(--brand-primary);
+  color: #fff;
+  border-color: var(--brand-primary);
+  box-shadow: 0 8px 28px rgba(21,101,192,0.28);
+}
+
+body.dark-theme .price-section .price-card {
+  background-color: #1f1f1f;
+  border-color: var(--border-color);
+  color: var(--text-dark);
+}
+
+body.dark-theme .price-section .plan-price {
+  color: var(--brand-primary);
+}
+
+body.dark-theme .price-section .features-list li {
+  color: var(--text-muted);
+}
+body.dark-theme .price-section .features-list i {
+  color: #4cd964; /* verde más legible en oscuro */
+}
+
+/* Botones: mejor contraste en oscuro, hover claro y foco accesible */
+body.dark-theme .price-section .btn-price {
+  background-color: transparent; /* dejar transparente para que se integre con la tarjeta */
+  color: var(--brand-primary);
+  border-color: rgba(255,255,255,0.12);
+}
+body.dark-theme .price-section .btn-price:hover,
+body.dark-theme .price-section .btn-price:focus-visible {
+  background-color: var(--brand-primary);
+  color: #fff;
+  border-color: var(--brand-primary);
+  box-shadow: 0 6px 18px rgba(21,101,192,0.25);
+  outline: none;
+  transform: translateY(-1px);
+}
+
+/* Recomendada: más presencia en oscuro */
+body.dark-theme .price-section .price-card.recommended {
+  border-color: var(--brand-primary);
+  box-shadow: 0 12px 40px rgba(21,101,192,0.2);
+}
+body.dark-theme .price-section .recommended-badge {
+  background-color: var(--brand-primary);
+}
+
+/* Mejorar contraste del botón dentro de la tarjeta recomendada en modo oscuro */
+body.dark-theme .price-section .price-card.recommended .btn-price {
+  background-color: var(--brand-primary);
+  color: #fff;
+  border-color: var(--brand-primary);
+}
+
+/* Hover / focus para los botones toggle en modo oscuro para que se diferencien del fondo */
+body.dark-theme .price-section .toggle-btn:hover,
+body.dark-theme .price-section .toggle-btn:focus-visible {
+  background-color: rgba(255,255,255,0.12);
+  color: #fff;
+  box-shadow: 0 6px 18px rgba(21,101,192,0.08);
+  transform: translateY(-1px);
+}
+
+/* Asegurar estados de foco para teclado en todos los botones del componente */
+.price-section .toggle-btn:focus-visible,
+.price-section .btn-price:focus-visible {
+  outline: 3px solid rgba(21,101,192,0.18);
+  outline-offset: 2px;
+}
+
+/* Pequeña mejora: transición más suave para transformaciones y sombras */
+.price-section .price-card,
+.price-section .btn-price,
+.price-section .toggle-btn {
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease, color 0.18s ease;
+}
+
+/* Ajustes adicionales para que los toggles sean claramente visibles en modo oscuro */
+body.dark-theme .price-section .billing-toggle {
+  background-color: rgba(255,255,255,0.02); /* forzar mayor contraste */
+  padding: 0.35rem 0.45rem;
+}
+
+body.dark-theme .price-section .toggle-btn {
+  background: rgba(255,255,255,0.02);
+  color: #e6eef8; /* texto claro */
+  border: 1px solid rgba(255,255,255,0.08);
+  padding: 0.7rem 1.6rem;
+  min-width: 150px;
+  margin: 0 0.35rem;
+  border-radius: 999px;
+  font-weight: 700;
+  box-shadow: none;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease, color 0.18s ease;
+}
+body.dark-theme .price-section .toggle-btn.active {
+  background: linear-gradient(180deg, var(--toggle-celeste), #1b83e0);
+  color: #ffffff;
+  border: 2px solid #ffffff; /* borde blanco visible */
+  box-shadow: 0 12px 36px rgba(42,157,244,0.22);
+  transform: translateY(-2px);
+}
+
+/* hover y foco para enfatizar interacción */
+body.dark-theme .price-section .toggle-btn:hover,
+body.dark-theme .price-section .toggle-btn:focus-visible {
+  background: rgba(255,255,255,0.06);
+  color: #ffffff;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+}
+
+/* ajustar la etiqueta de ahorro encima del botón para que siempre sea visible */
+body.dark-theme .price-section .toggle-btn .save-badge {
+  top: -10px;
+  right: -12px;
+  background-color: var(--brand-secondary);
+  color: #ffffff;
+  font-weight: 800;
+  padding: 0.25rem 0.5rem;
+  border-radius: 999px;
+  border: 1px solid rgba(0,0,0,0.12);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.45);
+  z-index: 12;
+}
+
+/* si el botón activo contiene el badge, mantener contraste y posición */
+body.dark-theme .price-section .toggle-btn.active .save-badge {
+  right: -14px;
+  top: -12px;
+}
+
+/* asegurar que el contenedor del toggle tenga overflow visible (para el badge) */
+body.dark-theme .price-section .billing-toggle,
+body.dark-theme .price-section .toggle-btn {
+  overflow: visible;
+}
+
+/* Fallback seguro para Angular emulated encapsulation: usar :host-context para aplicar estilos cuando <body> tiene .dark-theme */
+:host-context(body.dark-theme) .billing-toggle {
+  background-color: rgba(6,12,18,0.55);
+  padding: 0.55rem;
+  border-radius: 999px;
+  border: none;
+}
+:host-context(body.dark-theme) .toggle-btn {
+  background: rgba(255,255,255,0.02);
+  color: #e6eef8;
+  border: 1px solid rgba(255,255,255,0.08);
+  padding: 0.7rem 1.6rem;
+  min-width: 150px;
+  margin: 0 0.35rem;
+  border-radius: 999px;
+  font-weight: 700;
+}
+:host-context(body.dark-theme) .toggle-btn.active {
+  background: linear-gradient(180deg, var(--toggle-celeste), #1b83e0);
+  color: #ffffff;
+  border: 2px solid #ffffff;
+  box-shadow: 0 12px 36px rgba(42,157,244,0.22);
+  transform: translateY(-2px);
+}
+:host-context(body.dark-theme) .toggle-btn .save-badge {
+  top: -10px;
+  right: -12px;
+  background-color: var(--brand-secondary);
+  color: #ffffff;
+  font-weight: 800;
+  padding: 0.25rem 0.5rem;
+  border-radius: 999px;
+  border: 1px solid rgba(0,0,0,0.12);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.45);
+  z-index: 12;
+}
+
+/* end of host-context block */

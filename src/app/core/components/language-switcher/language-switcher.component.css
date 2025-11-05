@@ -1,6 +1,8 @@
 .language-switcher {
   position: relative;
   font-family: inherit;
+  display: inline-flex; /* permitir que el switcher se coloque en línea con el botón */
+  align-items: center;
 }
 
 .switcher-button {

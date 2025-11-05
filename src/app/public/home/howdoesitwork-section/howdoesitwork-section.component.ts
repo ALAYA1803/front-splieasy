@@ -15,7 +15,8 @@ interface ProcessStep {
 })
 export class HowdoesitworkSectionComponent {
 
-  activeTab: 'rep' | 'member' = 'rep';
+  // Por defecto mostrar la pestaña 'member' para que el botón de Miembro aparezca activo
+  activeTab: 'rep' | 'member' = 'member';
 
   repSteps: ProcessStep[] = [
     { iconClass: 'bi bi-person-plus-fill', titleKey: 'HOW_IT_WORKS.REP.STEP_1_TITLE', descriptionKey: 'HOW_IT_WORKS.REP.STEP_1_TEXT' },

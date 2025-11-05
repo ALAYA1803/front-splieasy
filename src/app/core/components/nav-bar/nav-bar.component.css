@@ -1,18 +1,22 @@
-
 :host {
   --brand-primary: #1565c0;
   --brand-secondary: #ff6f00;
   --text-dark: #212529;
   --text-light: #f8f9fa;
   --border-color: #e9ecef;
+  /* Variables para el botón de alternar tema */
+  --theme-toggle-hover-bg: #00bcd4; /* celeste */
+  --theme-toggle-hover-color: #ffffff; /* icono/texto sobre el celeste */
 }
 
 .site-navbar {
   padding: 0.75rem 0;
-  background-color: rgba(234, 234, 234, 0.87);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(234, 234, 234, 0.87);
+  /* Usar la variable --background-main para que el nav tenga fondo adecuado
+      en modo claro u oscuro según las variables definidas globalmente */
+  background-color: var(--background-main, transparent) !important;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border-bottom: 1px solid var(--border-color, transparent) !important;
   transition: all 0.3s ease;
 }
 
@@ -95,6 +99,45 @@
   background-color: #115293;
   transform: translateY(-2px);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* Estilos base para el botón de alternar tema: fondo transparente por defecto, transición y que el icono herede el color */
+.btn-theme-toggle {
+  background: transparent !important;
+  border: 1px solid transparent !important;
+  color: var(--text-dark, #212529) !important;
+  padding: 0.45rem 0.6rem !important;
+  border-radius: 0.5rem !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: background-color 0.2s ease, color 0.2s ease, transform 0.15s ease !important;
+}
+
+.btn-theme-toggle .bi {
+  font-size: 1.1rem;
+  transition: color 0.2s ease !important;
+  color: inherit !important; /* hereda el color del botón */
+}
+
+/* Asegurar que el icono del sol sea blanco por defecto (como las otras opciones) */
+.btn-theme-toggle .bi.bi-sun {
+  color: var(--text-light, #ffffff) !important;
+}
+
+/* Forzar el relleno celeste en hover (no sólo el contorno). Uso de !important para asegurarnos de que sobrescribe Bootstrap si fuera necesario) */
+.btn.btn-theme-toggle:hover,
+.btn-theme-toggle:hover,
+.navbar-controls button.btn-theme-toggle:hover {
+  background-color: var(--theme-toggle-hover-bg) !important;
+  color: var(--theme-toggle-hover-color) !important;
+  border-color: transparent !important;
+}
+
+.btn.btn-theme-toggle:hover .bi,
+.btn-theme-toggle:hover .bi,
+.navbar-controls button.btn-theme-toggle:hover .bi {
+  color: var(--theme-toggle-hover-color) !important;
 }
 
 @media (max-width: 991.98px) {

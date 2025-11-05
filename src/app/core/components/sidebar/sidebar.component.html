@@ -19,6 +19,7 @@
         <li *ngFor="let item of items; trackBy: trackByRoute" class="nav-item">
           <a [routerLink]="item.route"
              routerLinkActive="active-route"
+             [routerLinkActiveOptions]="{ exact: true }"
              class="nav-link p-3 flex align-items-center"
              [attr.aria-label]="item.label | translate">
             <div class="nav-icon-container">

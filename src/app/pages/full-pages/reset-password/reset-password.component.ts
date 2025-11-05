@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { environment } from '../../../core/environments/environment';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-reset-password',
@@ -10,12 +11,13 @@ import { environment } from '../../../core/environments/environment';
   templateUrl: './reset-password.component.html',
   styleUrls: ['./reset-password.component.css'],
 })
-export class ResetPasswordComponent implements OnInit {
+export class ResetPasswordComponent implements OnInit, OnDestroy {
   resetPasswordForm!: FormGroup;
   isSubmitting = false;
   message = '';
   private token: string | null = null;
   private readonly API_URL = environment.urlBackend;
+  private subs: Subscription = new Subscription();
 
   constructor(
     private fb: FormBuilder,
@@ -35,6 +37,18 @@ export class ResetPasswordComponent implements OnInit {
       password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(100)]],
       repeatPassword: ['', Validators.required],
     }, { validators: this.passwordMatchValidator });
+
+    // Suscribirse a cambios del password para actualizar la UI en vivo
+    this.subs.add(
+      this.resetPasswordForm.get('password')!.valueChanges.subscribe(() => {
+        // Forzar re-evaluación del validador de confirmación
+        this.resetPasswordForm.get('repeatPassword')?.updateValueAndValidity({ onlySelf: true });
+      })
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.subs.unsubscribe();
   }
 
   private passwordMatchValidator = (form: FormGroup) => {
@@ -42,6 +56,26 @@ export class ResetPasswordComponent implements OnInit {
     const p2 = form.get('repeatPassword')?.value;
     return p1 === p2 ? null : { mismatch: true };
   };
+
+  // Getters útiles para la plantilla (validación en vivo)
+  get passwordControl() {
+    return this.resetPasswordForm.get('password');
+  }
+
+  get repeatPasswordControl() {
+    return this.resetPasswordForm.get('repeatPassword');
+  }
+
+  get isMinLength(): boolean {
+    const val = this.passwordControl?.value;
+    return !!val && val.length >= 8;
+  }
+
+  get passwordsMatch(): boolean {
+    const p = this.passwordControl?.value;
+    const r = this.repeatPasswordControl?.value;
+    return !!p && !!r && p === r;
+  }
 
   updatePassword(): void {
     if (this.resetPasswordForm.invalid || !this.token) return;

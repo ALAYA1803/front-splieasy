@@ -1,6 +1,5 @@
-
 :host {
-  --brand-primary: #1565c0;
+  --brand-primary: #1e73d6; /* azul más vivo para que el botón coincida con la imagen */
   --text-dark: #212529;
   --text-muted: #6c757d;
   --background-light: #f8f9fa;
@@ -34,6 +33,7 @@
   display: flex;
   justify-content: center;
   margin-bottom: 3rem;
+  /* base: light-ish pill background (used as neutral for dark mode) */
   background-color: var(--background-light);
   border-radius: 50px;
   padding: 0.5rem;
@@ -55,9 +55,78 @@
 }
 
 .tab-btn.active {
+  /* gradient blue like the example */
+  background-image: linear-gradient(180deg, #2b8cf0 0%, #1565c0 100%);
   background-color: var(--brand-primary);
   color: #fff;
-  box-shadow: 0 3px 10px rgba(21, 101, 192, 0.3);
+  box-shadow: 0 12px 30px rgba(21, 101, 192, 0.35), 0 2px 0 rgba(255,255,255,0.06) inset;
+  transform: translateY(-4px);
+  padding: 0.6rem 1.8rem;
+  border: 3px solid #ffffff; /* white rim around the active pill */
+  border-radius: 999px;
+  z-index: 2; /* sit above the inactive buttons */
+  text-shadow: 0 1px 0 rgba(0,0,0,0.12);
+}
+
+/* ----------------- Light theme overrides (píldora blanca + botón activo elevado) ----------------- */
+body.light-theme .how-it-works-section {
+  background-color: #ffffff;
+}
+
+body.light-theme .how-it-works-section .tab-controls {
+  /* pill background for light-mode look */
+  background-color: #ffffff;
+  border-radius: 999px;
+  padding: 6px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+body.light-theme .how-it-works-section .tab-btn {
+  padding: 0.6rem 1.6rem;
+  border-radius: 999px;
+  font-weight: 600;
+  cursor: pointer;
+  background-color: transparent; /* let the pill's white show through for inactive */
+  color: var(--text-dark);
+  transition: all 0.25s cubic-bezier(.2,.9,.2,1);
+  margin: 0 6px;
+  position: relative;
+  z-index: 1;
+  box-shadow: none;
+}
+
+body.light-theme .how-it-works-section .tab-btn:not(.active):hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+body.light-theme .how-it-works-section .tab-btn.active {
+  /* gradient blue like the example */
+  background-image: linear-gradient(180deg, #2b8cf0 0%, #1565c0 100%);
+  background-color: var(--brand-primary);
+  color: #fff;
+  box-shadow: 0 12px 30px rgba(21, 101, 192, 0.35), 0 2px 0 rgba(255,255,255,0.06) inset;
+  transform: translateY(-4px);
+  padding: 0.6rem 1.8rem;
+  border: 3px solid #ffffff; /* white rim around the active pill */
+  border-radius: 999px;
+  z-index: 2; /* sit above the inactive buttons */
+  text-shadow: 0 1px 0 rgba(0,0,0,0.12);
+}
+
+/* focus styles for accessibility */
+body.light-theme .how-it-works-section .tab-btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(30,115,214,0.15);
+}
+
+body.light-theme .how-it-works-section .section-title {
+  color: var(--text-dark);
+}
+
+body.light-theme .how-it-works-section .section-lead {
+  color: var(--text-muted);
 }
 
 @keyframes fadeIn {

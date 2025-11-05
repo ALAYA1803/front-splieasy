@@ -8,6 +8,107 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <script>
+    // Aplicar clase de tema antes de que Angular arranque para evitar parpadeos.
+    (function(){
+      try {
+        var theme = localStorage.getItem('theme');
+        if (!theme && window.matchMedia) {
+          theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+        if (theme === 'dark') {
+          // Añadimos a documentElement inmediatamente como medida precautoria
+          if (document.documentElement) document.documentElement.classList.add('dark-theme');
+          // Intentamos añadir a body tan pronto como exista
+          function applyToBody(){ if (document.body && !document.body.classList.contains('dark-theme')) document.body.classList.add('dark-theme'); }
+          if (document.body) applyToBody(); else document.addEventListener('DOMContentLoaded', applyToBody);
+        } else if (theme === 'light') {
+          // Si el tema es light, aplicamos la clase `light-theme` al html y body para activar overrides CSS de modo claro
+          if (document.documentElement && !document.documentElement.classList.contains('light-theme')) document.documentElement.classList.add('light-theme');
+          function applyLightToBody(){ if (document.body && !document.body.classList.contains('light-theme')) document.body.classList.add('light-theme'); }
+          if (document.body) applyLightToBody(); else document.addEventListener('DOMContentLoaded', applyLightToBody);
+        }
+      } catch(e) { /* no hacemos nada si falla */ }
+    })();
+
+    // Funciones globales para corregir fondos claros que no cambian solo con CSS.
+    (function(){
+      function isTransparent(bg){
+        return !bg || bg === 'transparent' || bg === 'rgba(0, 0, 0, 0)';
+      }
+      function parseRGB(bg){
+        var m = String(bg).match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/i);
+        if (!m) return null;
+        return {r: +m[1], g: +m[2], b: +m[3]};
+      }
+
+      window.applyDarkBgFix = function(){
+        try{
+          var els = document.querySelectorAll('*');
+          els.forEach(function(el){
+            var cs = window.getComputedStyle(el);
+            var bg = cs.backgroundColor;
+            if (isTransparent(bg)) return;
+            var rgb = parseRGB(bg);
+            if (!rgb) return;
+            var brightness = (rgb.r * 299 + rgb.g * 587 + rgb.b * 114) / 1000;
+            // Si el fondo es claro (alto brillo), lo cambiamos a un fondo oscuro
+            if (brightness > 180) {
+              // Guardamos valor previo para poder revertir
+              if (!el.dataset._savedBg) el.dataset._savedBg = el.style.backgroundColor || '';
+              el.style.backgroundColor = '#0f1724';
+              // Forzamos color claro si el texto está oscuro
+              var textColor = window.getComputedStyle(el).color;
+              var t = parseRGB(textColor);
+              if (t && ((t.r * 299 + t.g * 587 + t.b * 114) / 1000) < 200) {
+                // texto ya oscuro: aseguramos contraste (no forzamos si ya es claro)
+                // no hacer nada
+              } else {
+                el.style.color = '#e6eef8';
+              }
+            }
+          });
+        }catch(e){}
+      };
+
+      window.revertDarkBgFix = function(){
+        try{
+          var els = document.querySelectorAll('[data-_saved-bg]');
+          els.forEach(function(el){
+            var prev = el.dataset._savedBg || '';
+            if (prev) el.style.backgroundColor = prev; else el.style.removeProperty('background-color');
+            el.removeAttribute('data-_saved-bg');
+            // No revertimos color (puede ser manejado por CSS de tema)
+          });
+        }catch(e){}
+      };
+
+      // Observer para reaplicar fix cuando se agreguen nodos dinámicamente (p. ej. modals, offcanvas)
+      function setupDarkObserver(){
+        try{
+          var timeoutRef = null;
+          var observer = new MutationObserver(function(mutations){
+            if (timeoutRef) clearTimeout(timeoutRef);
+            timeoutRef = setTimeout(function(){
+              if (document.body && document.body.classList.contains('dark-theme')){
+                try{ window.applyDarkBgFix && window.applyDarkBgFix(); }catch(e){}
+              }
+            }, 120);
+          });
+          observer.observe(document.documentElement || document.body, { childList: true, subtree: true });
+          // Exponer por si se quiere desconectar
+          window.__darkBgObserver = observer;
+        }catch(e){}
+      }
+
+      // Si el DOM ya está listo, configurar el observer; si no, esperar al evento
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', setupDarkObserver);
+      } else {
+        setupDarkObserver();
+      }
+    })();
+  </script>
 </head>
 <body>
   <app-root></app-root>

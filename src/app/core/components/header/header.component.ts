@@ -15,6 +15,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
   breadcrumbFull = '';
   items: SidebarItem[] = [];
 
+  // Estado del modo oscuro (añadido)
+  isDarkMode: boolean = false;
+
   private routerSubscription!: Subscription;
 
   constructor(
@@ -34,6 +37,15 @@ export class HeaderComponent implements OnInit, OnDestroy {
         const newUrl = event.urlAfterRedirects;
         this.findLabelForUrl(newUrl);
       });
+
+    // Inicializar preferencia de tema (copiado de NavBar)
+    const saved = localStorage.getItem('theme');
+    if (saved) {
+      this.isDarkMode = saved === 'dark';
+    } else if (window.matchMedia) {
+      this.isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    }
+    this.applyTheme();
   }
 
   ngOnDestroy() {
@@ -55,5 +67,25 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   private normalizePath(url: string): string {
     return url.replace(/^\/+|\/+$/g, '').toLowerCase();
+  }
+
+  // Aplica o remueve la clase en el <body> (copiado de NavBar)
+  applyTheme() {
+    if (this.isDarkMode) {
+      document.body.classList.add('dark-theme');
+      if (document.documentElement) document.documentElement.classList.add('dark-theme');
+      try { (window as any).applyDarkBgFix && (window as any).applyDarkBgFix(); } catch(e) {}
+    } else {
+      document.body.classList.remove('dark-theme');
+      if (document.documentElement) document.documentElement.classList.remove('dark-theme');
+      try { (window as any).revertDarkBgFix && (window as any).revertDarkBgFix(); } catch(e) {}
+    }
+  }
+
+  // Método ligado al botón del template
+  toggleDarkMode() {
+    this.isDarkMode = !this.isDarkMode;
+    localStorage.setItem('theme', this.isDarkMode ? 'dark' : 'light');
+    this.applyTheme();
   }
 }
