@@ -261,6 +261,18 @@
     },
     "MEMBERS_CARD": {
       "TITLE": "Household Members"
+    },
+    "ALERTS": {
+      "CARD_TITLE": "Contribution alerts",
+      "TODAY_TITLE": "Due today",
+      "TOMORROW_TITLE": "Due soon (tomorrow)",
+      "OVERDUE": "Overdue",
+      "DAYS_LEFT": "days left",
+      "DAYS_PAST": "days overdue",
+      "CONTRIB_ID": "Contribution",
+      "DEADLINE": "Deadline",
+      "NO_DEADLINE": "No deadline",
+      "EMPTY_SECTION": "No contributions in this category"
     }
   },
   "PROFILE": {
@@ -409,6 +421,10 @@
       "DUE_DATE_LABEL": "Due date",
       "DUE_DATE_PLACEHOLDER": "Select date",
       "DUE_DATE_REQUIRED": "Due date is required.",
+      "STRATEGY_HELP_TITLE": "Split strategy",
+      "STRATEGY_HELP": "See explanation",
+      "STRATEGY_HELP_EQUAL": "Equal: the total contribution amount is split equally between the selected members.\n\nExample: if the total is S/1000 and there are 4 selected members, each pays S/250.",
+      "STRATEGY_HELP_INCOME_BASED": "Income-based: the total contribution is distributed proportionally to each member's declared income.\n\nExample: if the total is S/1000 and incomes are: Member A S/2000, Member B S/1000, the sum of incomes = S/3000.\n- A pays: (2000/3000) * 1000 = S/666.67\n- B pays: (1000/3000) * 1000 = S/333.33",
       "STRATEGY_LABEL": "Split strategy",
       "STRATEGY_PLACEHOLDER": "Select strategy",
       "STRATEGY_REQUIRED": "Strategy is required.",
@@ -458,7 +474,8 @@
     "CONTRIBUTIONS_MADE": "Contributions made"
   },
   "COMMON": {
-    "CANCEL": "Cancel"
+    "CANCEL": "Cancel",
+    "CLOSE": "Close"
   },
   "HOUSEHOLD": {
     "MEMBERS": {

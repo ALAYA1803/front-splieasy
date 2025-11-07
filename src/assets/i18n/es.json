@@ -250,6 +250,18 @@
     },
     "MEMBERS_CARD": {
       "TITLE": "Miembros del hogar"
+    },
+    "ALERTS": {
+      "CARD_TITLE": "Alertas de contribuciones",
+      "TODAY_TITLE": "Vencen hoy",
+      "TOMORROW_TITLE": "Por vencer (mañana)",
+      "OVERDUE": "Vencida",
+      "DAYS_LEFT": "días restantes",
+      "DAYS_PAST": "días de atraso",
+      "CONTRIB_ID": "Contribución",
+      "DEADLINE": "Fecha límite",
+      "NO_DEADLINE": "Sin fecha límite",
+      "EMPTY_SECTION": "No hay contribuciones en esta categoría"
     }
   },
   "CONTRIBUTIONS_STATUS": {
@@ -399,13 +411,17 @@
       "DUE_DATE_LABEL": "Fecha límite",
       "DUE_DATE_PLACEHOLDER": "Selecciona fecha",
       "DUE_DATE_REQUIRED": "La fecha límite es obligatoria.",
-      "STRATEGY_LABEL": "Estrategia de reparto",
+      "STRATEGY_HELP_TITLE": "Estrategia de reparto",
+      "STRATEGY_HELP": "Ver explicación",
+      "STRATEGY_HELP_EQUAL": "Igualitaria: el total de la contribución se divide en partes iguales entre los miembros seleccionados.\n\nEjemplo: si el total es S/1000 y hay 4 miembros seleccionados, cada uno paga S/250.",
+      "STRATEGY_HELP_INCOME_BASED": "Según Ingresos: el total de la contribución se reparte proporcionalmente al ingreso declarado de cada miembro.\n\nEjemplo: si el total es S/1000 y los ingresos son: Miembro A S/2000, Miembro B S/1000, la suma de ingresos = S/3000.\n- A paga: (2000/3000) * 1000 = S/666.67\n- B paga: (1000/3000) * 1000 = S/333.33",
+      "STRATEGY_LABEL": "Comportamiento",
       "STRATEGY_PLACEHOLDER": "Selecciona estrategia",
-      "STRATEGY_REQUIRED": "La estrategia es obligatoria.",
+      "STRATEGY_REQUIRED": "Seleccione una estrategia.",
       "MEMBERS_LABEL": "Miembros",
       "MEMBERS_PLACEHOLDER": "Selecciona miembros (opcional)",
-      "BILL_INFO_TITLE": "Información del comprobante",
-      "TOTAL_AMOUNT_LABEL": "Monto total:",
+      "BILL_INFO_TITLE": "Información de la factura",
+      "TOTAL_AMOUNT_LABEL": "Monto total",
       "SELECTED_MEMBERS_LABEL": "Miembros seleccionados:",
       "CANCEL_BUTTON": "Cancelar",
       "SAVE_BUTTON": "Guardar"
@@ -546,7 +562,8 @@
     "STATUS": "Estado"
   },
   "COMMON": {
-    "CANCEL": "Cancelar"
+    "CANCEL": "Cancelar",
+    "CLOSE": "Cerrar"
   },
   "common": {
     "cancel": "Cancelar",
