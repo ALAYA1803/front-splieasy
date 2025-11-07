@@ -765,3 +765,54 @@ body:not(.dark-theme) app-about-section .about-card {
   color: var(--text-primary) !important;
   border-color: var(--border-color) !important;
 }
+
+/* Reglas globales para asegurar contraste de la alerts-card en tema claro */
+.light-theme .alerts-card,
+body.light-theme .alerts-card,
+:root.light-theme .alerts-card {
+  background: linear-gradient(90deg, rgba(255,85,85,0.72) , rgba(183,28,28,0.62)) !important;
+  border-color: rgba(183,28,28,0.8) !important;
+  color: #111 !important;
+}
+.light-theme .alerts-card .alert-row-desc,
+body.light-theme .alerts-card .alert-row-desc,
+.light-theme .alerts-card .alert-row-meta,
+body.light-theme .alerts-card .alert-row-meta {
+  color: rgba(0,0,0,0.95) !important;
+}
+.light-theme .alerts-card .alert-row .icon,
+body.light-theme .alerts-card .alert-row .icon {
+  color: #111 !important;
+}
+.light-theme .alerts-column .column-count,
+body.light-theme .alerts-column .column-count {
+  background: rgba(0,0,0,0.06) !important;
+  color: #111 !important;
+}
+@media (prefers-color-scheme: light) {
+  .alerts-card {
+    background: linear-gradient(90deg, rgba(255,85,85,0.72) , rgba(183,28,28,0.62)) !important;
+    border-color: rgba(183,28,28,0.8) !important;
+    color: #111 !important;
+  }
+}
+
+/* End global overrides for alerts card */
+
+/* Cobertura para layouts que usan la ausencia de .dark-theme (body:not(.dark-theme)) */
+body:not(.dark-theme) .alerts-card,
+body:not(.dark-theme) .alerts-card * {
+  color: rgba(0,0,0,0.95) !important;
+}
+body:not(.dark-theme) .alerts-card .alert-row-desc,
+body:not(.dark-theme) .alerts-card .alert-row-meta,
+body:not(.dark-theme) .alerts-card .alerts-column .column-count,
+body:not(.dark-theme) .alerts-card .alert-row .icon,
+body:not(.dark-theme) .alerts-card i,
+body:not(.dark-theme) .alerts-card svg,
+body:not(.dark-theme) .alerts-card .pi {
+  color: rgba(0,0,0,0.95) !important;
+  fill: rgba(0,0,0,0.95) !important;
+  stroke: rgba(0,0,0,0.95) !important;
+}
+
