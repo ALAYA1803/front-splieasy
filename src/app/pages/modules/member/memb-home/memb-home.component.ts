@@ -77,6 +77,17 @@ export class MembHomeComponent implements OnInit {
 
   loading = true;
 
+  // nuevas propiedades para alertas
+  householdContributions: Contribution[] = [];
+  alerts: { contribution: Contribution; daysLeft: number; state: 'overdue' | 'due-soon' }[] = [];
+
+  // grupos para la card única
+  alertsToday: { contribution: Contribution; daysLeft: number; state: 'overdue' | 'due-soon' }[] = [];
+  alertsTomorrow: { contribution: Contribution; daysLeft: number; state: 'overdue' | 'due-soon' }[] = [];
+
+  // número de días para considerar "por vencer"
+  private readonly ALERT_DAYS = 3;
+
   private readonly API_URL = environment.urlBackend;
 
   constructor(private http: HttpClient) {}
@@ -203,6 +214,89 @@ export class MembHomeComponent implements OnInit {
     );
   }
 
+  // obtiene año/mes/día según la interpretación en la zona de Perú (UTC-5)
+  private getPeruYMDFromString(fecha?: string): { y: number; m: number; d: number } | null {
+    if (!fecha) return null;
+
+    // 1) intentar extraer YYYY-MM-DD al inicio (incluso si viene con hora: 2025-11-07T00:00:00Z)
+    const isoPrefix = fecha.match(/^(\d{4})-(\d{2})-(\d{2})/);
+    if (isoPrefix) {
+      return { y: Number(isoPrefix[1]), m: Number(isoPrefix[2]) - 1, d: Number(isoPrefix[3]) };
+    }
+
+    // 2) intentar DD/MM/YYYY al inicio
+    const slashPrefix = fecha.match(/^(\d{2})\/(\d{2})\/(\d{4})/);
+    if (slashPrefix) {
+      return { y: Number(slashPrefix[3]), m: Number(slashPrefix[2]) - 1, d: Number(slashPrefix[1]) };
+    }
+
+    // 3) fallback: parsear con Date y convertir a fecha Perú (UTC-5)
+    const parsed = new Date(fecha);
+    if (isNaN(parsed.getTime())) return null;
+
+    const OFFSET_HOURS = 5; // Perú UTC-5
+    const peruTimeMs = parsed.getTime() - (OFFSET_HOURS * 60 * 60 * 1000);
+    const peru = new Date(peruTimeMs);
+    return { y: peru.getUTCFullYear(), m: peru.getUTCMonth(), d: peru.getUTCDate() };
+  }
+
+  private daysLeftUntil(fecha?: string): number | null {
+    const ymd = this.getPeruYMDFromString(fecha);
+    if (!ymd) return null;
+
+    // hoy en Perú
+    const OFFSET_HOURS = 5;
+    const now = new Date();
+    const peruNowMs = now.getTime() - (OFFSET_HOURS * 60 * 60 * 1000);
+    const peruNow = new Date(peruNowMs);
+    const todayUTC = Date.UTC(peruNow.getUTCFullYear(), peruNow.getUTCMonth(), peruNow.getUTCDate());
+
+    const deadlineUTC = Date.UTC(ymd.y, ymd.m, ymd.d);
+    const msPerDay = 1000 * 60 * 60 * 24;
+    return Math.floor((deadlineUTC - todayUTC) / msPerDay);
+  }
+
+  private computeAlerts(contribs: Contribution[]) {
+    this.alerts = [];
+    if (!contribs || !contribs.length) return;
+
+    contribs.forEach(c => {
+      // Si el miembro ya tiene una contribución pagada asociada a esta contribución del hogar,
+      // la ignoramos (no debe aparecer en las alertas).
+      const alreadyPaidByMe = this.paidContributions?.some(pc => pc && pc.contributionId === c.id && this.normalizeStatus(pc.status) === 'PAID');
+      if (alreadyPaidByMe) return;
+
+      const daysLeft = this.daysLeftUntil(c.fechaLimite);
+      if (daysLeft === null) return; // sin fecha
+
+      if (daysLeft < 0) {
+        // vencida -> la podemos ignorar en estas columnas, o incluirla en otra sección; por ahora la guardamos
+        this.alerts.push({ contribution: c, daysLeft, state: 'overdue' });
+      } else if (daysLeft <= this.ALERT_DAYS) {
+        this.alerts.push({ contribution: c, daysLeft, state: 'due-soon' });
+      }
+    });
+
+    // ordenar: primero vencidas, luego por vencer por días asc
+    this.alerts.sort((a, b) => {
+      if (a.state === b.state) return a.daysLeft - b.daysLeft;
+      return a.state === 'overdue' ? -1 : 1;
+    });
+
+    // poblar grupos para la tarjeta única: hoy (0) y mañana (1)
+    this.alertsToday = this.alerts.filter(a => a.daysLeft === 0);
+    this.alertsTomorrow = this.alerts.filter(a => a.daysLeft === 1);
+  }
+
+  // formatea fecha como DD/MM/YY según la interpretación en Perú
+  public formatDate(fecha?: string): string {
+    const ymd = this.getPeruYMDFromString(fecha);
+    if (!ymd) return fecha || '';
+    const pad = (n: number) => n < 10 ? `0${n}` : `${n}`;
+    const yy = ymd.y % 100;
+    return `${pad(ymd.d)}/${pad(ymd.m + 1)}/${pad(yy)}`;
+  }
+
   loadDashboardData(): void {
     this.loading = true;
     this.blockedHouseholdContribs = false;
@@ -221,28 +315,36 @@ export class MembHomeComponent implements OnInit {
         return forkJoin({
           household: this.fetchHousehold(householdId),
           members: this.fetchMembers(householdId),
-          myMemberContribs: this.fetchMyMemberContributions(householdId)
+          myMemberContribs: this.fetchMyMemberContributions(householdId),
+          householdContribs: this.fetchHouseholdContributions(householdId)
         });
       })
     ).subscribe({
       next: (bundle) => {
         if (!bundle) { this.loading = false; return; }
 
-        const { household, members, myMemberContribs } = bundle;
+        const { household, members, myMemberContribs, householdContribs } = bundle as any;
 
         this.household = { ...household, currency: household.currency || 'PEN' };
         this.members = members;
 
-        const normalized = (myMemberContribs || []).map(c => ({
+        // guardar contribuciones del hogar para alertas
+        this.householdContributions = householdContribs || [];
+        // NOTA: movemos el cálculo de alertas más abajo, después de normalizar las contribuciones del miembro
+
+        const normalized: MemberContribution[] = (myMemberContribs || []).map((c: MemberContribution) => ({
           ...c,
           status: this.normalizeStatus(c.status)
         }));
-        this.activeContributions = normalized.filter(c => c.status === 'PENDING');
-        this.paidContributions   = normalized.filter(c => c.status === 'PAID');
+        this.activeContributions = normalized.filter((c: MemberContribution) => c.status === 'PENDING');
+        this.paidContributions   = normalized.filter((c: MemberContribution) => c.status === 'PAID');
         this.contributions = this.activeContributions;
         this.totalPendiente = this.activeContributions.reduce((sum, c) => sum + this.getAmount(c), 0);
         this.totalPagado    = this.paidContributions.reduce((sum, c) => sum + this.getAmount(c), 0);
         this.activeContribsCount = this.activeContributions.length;
+
+        // ahora sí calcular alertas teniendo en cuenta las contribuciones ya pagadas por el miembro
+        this.computeAlerts(this.householdContributions);
 
         this.loading = false;
       },

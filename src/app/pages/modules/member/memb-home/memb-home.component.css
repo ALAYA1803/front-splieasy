@@ -10,6 +10,235 @@
   --text-primary: #f8f9fa;
   --text-secondary: #adb5bd;
 }
+
+/* ALERT STYLES --> */
+.alerts-wrapper {
+  max-width: 1200px;
+  margin: 0 auto 1.25rem auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.alert-card {
+  border-radius: 12px;
+  padding: 0.8rem 1rem;
+  border: 1px solid var(--border-color);
+  display: block;
+  color: #fff;
+  box-shadow: 0 8px 18px rgba(0,0,0,0.35);
+}
+
+.alert-card.overdue {
+  background: linear-gradient(90deg, #b71c1c, #e53935); /* tonos rojos */
+  border-color: #7f0000;
+}
+
+.alert-card.due-soon {
+  background: linear-gradient(90deg, #ff8f00, #ffb74d); /* tonos naranjas */
+  border-color: #ff6f00;
+  color: #1a1a1a;
+}
+
+.alert-inner {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.alert-left {
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  font-size: 1.25rem;
+  opacity: 0.95;
+}
+
+.alert-body {
+  display: flex;
+  flex-direction: column;
+}
+
+.alert-title {
+  font-weight: 700;
+  font-size: 0.98rem;
+  margin-bottom: 0.15rem;
+}
+
+.alert-days {
+  font-weight: 600;
+  margin-left: 0.5rem;
+  opacity: 0.95;
+  font-size: 0.9rem;
+}
+
+.alert-desc {
+  font-size: 0.95rem;
+  opacity: 0.95;
+}
+
+.alert-meta {
+  font-size: 0.85rem;
+  opacity: 0.85;
+  margin-top: 0.25rem;
+}
+
+/* SINGLE ALERT CARD LAYOUT */
+.alerts-card {
+  /* rojo más visible y con mejor contraste en valores por defecto */
+  background: linear-gradient(90deg, rgba(183,28,28,0.36), rgba(150,0,0,0.28));
+  border-radius: 12px;
+  padding: 0.9rem 1rem;
+  border: 1px solid rgba(150,0,0,0.6);
+  margin-bottom: 1.25rem;
+  box-shadow: 0 10px 28px rgba(0,0,0,0.35);
+  color: #fff; /* texto blanco por defecto (modo oscuro) */
+}
+
+.alerts-inner {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.alerts-column {
+  flex: 1 1 50%;
+  padding: 0.5rem 0.5rem;
+}
+
+.alerts-column .column-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.alerts-column .column-title {
+  font-weight: 700;
+  color: #fff;
+  font-size: 1rem;
+}
+
+.alerts-column .column-count {
+  background: rgba(255,255,255,0.16);
+  color: #fff;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  font-weight: 700;
+}
+
+.alerts-column.today .column-title { color: #fff; }
+.alerts-column.tomorrow .column-title { color: #fff; }
+
+.column-body { display: flex; flex-direction: column; gap: 0.5rem; }
+
+.alert-row {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  padding: 0.35rem 0.4rem;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.03);
+}
+
+.alert-row .icon { color: #fff; font-size: 1.05rem; width: 28px; height: 28px; display: grid; place-items: center; }
+.alert-row-body { display: flex; flex-direction: column; }
+.alert-row-desc { color: rgba(255,255,255,0.95); font-weight: 600; font-size: 0.95rem; }
+.alert-row-meta { color: rgba(255,255,255,0.95); font-size: 0.85rem; }
+
+.alerts-column .empty { color: rgba(255,255,255,0.85); font-size: 0.95rem; padding: 0.5rem 0; }
+
+/* mejorar legibilidad en modo claro (si el layout cambia a fondo claro) */
+:host-context(body.light) .alerts-card,
+:host-context(.light) .alerts-card,
+:host-context(.theme-light) .alerts-card,
+:host-context(.light-theme) .alerts-card,
+:host-context(body.light-theme) .alerts-card {
+  /* en modo claro queremos un rojo saturado y profundo */
+  background: linear-gradient(90deg, #e53935 0%, #b71c1c 100%) !important;
+  border: 1px solid #b71c1c !important;
+  color: #111 !important; /* texto oscuro sobre fondo rojo claro */
+}
+
+@media (prefers-color-scheme: light) {
+  /* preferencia del sistema -> mismo rojo saturado */
+  .alerts-card {
+    background: linear-gradient(90deg, #e53935 0%, #b71c1c 100%) !important;
+    border-color: #b71c1c !important;
+    color: #111 !important;
+  }
+}
+
+/* Modo oscuro: intensificar el rojo manteniendo el fondo oscuro general
+   (no queremos que sea chillón, pero sí más rojo que solo un overlay tenue) */
+:host-context(body.dark-theme) .alerts-card,
+:host-context(.dark-theme) .alerts-card,
+body.dark-theme .alerts-card {
+  background: linear-gradient(90deg, rgba(198,40,40,0.22) 0%, rgba(183,28,28,0.14) 100%) !important;
+  border: 1px solid rgba(198,40,40,0.12) !important;
+  color: var(--text-primary, #e6eef8) !important; /* texto claro en modo oscuro */
+}
+
+/* Asegurar que el texto en las filas del modo oscuro siga siendo legible (blanco) */
+:host-context(body.dark-theme) .alerts-card .alert-row-desc,
+:host-context(.dark-theme) .alerts-card .alert-row-desc,
+body.dark-theme .alerts-card .alert-row-desc {
+  color: var(--text-primary, #e6eef8) !important;
+}
+:host-context(body.dark-theme) .alerts-card .alert-row-meta,
+:host-context(.dark-theme) .alerts-card .alert-row-meta,
+body.dark-theme .alerts-card .alert-row-meta {
+  color: var(--text-secondary, rgba(230,238,248,0.85)) !important;
+}
+
+/* Reglas adicionales para asegurar contraste en modo claro */
+:host-context(body.light) .alerts-card i,
+:host-context(.light) .alerts-card i,
+:host-context(.theme-light) .alerts-card i,
+:host-context(.light-theme) .alerts-card i,
+:host-context(body.light-theme) .alerts-card i {
+  color: rgba(0,0,0,0.95) !important;
+}
+:host-context(body.light) .alerts-card .pi,
+:host-context(.light) .alerts-card .pi,
+:host-context(.theme-light) .alerts-card .pi,
+:host-context(.light-theme) .alerts-card .pi,
+:host-context(body.light-theme) .alerts-card .pi {
+  color: rgba(0,0,0,0.95) !important;
+}
+:host-context(body.light) .alerts-card svg,
+:host-context(.light) .alerts-card svg,
+:host-context(.theme-light) .alerts-card svg,
+:host-context(.light-theme) .alerts-card svg,
+:host-context(body.light-theme) .alerts-card svg {
+  fill: rgba(0,0,0,0.95) !important;
+  stroke: rgba(0,0,0,0.95) !important;
+}
+
+/* Pseudo-elementos (por si hay íconos con ::before/::after) */
+:host-context(body.light) .alerts-card *::before,
+:host-context(.light) .alerts-card *::before,
+:host-context(.theme-light) .alerts-card *::before,
+:host-context(.light-theme) .alerts-card *::before,
+:host-context(body.light-theme) .alerts-card *::before,
+:host-context(body.light) .alerts-card *::after,
+:host-context(.light) .alerts-card *::after,
+:host-context(.theme-light) .alerts-card *::after,
+:host-context(.light-theme) .alerts-card *::after,
+:host-context(body.light-theme) .alerts-card *::after {
+  color: rgba(0,0,0,0.95) !important;
+}
+
+/* Refuerzo para títulos y contadores */
+:host-context(body.light) .alerts-card .column-title,
+:host-context(.light) .alerts-card .column-title,
+:host-context(body.light) .alerts-card .alerts-column .column-count,
+:host-context(.light) .alerts-card .alerts-column .column-count {
+  color: rgba(0,0,0,0.95) !important;
+}
+
 .dashboard-container {
   padding: 2rem;
   max-width: 1200px;
@@ -135,4 +364,75 @@
   justify-content: center;
   align-items: center;
   height: 50vh;
+}
+
+/* Expandir cobertura de modo oscuro: cubrir varias convenciones de nombre de clase/atributo */
+html body.dark-theme .alerts-card .alert-row,
+html body.dark .alerts-card .alert-row,
+html .dark .alerts-card .alert-row,
+html .dark-theme .alerts-card .alert-row,
+html .theme-dark .alerts-card .alert-row,
+html [data-theme="dark"] .alerts-card .alert-row,
+html body[data-theme="dark"] .alerts-card .alert-row,
+:root.dark-theme .alerts-card .alert-row {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* También cubrir casos donde el selector apunta directamente a la fila sin alerts-card padre */
+html body.dark-theme .alert-row,
+html body.dark .alert-row,
+html .dark .alert-row,
+html .dark-theme .alert-row,
+html .theme-dark .alert-row,
+html [data-theme="dark"] .alert-row,
+html body[data-theme="dark"] .alert-row,
+:root.dark-theme .alert-row {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Asegurar iconos y texto dentro de las filas en modo oscuro sean claros */
+html body.dark-theme .alerts-card .alert-row-desc,
+html body.dark .alerts-card .alert-row-desc,
+html .dark .alerts-card .alert-row-desc,
+html .theme-dark .alerts-card .alert-row-desc,
+html [data-theme="dark"] .alerts-card .alert-row-desc {
+  color: var(--text-primary, #e6eef8) !important;
+}
+html body.dark-theme .alerts-card .alert-row .icon,
+html body.dark .alerts-card .alert-row .icon,
+html .dark .alerts-card .alert-row .icon,
+html .theme-dark .alerts-card .alert-row .icon,
+html [data-theme="dark"] .alerts-card .alert-row .icon {
+  color: var(--text-primary, #e6eef8) !important;
+}
+
+/* Refuerzo final: cubrir inline styles y background-image, outline, y forzar transparencia en hijos */
+html body.dark-theme .alerts-card .alert-row,
+html body.dark .alerts-card .alert-row,
+html .dark .alerts-card .alert-row,
+html .dark-theme .alerts-card .alert-row,
+html .theme-dark .alerts-card .alert-row,
+html [data-theme="dark"] .alerts-card .alert-row,
+html body[data-theme="dark"] .alerts-card .alert-row,
+:root.dark-theme .alerts-card .alert-row,
+.alerts-card .alert-row[style],
+.alert-row[style] {
+  background-color: transparent !important;
+  background-image: none !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+/* Asegurar que cualquier fondo en hijos también se elimine */
+html body.dark-theme .alerts-card .alert-row *,
+html .dark .alerts-card .alert-row *,
+.alerts-card .alert-row * {
+  background: transparent !important;
+  background-color: transparent !important;
 }

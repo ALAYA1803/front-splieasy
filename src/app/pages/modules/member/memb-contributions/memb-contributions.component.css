@@ -1,4 +1,4 @@
-:host {
+:host-context(body.dark-theme) {
   --brand-primary: #1565c0;
   --success-color: #2e7d32;
   --warning-color: #ff8f00;
@@ -13,6 +13,24 @@
 
   --text-primary: #f8f9fa;
   --text-secondary: #adb5bd;
+}
+
+:host-context(body:not(.dark-theme)) {
+  --brand-primary: #1565c0;
+  --success-color: #2e7d32;
+  --warning-color: #ff8f00;
+  --danger-color: #d32f2f;
+  --info-color: #1a73e8;
+
+  /* Valores claros para modo claro (coinciden con variables globales) */
+  --background-main: #ffffff;
+  --background-card: #f8f9fa;
+  --background-hover: #ffffff;
+  --border-color: #dee2e6;
+  --shadow-color: rgba(0, 0, 0, 0.06);
+
+  --text-primary: #212529;
+  --text-secondary: #6c757d;
 }
 
 .contributions-member-container {
@@ -166,4 +184,27 @@
   background: var(--background-main);
   border-color: var(--border-color);
   color: var(--text-primary);
+}
+
+/* Asegurar colores claros para la tabla cuando NO está activo dark-theme */
+:host-context(body:not(.dark-theme)) :host ::ng-deep .p-datatable {
+  background-color: var(--background-card) !important;
+}
+
+:host-context(body:not(.dark-theme)) :host ::ng-deep .p-datatable .p-datatable-thead > tr > th {
+  background-color: transparent !important;
+  color: var(--text-secondary) !important;
+}
+
+:host-context(body:not(.dark-theme)) :host ::ng-deep .p-datatable .p-datatable-tbody > tr {
+  background-color: var(--background-card) !important;
+  color: var(--text-primary) !important;
+}
+
+:host-context(body:not(.dark-theme)) :host ::ng-deep .p-datatable .p-datatable-tbody > tr:hover {
+  background-color: var(--background-hover) !important;
+}
+
+:host-context(body:not(.dark-theme)) :host ::ng-deep .p-datatable .p-datatable-tbody > tr > td {
+  color: var(--text-primary) !important;
 }
