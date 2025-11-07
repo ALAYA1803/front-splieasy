@@ -251,6 +251,7 @@
         {{ 'CONTRIBUTIONS.FORM.BILL_LABEL' | translate }}
       </label>
       <p-dropdown
+        id="billId"
         formControlName="billId"
         [options]="bills"
         optionLabel="description"
@@ -286,6 +287,7 @@
         {{ 'CONTRIBUTIONS.FORM.DUE_DATE_LABEL' | translate }}
       </label>
       <p-calendar
+        id="fechaLimite"
         formControlName="fechaLimite"
         dateFormat="dd/mm/yy"
         [showIcon]="true"
@@ -304,14 +306,28 @@
       <label for="strategy" class="block mb-2 font-medium">
         {{ 'CONTRIBUTIONS.FORM.STRATEGY_LABEL' | translate }}
       </label>
-      <p-dropdown
-        formControlName="strategy"
-        [options]="estrategias"
-        optionLabel="label"
-        optionValue="value"
-        [placeholder]="'CONTRIBUTIONS.FORM.STRATEGY_PLACEHOLDER' | translate"
-        class="w-full">
-      </p-dropdown>
+      <div class="flex align-items-center gap-2">
+        <div class="flex-auto">
+          <p-dropdown
+            id="strategy"
+            formControlName="strategy"
+            [options]="estrategias"
+            optionLabel="label"
+            optionValue="value"
+            [placeholder]="'CONTRIBUTIONS.FORM.STRATEGY_PLACEHOLDER' | translate"
+            class="w-full">
+          </p-dropdown>
+        </div>
+        <div>
+          <p-button
+            type="button"
+            icon="pi pi-info-circle"
+            class="p-button-text p-button-rounded"
+            (click)="showStrategyHelp()"
+            [pTooltip]="'CONTRIBUTIONS.FORM.STRATEGY_HELP' | translate">
+          </p-button>
+        </div>
+      </div>
       <small class="p-error"
              *ngIf="contributionForm.get('strategy')?.errors?.['required'] && contributionForm.get('strategy')?.touched">
         {{ 'CONTRIBUTIONS.FORM.STRATEGY_REQUIRED' | translate }}
@@ -380,4 +396,20 @@
       </p-button>
     </div>
   </form>
+</p-dialog>
+
+<!-- Dialogo explicativo sobre la estrategia de contribución -->
+<p-dialog
+  header="{{ 'CONTRIBUTIONS.FORM.STRATEGY_HELP_TITLE' | translate }}"
+  [(visible)]="strategyHelpVisible"
+  [modal]="true"
+  [closable]="true"
+  (onHide)="strategyHelpVisible = false"
+  [style]="{ width: '40vw' }">
+  <div>
+    <pre class="m-0" style="white-space: pre-wrap;">{{ strategyHelpText }}</pre>
+  </div>
+  <p-footer>
+    <p-button label="{{ 'COMMON.CLOSE' | translate }}" (onClick)="strategyHelpVisible = false"></p-button>
+  </p-footer>
 </p-dialog>

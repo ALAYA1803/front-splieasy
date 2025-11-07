@@ -193,6 +193,36 @@
   padding: var(--gap-3) var(--gap-4);
 }
 
+/* Estilos específicos para modo claro: cuando body NO tiene la clase .dark-theme */
+:host-context(body:not(.dark-theme)) ::ng-deep .p-dialog {
+  /* Asegurar que el diálogo se vea en tema claro */
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: 0 6px 18px rgba(16,24,40,0.12);
+}
+:host-context(body:not(.dark-theme)) ::ng-deep .p-dialog .p-dialog-header {
+  background: #f5f7fb !important; /* fondo claro */
+  color: #111827 !important;      /* texto oscuro legible */
+  border-bottom: 1px solid rgba(0,0,0,0.06) !important;
+  padding: var(--gap-3) var(--gap-4);
+}
+:host-context(body:not(.dark-theme)) ::ng-deep .p-dialog .p-dialog-content {
+  background: #ffffff !important;
+  color: #111827 !important;
+  padding: var(--gap-4);
+}
+:host-context(body:not(.dark-theme)) ::ng-deep .p-dialog .p-dialog-footer {
+  background: #f5f7fb !important;
+  color: #111827 !important;
+  border-top: 1px solid rgba(0,0,0,0.06) !important;
+  padding: var(--gap-3) var(--gap-4);
+}
+
+/* Aumentar contraste para botones de cierre/headers que puedan heredar color inapropiado */
+:host-context(body:not(.dark-theme)) ::ng-deep .p-dialog .p-dialog-title {
+  color: #111827 !important;
+}
+
 :host ::ng-deep .p-inputtext,
 :host ::ng-deep .p-dropdown,
 :host ::ng-deep .p-multiselect,

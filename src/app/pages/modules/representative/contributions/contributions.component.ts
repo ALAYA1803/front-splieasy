@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable, forkJoin, of } from 'rxjs';
 import { catchError, finalize, switchMap, map } from 'rxjs/operators';
+import { TranslateService } from '@ngx-translate/core';
 
 import { ContributionsService } from '../../services/contributions.service';
 import { CreateContributionRequest } from '../../interfaces/contributions';
@@ -61,6 +62,10 @@ export class ContributionsComponent implements OnInit {
 
   contributionForm!: FormGroup;
 
+  // Estado para ayuda/explicación de estrategias
+  strategyHelpVisible = false;
+  strategyHelpText = '';
+
   private apiUrl = environment.urlBackend;
 
   estrategias = [
@@ -77,12 +82,25 @@ export class ContributionsComponent implements OnInit {
     private billService: BillsService,
     private memberContributionService: MemberContributionService,
     private http: HttpClient,
-    private receiptsSvc: PaymentReceiptsService
+    private receiptsSvc: PaymentReceiptsService,
+    private translate: TranslateService
   ) {}
 
   ngOnInit(): void {
     this.initializeForm();
     this.loadData();
+    // Nota: el modal se abrirá solo cuando el usuario haga clic en el icono de información
+  }
+
+  // Mostrar el modal con la explicación de la estrategia seleccionada
+  showStrategyHelp(strategy?: string | null): void {
+    const s = (strategy || this.contributionForm.get('strategy')?.value || 'EQUAL').toString();
+    if (s === 'INCOME_BASED') {
+      this.strategyHelpText = this.translate.instant('CONTRIBUTIONS.FORM.STRATEGY_HELP_INCOME_BASED');
+    } else {
+      this.strategyHelpText = this.translate.instant('CONTRIBUTIONS.FORM.STRATEGY_HELP_EQUAL');
+    }
+    this.strategyHelpVisible = true;
   }
 
   private toYMD(value: Date | string): string {
