@@ -1,4 +1,6 @@
 <!-- Loading -->
+<p-toast></p-toast>
+<p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
 <div *ngIf="loading" class="loading-container" aria-live="polite" aria-busy="true">
   <p-progressSpinner></p-progressSpinner>
   <span>{{ 'GENERAL.LOADING' | translate }}</span>
@@ -67,6 +69,8 @@
       </p>
     </div>
   </div>
+
+  <!-- La notificación ahora se muestra como Toast (p-toast) desde el componente TS -->
 
   <!-- Stats -->
   <div class="stats-grid">
