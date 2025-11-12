@@ -246,138 +246,175 @@
   [style]="{ width: '40vw' }">
 
   <form [formGroup]="contributionForm" (ngSubmit)="guardarContribution()">
-    <div class="p-field mb-3">
-      <label for="billId" class="block mb-2 font-medium">
-        {{ 'CONTRIBUTIONS.FORM.BILL_LABEL' | translate }}
-      </label>
-      <p-dropdown
-        id="billId"
-        formControlName="billId"
-        [options]="bills"
-        optionLabel="description"
-        optionValue="id"
-        [placeholder]="'CONTRIBUTIONS.FORM.BILL_PLACEHOLDER' | translate"
-        class="w-full">
-      </p-dropdown>
-      <small class="p-error"
-             *ngIf="contributionForm.get('billId')?.errors?.['required'] && contributionForm.get('billId')?.touched">
-        {{ 'CONTRIBUTIONS.FORM.BILL_REQUIRED' | translate }}
-      </small>
-    </div>
-
-    <div class="p-field mb-3">
-      <label for="description" class="block mb-2 font-medium">
-        {{ 'CONTRIBUTIONS.FORM.DESCRIPTION_LABEL' | translate }}
-      </label>
-      <input
-        id="description"
-        type="text"
-        pInputText
-        formControlName="description"
-        [placeholder]="'CONTRIBUTIONS.FORM.DESCRIPTION_PLACEHOLDER' | translate"
-        class="w-full" />
-      <small class="p-error"
-             *ngIf="contributionForm.get('description')?.errors?.['required'] && contributionForm.get('description')?.touched">
-        {{ 'CONTRIBUTIONS.FORM.DESCRIPTION_REQUIRED' | translate }}
-      </small>
-    </div>
-
-    <div class="p-field mb-3">
-      <label for="fechaLimite" class="block mb-2 font-medium">
-        {{ 'CONTRIBUTIONS.FORM.DUE_DATE_LABEL' | translate }}
-      </label>
-      <p-calendar
-        id="fechaLimite"
-        formControlName="fechaLimite"
-        dateFormat="dd/mm/yy"
-        [showIcon]="true"
-        [showButtonBar]="true"
-        appendTo="body"
-        [placeholder]="'CONTRIBUTIONS.FORM.DUE_DATE_PLACEHOLDER' | translate"
-        class="w-full">
-      </p-calendar>
-      <small class="p-error"
-             *ngIf="contributionForm.get('fechaLimite')?.errors?.['required'] && contributionForm.get('fechaLimite')?.touched">
-        {{ 'CONTRIBUTIONS.FORM.DUE_DATE_REQUIRED' | translate }}
-      </small>
-    </div>
-
-    <div class="p-field mb-3">
-      <label for="strategy" class="block mb-2 font-medium">
-        {{ 'CONTRIBUTIONS.FORM.STRATEGY_LABEL' | translate }}
-      </label>
-      <div class="flex align-items-center gap-2">
-        <div class="flex-auto">
+    <!-- Layout en dos columnas -->
+    <div class="flex gap-4">
+      <div style="flex:1">
+        <div class="p-field mb-3">
+          <label for="billId" class="block mb-2 font-medium">
+            {{ 'CONTRIBUTIONS.FORM.BILL_LABEL' | translate }}
+          </label>
           <p-dropdown
-            id="strategy"
-            formControlName="strategy"
-            [options]="estrategias"
-            optionLabel="label"
-            optionValue="value"
-            [placeholder]="'CONTRIBUTIONS.FORM.STRATEGY_PLACEHOLDER' | translate"
+            id="billId"
+            formControlName="billId"
+            [options]="bills"
+            optionLabel="description"
+            optionValue="id"
+            [placeholder]="'CONTRIBUTIONS.FORM.BILL_PLACEHOLDER' | translate"
             class="w-full">
           </p-dropdown>
+          <small class="p-error"
+                 *ngIf="contributionForm.get('billId')?.errors?.['required'] && contributionForm.get('billId')?.touched">
+            {{ 'CONTRIBUTIONS.FORM.BILL_REQUIRED' | translate }}
+          </small>
         </div>
-        <div>
-          <p-button
-            type="button"
-            icon="pi pi-info-circle"
-            class="p-button-text p-button-rounded"
-            (click)="showStrategyHelp()"
-            [pTooltip]="'CONTRIBUTIONS.FORM.STRATEGY_HELP' | translate">
-          </p-button>
+
+        <div class="p-field mb-3">
+          <label for="fechaLimite" class="block mb-2 font-medium">
+            {{ 'CONTRIBUTIONS.FORM.DUE_DATE_LABEL' | translate }}
+          </label>
+          <p-calendar
+            id="fechaLimite"
+            formControlName="fechaLimite"
+            dateFormat="dd/mm/yy"
+            [showIcon]="true"
+            [showButtonBar]="true"
+            appendTo="body"
+            [placeholder]="'CONTRIBUTIONS.FORM.DUE_DATE_PLACEHOLDER' | translate"
+            class="w-full">
+          </p-calendar>
+          <small class="p-error"
+                 *ngIf="contributionForm.get('fechaLimite')?.errors?.['required'] && contributionForm.get('fechaLimite')?.touched">
+            {{ 'CONTRIBUTIONS.FORM.DUE_DATE_REQUIRED' | translate }}
+          </small>
+        </div>
+
+        <div class="p-field mb-3">
+          <label for="miembros" class="block mb-2 font-medium">
+            {{ 'CONTRIBUTIONS.FORM.MEMBERS_LABEL' | translate }} <small class="text-gray-500">(opcional)</small>
+          </label>
+          <p-multiSelect
+            formControlName="miembros"
+            [options]="miembros"
+            optionLabel="name"
+            optionValue="id"
+            display="chip"
+            [showClear]="true"
+            appendTo="body"
+            [placeholder]="'CONTRIBUTIONS.FORM.MEMBERS_PLACEHOLDER' | translate"
+            class="w-full">
+            <ng-template let-option pTemplate="item">
+              <div class="flex align-items-center">
+                <span class="ml-2">{{ option.name }}</span>
+                <span class="ml-auto">
+                  <small class="text-gray-500">
+                    ({{ (option.role === 'REPRESENTANTE'
+                    ? 'CONTRIBUTIONS.ROLES.REPRESENTATIVE'
+                    : 'CONTRIBUTIONS.ROLES.MEMBER') | translate }})
+                  </small>
+                </span>
+              </div>
+            </ng-template>
+          </p-multiSelect>
         </div>
       </div>
-      <small class="p-error"
-             *ngIf="contributionForm.get('strategy')?.errors?.['required'] && contributionForm.get('strategy')?.touched">
-        {{ 'CONTRIBUTIONS.FORM.STRATEGY_REQUIRED' | translate }}
-      </small>
-    </div>
 
-    <div class="p-field mb-3">
-      <label for="miembros" class="block mb-2 font-medium">
-        {{ 'CONTRIBUTIONS.FORM.MEMBERS_LABEL' | translate }} <small class="text-gray-500">(opcional)</small>
-      </label>
-      <p-multiSelect
-        formControlName="miembros"
-        [options]="miembros"
-        optionLabel="name"
-        optionValue="id"
-        display="chip"
-        [showClear]="true"
-        appendTo="body"
-        [placeholder]="'CONTRIBUTIONS.FORM.MEMBERS_PLACEHOLDER' | translate"
-        class="w-full">
-        <ng-template let-option pTemplate="item">
-          <div class="flex align-items-center">
-            <span class="ml-2">{{ option.name }}</span>
-            <span class="ml-auto">
-              <small class="text-gray-500">
-                ({{ (option.role === 'REPRESENTANTE'
-                ? 'CONTRIBUTIONS.ROLES.REPRESENTATIVE'
-                : 'CONTRIBUTIONS.ROLES.MEMBER') | translate }})
-              </small>
-            </span>
-          </div>
-        </ng-template>
-      </p-multiSelect>
-    </div>
-
-    <div class="p-field mb-3" *ngIf="contributionForm.get('billId')?.value">
-      <div class="p-3 bg-blue-50 border-round">
-        <h6 class="mt-0 mb-2">{{ 'CONTRIBUTIONS.FORM.BILL_INFO_TITLE' | translate }}</h6>
-        <p class="m-0">
-          <strong>{{ 'CONTRIBUTIONS.FORM.TOTAL_AMOUNT_LABEL' | translate }}</strong>
+      <div style="flex:1">
+        <div class="p-field mb-3">
+          <label for="description" class="block mb-2 font-medium">
+            {{ 'CONTRIBUTIONS.FORM.DESCRIPTION_LABEL' | translate }}
+          </label>
           <input
+            id="description"
+            type="text"
+            pInputText
+            formControlName="description"
+            [placeholder]="'CONTRIBUTIONS.FORM.DESCRIPTION_PLACEHOLDER' | translate"
+            class="w-full" />
+          <small class="p-error"
+                 *ngIf="contributionForm.get('description')?.errors?.['required'] && contributionForm.get('description')?.touched">
+            {{ 'CONTRIBUTIONS.FORM.DESCRIPTION_REQUIRED' | translate }}
+          </small>
+        </div>
+
+        <div class="p-field mb-3">
+          <label for="montoTotal" class="block mb-2 font-medium">{{ 'CONTRIBUTIONS.FORM.TOTAL_AMOUNT_LABEL' | translate }}</label>
+          <input
+            id="montoTotal"
             type="text"
             pInputText
             [value]="selectedBillMonto | currency:'PEN':'symbol':'1.2-2'"
-            readonly />
-        </p>
-        <p class="m-0 mt-1" *ngIf="contributionForm.get('miembros')?.value?.length > 0">
-          <strong>{{ 'CONTRIBUTIONS.FORM.SELECTED_MEMBERS_LABEL' | translate }}</strong>
-          {{ contributionForm.get('miembros')?.value?.length }}
-        </p>
+            readonly
+            class="w-full" />
+        </div>
+
+        <div class="p-field mb-3">
+          <label for="strategy" class="block mb-2 font-medium">
+            {{ 'CONTRIBUTIONS.FORM.STRATEGY_LABEL' | translate }}
+          </label>
+          <div class="flex align-items-center gap-2">
+            <div class="flex-auto">
+              <p-dropdown
+                id="strategy"
+                formControlName="strategy"
+                [options]="estrategias"
+                optionLabel="label"
+                optionValue="value"
+                [placeholder]="'CONTRIBUTIONS.FORM.STRATEGY_PLACEHOLDER' | translate"
+                class="w-full">
+              </p-dropdown>
+            </div>
+            <div>
+              <p-button
+                type="button"
+                icon="pi pi-info-circle"
+                class="p-button-text p-button-rounded"
+                (click)="showStrategyHelp()"
+                [pTooltip]="'CONTRIBUTIONS.FORM.STRATEGY_HELP' | translate">
+              </p-button>
+            </div>
+          </div>
+          <small class="p-error"
+                 *ngIf="contributionForm.get('strategy')?.errors?.['required'] && contributionForm.get('strategy')?.touched">
+            {{ 'CONTRIBUTIONS.FORM.STRATEGY_REQUIRED' | translate }}
+          </small>
+        </div>
+      </div>
+    </div>
+
+    <!-- Datos de Pago (sección separada) -->
+    <hr class="my-4" />
+    <h5 class="mb-3">Datos de Pago</h5>
+
+    <div class="flex gap-4">
+      <div style="flex:1">
+        <div class="p-field mb-3">
+          <label for="numero" class="block mb-2 font-medium">Número (Yape)</label>
+          <input
+            id="numero"
+            type="text"
+            pInputText
+            formControlName="numero"
+            placeholder="Ej. 987654321"
+            class="w-full" />
+          <small class="p-muted">Ingresa el número asociado al QR (opcional).</small>
+        </div>
+      </div>
+
+      <div style="flex:1">
+        <div class="p-field mb-3">
+          <label class="block mb-2 font-medium">QR (imagen)</label>
+          <input type="file" accept="image/*" (change)="onQrFileChange($event)" class="w-full" />
+          <small class="p-muted">Sube una imagen del código QR de Yape/Plin.</small>
+
+          <div *ngIf="qrPreview" class="mt-2 flex align-items-center gap-2">
+            <div>
+              <img [src]="qrPreview" alt="QR preview" style="max-height:150px; max-width:100%; border-radius:4px;" />
+            </div>
+            <div>
+              <p-button type="button" label="Remover" class="p-button-text" (onClick)="qrPreview = null; qrFileBase64 = null"></p-button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 

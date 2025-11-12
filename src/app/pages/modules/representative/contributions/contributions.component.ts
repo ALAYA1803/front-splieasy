@@ -66,6 +66,11 @@ export class ContributionsComponent implements OnInit {
   strategyHelpVisible = false;
   strategyHelpText = '';
 
+  // --- Nuevas propiedades para QR/numero ---
+  qrPreview: string | null = null; // data URL para preview
+  qrFileBase64: string | null = null; // contenido base64 para enviar
+  // -----------------------------------------
+
   private apiUrl = environment.urlBackend;
 
   estrategias = [
@@ -137,7 +142,9 @@ export class ContributionsComponent implements OnInit {
       description: ['', Validators.required],
       fechaLimite: [null, Validators.required],
       strategy: ['EQUAL', Validators.required],
-      miembros: [[], []]
+      miembros: [[], []],
+      // Nuevo control para número y (opcional) para el QR se maneja por separado
+      numero: ['', []]
     });
   }
 
@@ -441,6 +448,9 @@ export class ContributionsComponent implements OnInit {
       strategy: 'EQUAL',
       miembros: []
     });
+    // limpiar estado de QR al abrir el diálogo
+    this.qrPreview = null;
+    this.qrFileBase64 = null;
     this.mostrarDialogo = true;
   }
   downloadReceipt(r: PaymentReceipt): void {
@@ -456,6 +466,9 @@ export class ContributionsComponent implements OnInit {
   }
   cerrarDialogo(): void {
     this.mostrarDialogo = false;
+    // limpiar estado de QR al cerrar
+    this.qrPreview = null;
+    this.qrFileBase64 = null;
   }
 
   guardarContribution(): void {
@@ -502,6 +515,11 @@ export class ContributionsComponent implements OnInit {
       memberIds
     };
 
+    // Añadir numero y qr (si están presentes)
+    const numeroVal = String(fv.numero ?? '').trim();
+    if (numeroVal) req.numero = numeroVal;
+    if (this.qrFileBase64) req.qr = this.qrFileBase64;
+
     this.loading = true;
     this.contributionsService.createContribution(req)
       .pipe(
@@ -511,8 +529,51 @@ export class ContributionsComponent implements OnInit {
       .subscribe(saved => {
         if (!saved) return;
         this.mostrarDialogo = false;
+        // limpiar preview y buffer
+        this.qrPreview = null;
+        this.qrFileBase64 = null;
         this.loadData();
       });
+  }
+
+  // Nuevo método para manejar la carga del archivo QR y convertirlo a base64
+  onQrFileChange(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (!input || !input.files || input.files.length === 0) {
+      this.qrPreview = null;
+      this.qrFileBase64 = null;
+      return;
+    }
+
+    const file = input.files[0];
+    // Opcional: limitar tamaño a 2MB
+    const maxSize = 2 * 1024 * 1024;
+    if (file.size > maxSize) {
+      alert('El archivo es demasiado grande. Máx 2 MB.');
+      input.value = '';
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      const result = reader.result as string | ArrayBuffer | null;
+      if (typeof result === 'string') {
+        this.qrPreview = result;
+        // Normalizamos el valor para enviar solo la parte base64 (sin el prefijo data:...;base64,)
+        const idx = result.indexOf('base64,');
+        this.qrFileBase64 = idx >= 0 ? result.substring(idx + 7) : result;
+      } else {
+        this.qrPreview = null;
+        this.qrFileBase64 = null;
+      }
+    };
+    reader.onerror = (err) => {
+      console.error('Error leyendo archivo QR:', err);
+      alert('No se pudo leer el archivo seleccionado.');
+      this.qrPreview = null;
+      this.qrFileBase64 = null;
+    };
+    reader.readAsDataURL(file);
   }
 
   private getBillsByHousehold(householdId: number): Observable<any[]> {

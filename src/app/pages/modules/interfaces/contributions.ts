@@ -5,6 +5,8 @@ export interface Contribution {
   description: string;
   strategy: string;
   fechaLimite: string;
+  qr?: string;
+  numero?: string;
 }
 
 export interface CreateContributionRequest {
@@ -14,6 +16,8 @@ export interface CreateContributionRequest {
   strategy: string;
   fechaLimite: string;
   memberIds?: number[];
+  qr?: string;
+  numero?: string;
 }
 
 export interface UpdateContributionRequest {

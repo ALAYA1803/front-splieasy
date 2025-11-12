@@ -26,6 +26,8 @@ interface Contribution {
   description?: string;
   strategy?: 'EQUAL' | 'INCOME_BASED' | string;
   fechaLimite?: string;
+  qr?: string;
+  numero?: string;
 }
 
 interface Bill {
@@ -43,6 +45,9 @@ type Row = MemberContribution & {
   fechaFactura?: string;
   montoFactura?: number;
   receipts?: PaymentReceipt[];
+  // campos añadidos de la contribución
+  qr?: string | null;
+  numero?: string | null;
 };
 
 @Component({
@@ -144,7 +149,9 @@ export class MembContributionsComponent implements OnInit {
                     billDescripcion: b?.description,
                     fechaFactura: b?.fecha,
                     montoFactura: b?.monto,
-                    receipts
+                    receipts,
+                    qr: c?.qr ?? null,
+                    numero: c?.numero ?? null
                   };
                 });
 
@@ -213,4 +220,51 @@ export class MembContributionsComponent implements OnInit {
   isUnderReview(row: Row): boolean {
     return row.status === 'EN_REVISION';
   }
+
+  // Formatea un número (p. ej. +51 987 654 321) si es posible
+  formatNumero(raw?: string | null): string {
+    if (!raw) return '-';
+    const s = String(raw).trim();
+    const digits = s.replace(/\D/g, '');
+    if (!digits) return s;
+    // Si empieza con country code 51 (Perú)
+    if (digits.length >= 11 && digits.startsWith('51')) {
+      const rest = digits.substring(2);
+      const groups = rest.match(/(\d{3})(\d{3})(\d{3,})/);
+      if (groups) return `+51 ${groups[1]} ${groups[2]} ${groups[3]}`;
+      return `+51 ${rest}`;
+    }
+    // Agrupar cada 3 desde el inicio
+    const parts: string[] = [];
+    for (let i = 0; i < digits.length; i += 3) parts.push(digits.substring(i, i + 3));
+    return parts.join(' ');
+  }
+
+  copySelectedNumero(): void {
+    const num = String(this.selectedRow?.numero ?? '').trim();
+    if (!num) return;
+    if (navigator?.clipboard?.writeText) {
+      navigator.clipboard.writeText(num).then(() => {
+        alert('Número copiado al portapapeles');
+      }).catch(() => alert('No se pudo copiar el número'));
+    } else {
+      const ta = document.createElement('textarea');
+      ta.value = num;
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); alert('Número copiado al portapapeles'); } catch { alert('No se pudo copiar el número'); }
+      document.body.removeChild(ta);
+    }
+  }
+
+  // Devuelve un src válido para <img> a partir del campo qr (acepta dataURL o base64 simple)
+  getQrSrc(qr?: string | null): string | null {
+    if (!qr) return null;
+    const s = String(qr).trim();
+    if (!s) return null;
+    if (s.startsWith('data:')) return s;
+    // suponer base64 de imagen PNG si no tiene prefijo
+    return `data:image/png;base64,${s}`;
+  }
+
 }

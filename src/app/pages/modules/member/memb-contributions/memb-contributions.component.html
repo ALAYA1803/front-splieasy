@@ -62,12 +62,27 @@
     </p-table>
   </div>
 
-  <p-dialog [(visible)]="showUploadDialog" [modal]="true" [closable]="true" [style]="{ width: '420px' }"
+  <p-dialog [(visible)]="showUploadDialog" [modal]="true" [closable]="true" [style]="{ width: '520px' }"
             [header]="'MEMBER_CONTRIBUTIONS.UPLOAD_TITLE' | translate">
     <div *ngIf="selectedRow" class="p-fluid">
-      <p class="mb-3">
-        {{ 'MEMBER_CONTRIBUTIONS.UPLOAD_DESC' | translate:{ desc: selectedRow.descripcion } }}
-      </p>
+      <h3 class="mb-2">{{ selectedRow?.billDescripcion || selectedRow?.descripcion || ('MEMBER_CONTRIBUTIONS.UPLOAD_TITLE' | translate) }}</h3>
+      <p class="mb-2"> <strong>{{ 'contributions.amount' | translate }}:</strong> {{ selectedRow.monto | currency:'PEN':'symbol':'1.2-2' }}</p>
+
+      <!-- Zona QR grande y número (si existen) -->
+      <div class="qr-card p-4 mb-3 border-round" style="background:#f8fafc;">
+        <p class="m-0 mb-3">1. Realiza el pago escaneando este QR:</p>
+        <div style="display:flex; justify-content:center; margin:12px 0;">
+          <div style="width:180px; height:180px; background:#5b21b6; display:flex; align-items:center; justify-content:center; border-radius:8px; overflow:hidden;">
+            <img *ngIf="getQrSrc(selectedRow?.qr)" [src]="getQrSrc(selectedRow?.qr)" alt="QR representante" style="max-width:100%; max-height:100%; display:block;" />
+            <span *ngIf="!getQrSrc(selectedRow?.qr)" style="color:#fff; font-weight:700;">QR</span>
+          </div>
+        </div>
+        <p class="m-0 mt-2 text-center">Número de Yape/Plin: <strong>{{ formatNumero(selectedRow?.numero) }}</strong>
+          <button pButton type="button" class="p-button-text p-ml-2" icon="pi pi-copy" (click)="copySelectedNumero()" [disabled]="!selectedRow?.numero"></button>
+        </p>
+      </div>
+
+      <p class="mb-3">2. Confirma el pago (Sube tu comprobante):</p>
 
       <input type="file" (change)="onFileSelected($event)" accept="image/*,.pdf" class="mb-3" />
 
